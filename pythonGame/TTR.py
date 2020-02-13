@@ -44,27 +44,34 @@ class Card:
     def setColor(self,color):
         self.color = color
 
-def displayTrainCard(color,x,y):
-    push
-
+##initilized the hand array and keeps track of the card index
 handCards = []
+cardIndex = 0
 
 ##main while loop
 running = True
 while running:
     
-    for card in handCards:
-        push
-        
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
-            if blackDeck.collidepoint(pos):
+
+            if len(handCards) >= 14:
+                print('There are 14 cards in your hand, you can not draw any more!')
+                
+            elif blackDeck.collidepoint(pos):
+                handCards.append(Card('black'))
                 print('added black card to your hand')
-            if whiteDeck.collidepoint(pos):
+                screen.blit(blackTrainImg,(display_width * 0.05 + (50 * cardIndex),display_height * 0.05))
+                cardIndex+=1
+                
+            elif whiteDeck.collidepoint(pos):
                 print('added white card to your hand')
+                handCards.append(Card('white'))
+                screen.blit(whiteTrainImg,(display_width * 0.05 + (50 * cardIndex),display_height * 0.05))
+                cardIndex+=1
                 
     pygame.display.update()
     clock.tick(10)
