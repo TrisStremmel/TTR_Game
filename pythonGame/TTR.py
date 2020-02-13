@@ -28,6 +28,10 @@ numCards = 0
 blackDeck = pygame.draw.rect(screen, (255, 255, 255),(display_width * 0.05,display_height * 0.9, 50, 50))
 whiteDeck = pygame.draw.rect(screen, (255, 255, 255),(display_width * 0.15,display_height * 0.9, 50, 50))
 
+##draws the black and white train card on the card piles over the hitboxes
+screen.blit(whiteTrainImg,(display_width * 0.05,display_height * 0.9))
+screen.blit(blackTrainImg,(display_width * 0.15,display_height * 0.9))
+
 ##card class, holds color
 class Card:
 
@@ -41,31 +45,17 @@ class Card:
         self.color = color
 
 def displayTrainCard(color,x,y):
-    if Card.getColor == white:
-        screen.blit(whiteTrainImg,(x,y))
-    if Card.getColor == black:
-        screen.blit(blackTrainImg,(x,y))
-
-def trainCardImg(x,y):
-    screen.blit(whiteTrainImg,(display_width * 0.05,display_height * 0.9))
-    screen.blit(blackTrainImg,(display_width * 0.15,display_height * 0.9))
-
-trainCardImg(display_width * 0.05,display_height * 0.9)
-trainCardImg(display_width * 0.15,display_height * 0.9)
-    
-def hand(trainCard):
-    handCards.append(trainCard)
+    push
 
 handCards = []
 
 ##main while loop
 running = True
 while running:
+    
     for card in handCards:
-        if card.getColor == white:
-            displayTrainCard(white,display_width * 0.05 + (handCards.index(card)*50),display_height * 0.9)
-        if card.getColor == black:
-            displayTrainCard(black,display_width * 0.05 + (handCards.index(card)*50),display_height * 0.9)
+        push
+        
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -75,8 +65,10 @@ while running:
                 print('added black card to your hand')
             if whiteDeck.collidepoint(pos):
                 print('added white card to your hand')
+                
     pygame.display.update()
     clock.tick(10)
+    
 pygame.quit()
 quit()
 
