@@ -30,9 +30,14 @@ blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.05, dis
 whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.15, display_height * 0.9, 50, 50))
 
 ##draws the black and white train card on the card piles over the hitboxes
+<<<<<<< HEAD
 screen.blit(whiteTrainImg, (display_width * 0.05, display_height * 0.9))
 screen.blit(blackTrainImg, (display_width * 0.15, display_height * 0.9))
 
+=======
+screen.blit(blackTrainImg,(display_width * 0.05,display_height * 0.9))
+screen.blit(whiteTrainImg,(display_width * 0.15,display_height * 0.9))
+>>>>>>> 77d5f69e29f52621de7a18e14bc0ae8e92e782fe
 
 ##card class, holds color
 class Card:
