@@ -135,10 +135,9 @@ def quitGame():
 
 
 def titleScreen():
-    print(pygame.font.get_fonts())
+    #   print(pygame.font.get_fonts())
     start = True
     screen.fill(white)
-
     screen.blit(TitleScreenImg.image, TitleScreenImg.rect)
 
     while start:
@@ -148,9 +147,27 @@ def titleScreen():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
         button("Start Train-ing", 20, 400, 100, 200, 75, green, darkgreen, gameLoop)
-        button("Coward", 20, 400, 200, 200, 75, red, darkred, quitGame)
+        button("Settings", 20, 400, 200, 200, 75, blue, darkblue, settings)
+        button("Coward", 20, 400, 300, 200, 75, red, darkred, quitGame)
 
         pygame.display.update()
+        clock.tick(10)
+
+
+def settings():
+    screen.fill(white)
+    screen.blit(BackGround.image, BackGround.rect)
+    running = True
+    while running:
+        button("Title Screen", 20, 400, 100, 200, 75, blue, darkblue, titleScreen)
+        button("Coward", 20, 400, 300, 200, 75, red, darkred, quitGame)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+            pygame.display.update()
         clock.tick(10)
 
 
@@ -253,4 +270,5 @@ def gameLoop():
 
 
 titleScreen()
+settings()
 gameLoop()
