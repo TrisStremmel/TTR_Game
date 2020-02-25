@@ -186,7 +186,7 @@ def gameLoop():
 
     running = True
     while running:
-        button("Title Screen", 17, display_width * 0.85, display_height * 0.65, 100, 75, red, darkred, titleScreen)
+        button("Title Screen", 17, display_width * 0.85, display_height * 0.65, 100, 75, blue, darkblue, titleScreen)
         button("Coward", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkred, quitGame)
 
         for event in pygame.event.get():
