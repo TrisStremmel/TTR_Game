@@ -186,10 +186,13 @@ def drawHand(color):
     human.cardIndex += 1
 
 def drawGameBoard():
-    pygame.draw.circle(screen, black, [80, 80], 80, 10)
-    pygame.draw.circle(screen, black, [80, 80], 80, 1)
-    pygame.draw.circle(screen, black, [80, 80], 80, 1)
-    pygame.draw.circle(screen, black, [80, 80], 80, 1)
+    pygame.draw.circle(screen, black, [int(display_width * 0.1), int(display_height * 0.4)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.5), int(display_height * 0.6)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.3), int(display_height * 0.3)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.35), int(display_height * 0.1)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.45), int(display_height * 0.45)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.5), int(display_height * 0.3)], 50, 10)
+    pygame.draw.circle(screen, black, [int(display_width * 0.75), int(display_height * 0.2)], 50, 10)
 
 
 
