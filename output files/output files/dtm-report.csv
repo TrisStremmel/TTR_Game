@@ -1,0 +1,96 @@
+CS Index,CS Human Name,numTrains_p1 [Is Set?],numTrains_p1 [Is Specified?],numTrains_p1 = 15,numTrains_p1 = 13,numTrains_p1 = 9,numTrains_p1 = 7,numTrains_p1 = 4,numTrains_p1 = 8,numTrains_p1 = 2,numTrains_p1 = 0,numTrains_p1 = 12,numTrains_p1 = 10,numTrains_p1 = 11,numTrains_p1 = 6,numTrains_p1 = 3,numTrains_p2 [Is Set?],numTrains_p2 [Is Specified?],numTrains_p2 = 15,numTrains_p2 = 12,numTrains_p2 = 9,numTrains_p2 = 7,numTrains_p2 = 4,numTrains_p2 = 13,numTrains_p2 = 10,numTrains_p2 = 8,numTrains_p2 = 5,numTrains_p2 = 3,edge_1-2 [Is Set?],edge_1-2 [Is Specified?],edge_1-2 = 0,edge_1-2 = 2,edge_1-2 = 1,edge_1-5 [Is Set?],edge_1-5 [Is Specified?],edge_1-5 = 0,edge_1-5 = 1,edge_1-4 [Is Set?],edge_1-4 [Is Specified?],edge_1-4 = 0,edge_1-4 = 1,edge_1-4 = 2,edge_2-3 [Is Set?],edge_2-3 [Is Specified?],edge_2-3 = 0,edge_2-3 = 1,edge_3-6 [Is Set?],edge_3-6 [Is Specified?],edge_3-6 = 0,edge_3-6 = 2,edge_3-6 = 1,edge_3-4 [Is Set?],edge_3-4 [Is Specified?],edge_3-4 = 0,edge_3-4 = 1,edge_4-7 [Is Set?],edge_4-7 [Is Specified?],edge_4-7 = 0,edge_4-7 = 1,edge_4-7 = 2,edge_5-6 [Is Set?],edge_5-6 [Is Specified?],edge_5-6 = 0,edge_5-6 = 2,edge_5-6 = 1,edge_5-7 [Is Set?],edge_5-7 [Is Specified?],edge_5-7 = 0,edge_5-7 = 2,edge_5-7 = 1,edge_6-7 [Is Set?],edge_6-7 [Is Specified?],edge_6-7 = 0,edge_6-7 = 1,edge_6-7 = 2,numTrains_p1 [Is Target Set?],numTrains_p1 [Is Target Specified?],[Target] numTrains_p1 = 15,[Target] numTrains_p1 = 13,[Target] numTrains_p1 = 9,[Target] numTrains_p1 = 7,[Target] numTrains_p1 = 4,[Target] numTrains_p1 = 8,[Target] numTrains_p1 = 2,[Target] numTrains_p1 = 0,[Target] numTrains_p1 = 12,[Target] numTrains_p1 = 10,[Target] numTrains_p1 = 11,[Target] numTrains_p1 = 6,[Target] numTrains_p1 = 3,numTrains_p2 [Is Target Set?],numTrains_p2 [Is Target Specified?],[Target] numTrains_p2 = 15,[Target] numTrains_p2 = 12,[Target] numTrains_p2 = 9,[Target] numTrains_p2 = 7,[Target] numTrains_p2 = 4,[Target] numTrains_p2 = 13,[Target] numTrains_p2 = 10,[Target] numTrains_p2 = 8,[Target] numTrains_p2 = 5,[Target] numTrains_p2 = 3,edge_1-2 [Is Target Set?],edge_1-2 [Is Target Specified?],[Target] edge_1-2 = 0,[Target] edge_1-2 = 2,[Target] edge_1-2 = 1,edge_1-5 [Is Target Set?],edge_1-5 [Is Target Specified?],[Target] edge_1-5 = 0,[Target] edge_1-5 = 1,edge_1-4 [Is Target Set?],edge_1-4 [Is Target Specified?],[Target] edge_1-4 = 0,[Target] edge_1-4 = 1,[Target] edge_1-4 = 2,edge_2-3 [Is Target Set?],edge_2-3 [Is Target Specified?],[Target] edge_2-3 = 0,[Target] edge_2-3 = 1,edge_3-6 [Is Target Set?],edge_3-6 [Is Target Specified?],[Target] edge_3-6 = 0,[Target] edge_3-6 = 2,[Target] edge_3-6 = 1,edge_3-4 [Is Target Set?],edge_3-4 [Is Target Specified?],[Target] edge_3-4 = 0,[Target] edge_3-4 = 1,edge_4-7 [Is Target Set?],edge_4-7 [Is Target Specified?],[Target] edge_4-7 = 0,[Target] edge_4-7 = 1,[Target] edge_4-7 = 2,edge_5-6 [Is Target Set?],edge_5-6 [Is Target Specified?],[Target] edge_5-6 = 0,[Target] edge_5-6 = 2,[Target] edge_5-6 = 1,edge_5-7 [Is Target Set?],edge_5-7 [Is Target Specified?],[Target] edge_5-7 = 0,[Target] edge_5-7 = 2,[Target] edge_5-7 = 1,edge_6-7 [Is Target Set?],edge_6-7 [Is Target Specified?],[Target] edge_6-7 = 0,[Target] edge_6-7 = 1,[Target] edge_6-7 = 2,Reward
+0,"
+",Yes,Yes,0,0,0,0,0,0,1,0,0,0,0,0,0,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+1,"
+",Yes,Yes,1,0,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,1,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+2,"
+",Yes,Yes,0,1,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,1,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+3,"
+",Yes,Yes,0,0,0,1,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,1,0,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+4,"
+",Yes,Yes,0,0,0,0,1,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,0,0,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,0,1,Yes,Yes,0,0,1,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,0.5
+5,"
+",Yes,Yes,0,0,0,0,1,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,0,0,0,0,1,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,0,1,Yes,Yes,0,0,1,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+6,"
+",Yes,Yes,0,1,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,1,0,0,0,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+7,"
+",Yes,Yes,0,0,0,1,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,0,0,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,0,1,Yes,Yes,0,0,1,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+8,"
+",Yes,Yes,0,0,0,0,0,1,0,0,0,0,0,0,0,Yes,Yes,0,1,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+9,"
+",Yes,Yes,0,1,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+10,"
+",Yes,Yes,0,0,0,0,0,0,0,0,1,0,0,0,0,Yes,Yes,0,0,0,0,0,1,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,0,1,Yes,Yes,1,0,0,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+11,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,0,0,1,0,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,0.6666666666666672
+12,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,1,0,0,0,Yes,Yes,0,0,0,0,0,1,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,0,1,Yes,Yes,1,0,0,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,0.7857136666666574
+13,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,0,1,0,0,Yes,Yes,0,1,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+14,"
+",Yes,Yes,0,1,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,0,0,1,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+15,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,0,0,1,0,Yes,Yes,0,0,1,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+16,"
+",Yes,Yes,0,0,1,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,0,1,0,0,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+17,"
+",Yes,Yes,0,0,0,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+18,"
+",Yes,Yes,0,0,0,0,1,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+19,"
+",Yes,Yes,1,0,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.1666678333345037
+20,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,1,0,0,0,Yes,Yes,0,0,0,0,0,0,0,1,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,0,1,Yes,Yes,1,0,0,Yes,Yes,0,0,1,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+21,"
+",Yes,Yes,0,0,0,0,0,1,0,0,0,0,0,0,0,Yes,Yes,0,0,0,1,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+22,"
+",Yes,Yes,0,1,0,0,0,0,0,0,0,0,0,0,0,Yes,Yes,0,1,0,0,0,0,0,0,0,0,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,Yes,Yes,1,0,0,Yes,Yes,0,1,0,Yes,Yes,1,0,0,Yes,Yes,1,0,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,1.0
+23,"
+",Yes,Yes,0,0,0,0,0,0,0,0,0,0,0,0,1,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,0,1,Yes,Yes,0,1,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,0,1,Yes,Yes,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+24,"
+",Yes,Yes,0,0,0,0,1,0,0,0,0,0,0,0,0,Yes,Yes,0,0,0,0,1,0,0,0,0,0,Yes,Yes,0,1,0,Yes,Yes,0,1,Yes,Yes,1,0,0,Yes,Yes,0,1,Yes,Yes,0,1,0,Yes,Yes,1,0,Yes,Yes,0,0,1,Yes,Yes,0,1,0,Yes,Yes,0,0,1,Yes,Yes,0,1,0,No,No,0,0,0,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,No,No,0,0,0,(see triples)
+CS Source Index,Action,CS Destination Index,Weight,Probability,Reward
+19,<action=draw>,19,2.0,0.285714,1.1666678333345037
+1,<action=draw>,2,1.0,1.0,1.0
+22,<action=draw>,16,1.0,1.0,0.9999999999999999
+21,<action=draw>,0,1.0,0.5,0.6666666666666666
+9,<action=claim>,13,1.0,0.333333,1.0
+13,<action=draw>,8,1.0,1.0,0.5000000000000011
+3,<action=draw>,18,1.0,0.25,1.3333333333333308
+21,<action=draw>,21,1.0,0.5,0.7063490000000008
+15,<action=claim>,15,1.0,1.0,0.3333333333333328
+14,<action=draw>,14,1.0,0.5,0.7063489999999997
+2,<action=claim>,14,1.0,1.0,1.0
+3,<action=claim>,3,2.0,1.0,0.33333333333333354
+7,<action=claim>,7,1.0,1.0,0.33333333333333465
+8,<action=claim>,8,1.0,1.0,0.3333333333333327
+19,<action=draw>,9,3.0,0.428571,1.0
+3,<action=draw>,3,2.0,0.5,0.6666666666666666
+4,<action=claim>,5,1.0,1.0,1.0
+11,<action=draw>,23,1.0,1.0,1.0
+18,<action=claim>,18,1.0,1.0,0.3333333333333333
+7,<action=draw>,4,1.0,1.0,0.5
+14,<action=draw>,21,1.0,0.5,0.7063489999999997
+9,<action=claim>,6,1.0,0.333333,1.0
+10,<action=claim>,12,1.0,1.0,0.7857136666666574
+0,<action=claim>,0,1.0,1.0,0.35317449999999995
+5,<action=draw>,5,1.0,1.0,0.3333333333333344
+6,<action=draw>,16,1.0,1.0,0.9999999999999993
+8,<action=draw>,15,1.0,1.0,0.49999999999999845
+20,<action=draw>,20,1.0,0.5,0.6666666666666663
+9,<action=claim>,22,1.0,0.333333,1.0
+24,<action=claim>,24,1.0,1.0,0.33333333333333326
+3,<action=draw>,24,1.0,0.25,1.333333333333336
+20,<action=draw>,7,1.0,0.5,0.6666666666666744
+15,<action=draw>,15,1.0,0.5,0.6666666666666664
+16,<action=claim>,16,2.0,1.0,0.3333333333333334
+17,<action=claim>,17,1.0,1.0,0.3531744999999999
+19,<action=draw>,1,1.0,0.142857,1.0
+0,<action=draw>,17,1.0,1.0,0.5
+12,<action=claim>,20,1.0,1.0,1.0
+21,<action=claim>,21,1.0,1.0,0.35317449999999995
+23,<action=claim>,23,1.0,1.0,0.33333333333333276
+16,<action=draw>,3,2.0,1.0,1.6666666666666665
+19,<action=draw>,10,1.0,0.142857,1.0
+15,<action=draw>,11,1.0,0.5,0.6666666666666672
+13,<action=claim>,13,1.0,1.0,0.33333333333333354

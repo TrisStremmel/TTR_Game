@@ -6,8 +6,8 @@ import sys
 pygame.init()
 
 # sets the window size to 800x600px
-display_width = 1024
-display_height = 512
+display_width = 1920
+display_height = 1080
 
 # easy access to colors
 black = (0, 0, 0)
@@ -89,7 +89,7 @@ screen.blit(whiteTrainImg,(display_width * 0.15,display_height * 0.9))
 class Background(pygame.sprite.Sprite):
     def __init__(self, image_file, location):
         pygame.sprite.Sprite.__init__(self)  # call Sprite initializer
-        self.image = pygame.image.load(image_file)
+        self.image = pygame.transform.scale(pygame.image.load(image_file), (display_width, display_height))
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
 
@@ -257,6 +257,22 @@ def settings():
             pygame.display.update()
         clock.tick(10)
 
+class player():
+    def __init__(self):
+        self.handCards = []
+        self.cardIndex = 0;
+
+human = player()
+bot = player()
+
+def drawHand(color):
+    print('added ' + color + ' card to your hand')
+    human.handCards.append(Card('white', randint(1, 10)))
+    print(len(human.handCards))
+    # pos = (display_width * 0.05 + (50 * cardIndex), display_height * 0.05)
+    screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
+    human.cardIndex += 1
+
 
 def gameLoop():
     numCards = 0
@@ -286,10 +302,10 @@ def gameLoop():
     screen.blit(blackDeckImg, (display_width * 0.712, display_height * 0.75))
 
     # initialised the hand array and keeps track of the card index
-    handCards = []
-    cardIndex = 0
 
     running = True
+
+
     while running:
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Coward", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
@@ -300,65 +316,40 @@ def gameLoop():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
-                if len(handCards) >= 14:
+                if len(human.handCards) >= 14:
                     print('There are 14 cards in your hand, you can not draw any more!')
 
                 elif whiteDeck.collidepoint(pos):
                     print('added white card to your hand')
-                    handCards.append(Card('white',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    # pos = (display_width * 0.05 + (50 * cardIndex), display_height * 0.05)
-                    screen.blit(whiteTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('white')
 
                 elif pinkDeck.collidepoint(pos):
                     print('added pink card to your hand')
-                    handCards.append(Card('pink',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(pinkTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('pink')
 
                 elif redDeck.collidepoint(pos):
                     print('added red card to your hand')
-                    handCards.append(Card('red',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(redTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('red')
 
                 elif orangeDeck.collidepoint(pos):
                     print('added orange card to your hand')
-                    handCards.append(Card('orange',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(orangeTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('orange')
 
                 elif yellowDeck.collidepoint(pos):
                     print('added yellow card to your hand')
-                    handCards.append(Card('yellow',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(yellowTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('yellow')
 
                 elif greenDeck.collidepoint(pos):
                     print('added green card to your hand')
-                    handCards.append(Card('green',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(greenTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('green')
 
                 elif blueDeck.collidepoint(pos):
                     print('added blue card to your hand')
-                    handCards.append(Card('blue',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(blueTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('blue')
 
                 elif blackDeck.collidepoint(pos):
                     print('added black card to your hand')
-                    handCards.append(Card('black',randint(1,10)))
-                    print(handCards[cardIndex].length)
-                    screen.blit(blackTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
-                    cardIndex += 1
+                    drawHand('black')
 
         pygame.display.update()
         clock.tick(10)
