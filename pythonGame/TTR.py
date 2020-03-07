@@ -273,6 +273,14 @@ def drawHand(color):
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
     human.cardIndex += 1
 
+def drawGameBoard():
+    pygame.draw.circle(screen, black, [80, 80], 80, 10)
+    pygame.draw.circle(screen, black, [80, 80], 80, 1)
+    pygame.draw.circle(screen, black, [80, 80], 80, 1)
+    pygame.draw.circle(screen, black, [80, 80], 80, 1)
+
+
+
 
 def gameLoop():
     numCards = 0
@@ -300,6 +308,8 @@ def gameLoop():
     screen.blit(greenDeckImg, (display_width * 0.512, display_height * 0.75))
     screen.blit(blueDeckImg, (display_width * 0.612, display_height * 0.75))
     screen.blit(blackDeckImg, (display_width * 0.712, display_height * 0.75))
+
+    drawGameBoard()
 
     # initialised the hand array and keeps track of the card index
 
