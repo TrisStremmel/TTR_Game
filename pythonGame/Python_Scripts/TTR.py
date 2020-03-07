@@ -2,6 +2,11 @@ from typing import Any
 from random import *
 import pygame
 import sys
+from Background import Background
+from Edge import Edge
+from City import City
+from Card import Card
+from Player import Player
 
 pygame.init()
 
@@ -58,123 +63,15 @@ greenDeckImg = pygame.image.load('Ticket To Ride Assets\Green\GreenDeck.png')
 blueDeckImg = pygame.image.load('Ticket To Ride Assets\Blue\BlueDeck.png')
 blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 
+human = Player()
+bot = Player()
 
-# Draws the surface where the text will be written
-def text_objects(text, font):
-    textSurface = font.render(text, True, black)
-    return textSurface, textSurface.get_rect()
-
-
-# makes a button with message,font size,x,y,width,height,inactive and active color and the action
-def button(msg, fs, x, y, w, h, ic, ac, action=None):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-
-    if x + w > mouse[0] > x and y + h > mouse[1] > y:
-        pygame.draw.rect(screen, ac, (x, y, w, h))
-        if click[0] == 1 and action != None:
-            action()
-
-    else:
-        pygame.draw.rect(screen, ic, (x, y, w, h))
-    smallText = pygame.font.Font('freesansbold.ttf', fs)
-    textSurf, textRect = text_objects(msg, smallText)
-    textRect.center = (x + (w / 2), (y + (h / 2)))
-    screen.blit(textSurf, textRect)
 
 screen.blit(blackTrainImg,(display_width * 0.05,display_height * 0.9))
 screen.blit(whiteTrainImg,(display_width * 0.15,display_height * 0.9))
 
-# Allows the background image to be loaded with a method background needs to be at least the size of the window
-class Background(pygame.sprite.Sprite):
-    def __init__(self, image_file, location):
-        pygame.sprite.Sprite.__init__(self)  # call Sprite initializer
-        self.image = pygame.transform.scale(pygame.image.load(image_file), (display_width, display_height))
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = location
-
-
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
-
-
-# card class, holds color
-class Card:
-    def __init__(self, color, length):
-        self.color = color
-        self.length = length
-
-    def getColor(self):
-        return self.color
-
-    def setColor(self, color):
-        self.color = color
-
-    def getLength(self):
-        return self.length
-
-    def setLength(self, length):
-        self.length = length
-
-
-class City:
-
-    def __init__(self, x, y, name, color):
-        self.x = x
-        self.y = y
-        self.name = name
-        self.color = color
-
-    def getX(self):
-        return self.x
-
-    def setX(self, x):
-        self.x = x
-
-    def getY(self):
-        return self.y
-
-    def setY(self, y):
-        self.y = y
-
-    def getName(self):
-        return self.name
-
-    def setName(self, name):
-        self.name = name
-
-    def getColor(self):
-        return self.color
-
-    def setColor(self, color):
-        self.color = color
-
-
-class Edge:
-
-    def __init__(self, length, connection, color):
-        self.length = length
-        self.occupied = False
-        self.connection = connection
-        self.color = color
-
-    def getLength(self):
-        return self.length
-
-    def setLength(self, length):
-        self.length = length
-
-    def getColor(self):
-        return self.color
-
-    def setColor(self, color):
-        self.occupied = color
-
-    def getConnection(self):
-        return self.connection
-
-    def setConnection(self, connection):
-        self.connection = connection
 
 
 ##numNodes = input('How many cities?')
@@ -219,6 +116,29 @@ def quitGame():
     pygame.quit()
     quit()
 
+# Draws the surface where the text will be written
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
+
+
+# makes a button with message,font size,x,y,width,height,inactive and active color and the action
+def button(msg, fs, x, y, w, h, ic, ac, action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        pygame.draw.rect(screen, ac, (x, y, w, h))
+        if click[0] == 1 and action != None:
+            action()
+
+    else:
+        pygame.draw.rect(screen, ic, (x, y, w, h))
+    smallText = pygame.font.Font('freesansbold.ttf', fs)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = (x + (w / 2), (y + (h / 2)))
+    screen.blit(textSurf, textRect)
+
 
 def titleScreen():
     #   print(pygame.font.get_fonts())
@@ -256,14 +176,6 @@ def settings():
                 pos = pygame.mouse.get_pos()
             pygame.display.update()
         clock.tick(10)
-
-class player():
-    def __init__(self):
-        self.handCards = []
-        self.cardIndex = 0;
-
-human = player()
-bot = player()
 
 def drawHand(color):
     print('added ' + color + ' card to your hand')
