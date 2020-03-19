@@ -49,9 +49,7 @@ pinkMovingImg = pygame.image.load('Ticket To Ride Assets\Pink\RotatedCard_Pink.p
 redMovingImg = pygame.image.load('Ticket To Ride Assets\Red\RotatedCard_Red.png')
 orangeMovingImg = pygame.image.load('Ticket To Ride Assets\Orange\RotatedCard_Orange.png')
 yellowMovingImg = pygame.image.load('Ticket To Ride Assets\Yellow\RotatedCard_Yellow.png')
-greenMovingImg = pygame.image.load('Ticket To Ride Assets\Green\RotatedCard_Green.png')
-blueMovingImg = pygame.image.load('Ticket To Ride Assets\Blue\RotatedCard_Blue.png')
-blackMovingImg = pygame.image.load('Ticket To Ride Assets\Black\RotatedCard_Black.png')
+greenMovingImg = pygame.image.load('Ticket To Ride Assets\Green\RotatedCard_Green.png')w
 
 # loads images to act as the draw deck
 whiteDeckImg = pygame.image.load('Ticket To Ride Assets\White\WhiteDeck.png')
@@ -66,29 +64,27 @@ blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 human = Player()
 bot = Player()
 
-
-screen.blit(blackTrainImg,(display_width * 0.05,display_height * 0.9))
-screen.blit(whiteTrainImg,(display_width * 0.15,display_height * 0.9))
+screen.blit(blackTrainImg, (display_width * 0.05, display_height * 0.9))
+screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
 
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
-
 ##numNodes = input('How many cities?')
 
-cityConnection = ([[-1,                      Edge(3, [0, 1], 'black'), -1,                      Edge(5, [0, 3],'white'),  Edge(2, [0, 4],'black'),  -1,                      -1],
-                   [Edge(3, [1, 0],'black'), -1,                       Edge(4, [1, 2],'white'), -1,                       -1,                       -1,                      -1],
-                   [-1,                      Edge(4, [2, 1],'white'),  -1,                      Edge(6, [2, 3],'black'),  -1,                       Edge(4, [2, 5],'black'), -1],
-                   [Edge(5, [3, 0],'white'), -1,                       Edge(6, [3, 2],'black'), -1,                       -1,                       -1,                      Edge(3, [3, 6],'white')],
-                   [Edge(2, [4, 0],'black'), -1,                        -1,                     -1,                       -1,                       Edge(3, [4, 5],'white'), Edge(3, [4, 6],'white')],
-                   [-1,                      -1,                       Edge(4, [5, 2],'black'), -1,                       Edge(3,  [5, 4],'white'), -1,                      Edge(2, [5, 6],'black')],
-                   [-1,                      -1,                        -1,                     Edge(3,  [6, 3],'white'), Edge(3,  [6, 4],'white'), Edge(2, [6, 5],'black'), -1]])
+cityConnection = ([[-1, Edge(3, [0, 1], 'black'), -1, Edge(5, [0, 3], 'white'), Edge(2, [0, 4], 'black'), -1, -1],
+                   [Edge(3, [1, 0], 'black'), -1, Edge(4, [1, 2], 'white'), -1, -1, -1, -1],
+                   [-1, Edge(4, [2, 1], 'white'), -1, Edge(6, [2, 3], 'black'), -1, Edge(4, [2, 5], 'black'), -1],
+                   [Edge(5, [3, 0], 'white'), -1, Edge(6, [3, 2], 'black'), -1, -1, -1, Edge(3, [3, 6], 'white')],
+                   [Edge(2, [4, 0], 'black'), -1, -1, -1, -1, Edge(3, [4, 5], 'white'), Edge(3, [4, 6], 'white')],
+                   [-1, -1, Edge(4, [5, 2], 'black'), -1, Edge(3, [5, 4], 'white'), -1, Edge(2, [5, 6], 'black')],
+                   [-1, -1, -1, Edge(3, [6, 3], 'white'), Edge(3, [6, 4], 'white'), Edge(2, [6, 5], 'black'), -1]])
 
 cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 
 # numNodes = input('How many cities?')
-#cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
-#cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
+# cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
+# cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
 
 '''
           City(6, 7, 'Dallas', black), City(7, 8, 'Salt Lake', white), City(8, 9, 'Milwaukee', red),
@@ -115,6 +111,7 @@ for row in cityConnection:
 def quitGame():
     pygame.quit()
     quit()
+
 
 # Draws the surface where the text will be written
 def text_objects(text, font):
@@ -177,6 +174,7 @@ def settings():
             pygame.display.update()
         clock.tick(10)
 
+
 def drawHand(color):
     print('added ' + color + ' card to your hand')
     human.handCards.append(Card('white', randint(1, 10)))
@@ -184,6 +182,7 @@ def drawHand(color):
     # pos = (display_width * 0.05 + (50 * cardIndex), display_height * 0.05)
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
     human.cardIndex += 1
+
 
 def drawGameBoard():
     pygame.draw.circle(screen, black, [int(display_width * 0.1), int(display_height * 0.4)], 50, 10)
@@ -193,8 +192,6 @@ def drawGameBoard():
     pygame.draw.circle(screen, black, [int(display_width * 0.45), int(display_height * 0.45)], 50, 10)
     pygame.draw.circle(screen, black, [int(display_width * 0.5), int(display_height * 0.3)], 50, 10)
     pygame.draw.circle(screen, black, [int(display_width * 0.75), int(display_height * 0.2)], 50, 10)
-
-
 
 
 def gameLoop():
@@ -229,7 +226,6 @@ def gameLoop():
     # initialised the hand array and keeps track of the card index
 
     running = True
-
 
     while running:
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
