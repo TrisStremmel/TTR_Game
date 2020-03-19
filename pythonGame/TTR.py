@@ -49,7 +49,7 @@ pinkMovingImg = pygame.image.load('Ticket To Ride Assets\Pink\RotatedCard_Pink.p
 redMovingImg = pygame.image.load('Ticket To Ride Assets\Red\RotatedCard_Red.png')
 orangeMovingImg = pygame.image.load('Ticket To Ride Assets\Orange\RotatedCard_Orange.png')
 yellowMovingImg = pygame.image.load('Ticket To Ride Assets\Yellow\RotatedCard_Yellow.png')
-greenMovingImg = pygame.image.load('Ticket To Ride Assets\Green\RotatedCard_Green.png')w
+greenMovingImg = pygame.image.load('Ticket To Ride Assets\Green\RotatedCard_Green.png')
 
 # loads images to act as the draw deck
 whiteDeckImg = pygame.image.load('Ticket To Ride Assets\White\WhiteDeck.png')
