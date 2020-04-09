@@ -1,6 +1,7 @@
 from typing import Any
 from random import *
 import pygame
+import math
 import sys
 from Background import Background
 from Edge import Edge
@@ -61,6 +62,19 @@ greenDeckImg = pygame.image.load('Ticket To Ride Assets\Green\GreenDeck.png')
 blueDeckImg = pygame.image.load('Ticket To Ride Assets\Blue\BlueDeck.png')
 blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 
+#loads images of the train tracks
+
+blankTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Blank.png')
+#blankTrack = pygame.transform.scale(blankTrack, (50,50))
+redTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Red.png')
+orangeTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Orange.png')
+yellowTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Yellow.png')
+greenTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Green.png')
+blueTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Blue.png')
+pinkTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Pink.png')
+whiteTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_White.png')
+blackTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Black.png')
+
 human = Player()
 bot = Player()
 
@@ -80,7 +94,7 @@ cityConnection = ([[-1, Edge(3, [0, 1], 'black'), -1, Edge(5, [0, 3], 'white'), 
                    [-1, -1, Edge(4, [5, 2], 'black'), -1, Edge(3, [5, 4], 'white'), -1, Edge(2, [5, 6], 'black')],
                    [-1, -1, -1, Edge(3, [6, 3], 'white'), Edge(3, [6, 4], 'white'), Edge(2, [6, 5], 'black'), -1]])
 
-cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
+cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas', 'Oklahoma']
 
 # numNodes = input('How many cities?')
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
@@ -152,7 +166,7 @@ def titleScreen():
                 pos = pygame.mouse.get_pos()
         button("Start Train-ing", 20, 400, 100, 200, 75, green, darkGreen, gameLoop)
         button("Settings", 20, 400, 200, 200, 75, blue, darkBlue, settings)
-        button("Coward", 20, 400, 300, 200, 75, red, darkRed, quitGame)
+        button("Quit", 20, 400, 300, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
         clock.tick(10)
@@ -164,7 +178,7 @@ def settings():
     running = True
     while running:
         button("Title Screen", 20, 400, 100, 200, 75, blue, darkBlue, titleScreen)
-        button("Coward", 20, 400, 300, 200, 75, red, darkRed, quitGame)
+        button("Quit", 20, 400, 300, 200, 75, red, darkRed, quitGame)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -183,16 +197,86 @@ def drawHand(color):
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
     human.cardIndex += 1
 
+def cityNameDisplay(text, x, y):
+    largeText = pygame.font.Font('freesansbold.ttf',25)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((x),(y))
+    screen.blit(TextSurf, TextRect)
+
+WA = City(int(display_width * 0.1), int(display_height * 0.15))
+CO = City(int(display_width * 0.3), int(display_height * 0.35))
+MT = City(int(display_width * 0.35), int(display_height * 0.1))
+TX = City(int(display_width * 0.4), int(display_height * 0.7))
+OK = City(int(display_width * 0.475), int(display_height * 0.45))
+KS = City(int(display_width * 0.5), int(display_height * 0.25))
+NY = City(int(display_width * 0.75), int(display_height * 0.2))
+
+stateArray = [WA, MT, NY, TX, CO, KS, OK]
 
 def drawGameBoard():
-    pygame.draw.circle(screen, black, [int(display_width * 0.1), int(display_height * 0.4)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.5), int(display_height * 0.6)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.3), int(display_height * 0.3)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.35), int(display_height * 0.1)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.45), int(display_height * 0.45)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.5), int(display_height * 0.3)], 50, 10)
-    pygame.draw.circle(screen, black, [int(display_width * 0.75), int(display_height * 0.2)], 50, 10)
+    pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (CO.getX(), CO.getY()))
+    pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (TX.getX(), TX.getY()))
+    pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (MT.getX(), MT.getY()))
+    pygame.draw.line(screen, black, (TX.getX(), TX.getY()), (NY.getX(), NY.getY()))
+    pygame.draw.line(screen, black, (NY.getX(), NY.getY()), (MT.getX(), MT.getY()))
+    pygame.draw.line(screen, black, (NY.getX(), NY.getY()), (KS.getX(), KS.getY()))
+    pygame.draw.line(screen, black, (TX.getX(), TX.getY()), (OK.getX(), OK.getY()))
+    pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (CO.getX(), CO.getY()))
+    pygame.draw.line(screen, black, (KS.getX(), KS.getY()), (CO.getX(), CO.getY()))
+    pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (KS.getX(), KS.getY()))
 
+
+    pygame.draw.circle(screen, white, [WA.getX(), WA.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [CO.getX(), CO.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [MT.getX(), MT.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [TX.getX(), TX.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [OK.getX(), OK.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [KS.getX(), KS.getY()], 50, 50)
+    pygame.draw.circle(screen, white, [NY.getX(), NY.getY()], 50, 50)
+
+    cityNameDisplay("WA", WA.getX(), WA.getY())
+    cityNameDisplay("CO", CO.getX(), CO.getY())
+    cityNameDisplay("MT", MT.getX(), MT.getY())
+    cityNameDisplay("TX", TX.getX(), TX.getY())
+    cityNameDisplay("OK", OK.getX(), OK.getY())
+    cityNameDisplay("KS", KS.getX(), KS.getY())
+    cityNameDisplay("NY", NY.getX(), NY.getY())
+
+    # draws the black and white train card on the card piles over the hit boxes
+    screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75))
+    screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.75))
+    screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.75))
+    screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.75))
+    screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.75))
+    screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.75))
+    screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
+    screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
+
+
+    #draws the tracks
+def drawTracks():
+    for i in range(0, len(cityConnection), 1):
+        for j in range(i, len(cityConnection[i]), 1):
+            if cityConnection[i][j] != -1:
+                length = cityConnection[i][j].getLength()
+                x1 = stateArray[i].getX()
+                y1 = stateArray[i].getY()
+                x2 = stateArray[j].getX()
+                y2 = stateArray[j].getY()
+                difx = x2 - x1
+                dify = y2 - y1
+                radians = math.atan2(dify, difx)
+                rot = math.degrees(radians)
+
+                perLenX= difx/length
+                perLeny= dify/length
+
+                blankTrackImg = pygame.transform.scale(blankTrack, (100, 50))
+                blankTrackImgFin = pygame.transform.rotate(blankTrackImg, -rot)
+
+                print(rot)
+                for pri in range(1, length+1):
+                    screen.blit(blankTrackImgFin, (x1 + (perLenX*pri*.8) -50, y1 + (perLeny*pri*.8) -50))
 
 def gameLoop():
     numCards = 0
@@ -211,16 +295,9 @@ def gameLoop():
     blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
     blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
 
-    # draws the black and white train card on the card piles over the hit boxes
-    screen.blit(whiteDeckImg, (display_width * 0.012, display_height * 0.75))
-    screen.blit(pinkDeckImg, (display_width * 0.112, display_height * 0.75))
-    screen.blit(redDeckImg, (display_width * 0.212, display_height * 0.75))
-    screen.blit(orangeDeckImg, (display_width * 0.312, display_height * 0.75))
-    screen.blit(yellowDeckImg, (display_width * 0.412, display_height * 0.75))
-    screen.blit(greenDeckImg, (display_width * 0.512, display_height * 0.75))
-    screen.blit(blueDeckImg, (display_width * 0.612, display_height * 0.75))
-    screen.blit(blackDeckImg, (display_width * 0.712, display_height * 0.75))
+    deackArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck]
 
+    drawTracks()
     drawGameBoard()
 
     # initialised the hand array and keeps track of the card index
@@ -229,7 +306,7 @@ def gameLoop():
 
     while running:
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
-        button("Coward", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
+        button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -239,7 +316,7 @@ def gameLoop():
 
                 if len(human.handCards) >= 14:
                     print('There are 14 cards in your hand, you can not draw any more!')
-
+#                for check in deackArray:
                 elif whiteDeck.collidepoint(pos):
                     print('added white card to your hand')
                     drawHand('white')
