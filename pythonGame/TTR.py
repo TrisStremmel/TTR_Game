@@ -8,6 +8,7 @@ from Edge import Edge
 from City import City
 from Card import Card
 from Player import Player
+from Track import Track
 
 pygame.init()
 
@@ -65,7 +66,6 @@ blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 #loads images of the train tracks
 
 blankTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Blank.png')
-#blankTrack = pygame.transform.scale(blankTrack, (50,50))
 redTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Red.png')
 orangeTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Orange.png')
 yellowTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Yellow.png')
@@ -86,41 +86,19 @@ TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png',
 
 ##numNodes = input('How many cities?')
 
-cityConnection = ([[-1, Edge(3, [0, 1], 'black'), -1, Edge(5, [0, 3], 'white'), Edge(2, [0, 4], 'black'), -1, -1],
-                   [Edge(3, [1, 0], 'black'), -1, Edge(4, [1, 2], 'white'), -1, -1, -1, -1],
-                   [-1, Edge(4, [2, 1], 'white'), -1, Edge(6, [2, 3], 'black'), -1, Edge(4, [2, 5], 'black'), -1],
-                   [Edge(5, [3, 0], 'white'), -1, Edge(6, [3, 2], 'black'), -1, -1, -1, Edge(3, [3, 6], 'white')],
-                   [Edge(2, [4, 0], 'black'), -1, -1, -1, -1, Edge(3, [4, 5], 'white'), Edge(3, [4, 6], 'white')],
-                   [-1, -1, Edge(4, [5, 2], 'black'), -1, Edge(3, [5, 4], 'white'), -1, Edge(2, [5, 6], 'black')],
-                   [-1, -1, -1, Edge(3, [6, 3], 'white'), Edge(3, [6, 4], 'white'), Edge(2, [6, 5], 'black'), -1]])
+cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
+                   [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
+                   [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
+                   [Edge(5, 'white'), -1, Edge(6, 'black'), -1, -1, -1, Edge(3, 'white')],
+                   [Edge(2, 'black'), -1, -1, -1, -1, Edge(3, 'white'), Edge(3, 'white')],
+                   [-1, -1, Edge(4, 'black'), -1, Edge(3, 'white'), -1, Edge(2, 'black')],
+                   [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]])
 
 cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas', 'Oklahoma']
 
 # numNodes = input('How many cities?')
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 # cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
-
-'''
-          City(6, 7, 'Dallas', black), City(7, 8, 'Salt Lake', white), City(8, 9, 'Milwaukee', red),
-          City(10, 11, 'Chicago', blue)]
-cityConnection = ([[-1, Edge(3, [0, 1], 'black'), -1, Edge(5, [0, 3], 'white'), Edge(2, [0, 4], 'black'), -1, -1],
-                   [Edge(3, [1, 0], 'black'), -1, Edge(4, [1, 2], 'white'), -1, -1, -1, -1],
-                   [-1, Edge(4, [2, 1], 'white'), -1, Edge(6, [2, 3], 'black'), -1, Edge(4, [2, 5], 'black'), -1],
-                   [Edge(5, [3, 0], 'white'), -1, Edge(6, [3, 2], 'black'), -1, -1, -1, Edge(3, [3, 6], 'white')],
-                   [Edge(2, [4, 0], 'black'), -1, -1, -1, -1, Edge(3, [4, 5], 'white'), Edge(3, [4, 6], 'white')],
-                   [-1, -1, Edge(4, [5, 2], 'black'), -1, Edge(3, [5, 4], 'white'), -1, Edge(2, [5, 6], 'black')],
-                   [-1, -1, -1, Edge(3, [6, 3], 'white'), Edge(3, [6, 4], 'white'), Edge(2, [6, 5], 'black'), -1]])
->>>>>>> f91e5c7cc1ac9b4fa6c184d2e4803e38f89820f3
-'''
-
-for row in cityConnection:
-    for colm in row:
-        if type(colm) != int:
-            print(colm.getColor(), end=", ")
-        else:
-            print("none", end=", ")
-    print("\n")
-
 
 def quitGame():
     pygame.quit()
@@ -188,12 +166,12 @@ def settings():
             pygame.display.update()
         clock.tick(10)
 
+def strToObj(name):
+    return eval(name)
 
 def drawHand(color):
     print('added ' + color + ' card to your hand')
     human.handCards.append(Card('white', randint(1, 10)))
-    print(len(human.handCards))
-    # pos = (display_width * 0.05 + (50 * cardIndex), display_height * 0.05)
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
     human.cardIndex += 1
 
@@ -252,13 +230,14 @@ def drawGameBoard():
     screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
     screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
 
-
+trackDataArray = [[-1 for x in range(len(cityConnection))] for y in range(len(cityConnection[1]))]
     #draws the tracks
 def drawTracks():
     for i in range(0, len(cityConnection), 1):
         for j in range(i, len(cityConnection[i]), 1):
             if cityConnection[i][j] != -1:
                 length = cityConnection[i][j].getLength()
+                color = cityConnection[i][j].getColor()
                 x1 = stateArray[i].getX()
                 y1 = stateArray[i].getY()
                 x2 = stateArray[j].getX()
@@ -271,21 +250,26 @@ def drawTracks():
                 perLenX= difx/length
                 perLeny= dify/length
 
-                blankTrackImg = pygame.transform.scale(blankTrack, (100, 50))
-                blankTrackImgFin = pygame.transform.rotate(blankTrackImg, -rot)
+                trackImg = pygame.transform.scale(strToObj(color + "Track"), (100, 50))
+                trackImgFin = pygame.transform.rotate(trackImg, -rot)
 
-                print(rot)
                 for pri in range(1, length+1):
-                    screen.blit(blankTrackImgFin, (x1 + (perLenX*pri*.8) -50, y1 + (perLeny*pri*.8) -50))
+                    left = x1 + (perLenX*pri*.8) - 50
+                    top = y1 + (perLeny*pri*.8) - 50
+                    screen.blit(trackImgFin, (left, top))
+
+                    trackDataArray[i][pri-1] = Track(top, left, abs(dify), abs(difx), color)
 
 def gameLoop():
     numCards = 0
+
+    playerTurn = True
+
     screen.fill(white)
 
     screen.blit(BackGround.image, BackGround.rect)
 
     # draws the hit boxes for the white and black card draw piles
-    #  pygame.Surface.set_colorkey(255,255,255)
     whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
     pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
     redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
@@ -299,9 +283,6 @@ def gameLoop():
 
     drawTracks()
     drawGameBoard()
-
-    # initialised the hand array and keeps track of the card index
-
     running = True
 
     while running:
@@ -311,43 +292,53 @@ def gameLoop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
 
-                if len(human.handCards) >= 14:
-                    print('There are 14 cards in your hand, you can not draw any more!')
-#                for check in deackArray:
-                elif whiteDeck.collidepoint(pos):
-                    print('added white card to your hand')
-                    drawHand('white')
+            if playerTurn:
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
 
-                elif pinkDeck.collidepoint(pos):
-                    print('added pink card to your hand')
-                    drawHand('pink')
+                    if len(human.handCards) >= 14:
+                        print('There are 14 cards in your hand, you can not draw any more!')
 
-                elif redDeck.collidepoint(pos):
-                    print('added red card to your hand')
-                    drawHand('red')
+                    elif whiteDeck.collidepoint(pos):
+                        drawHand('white')
 
-                elif orangeDeck.collidepoint(pos):
-                    print('added orange card to your hand')
-                    drawHand('orange')
+                    elif pinkDeck.collidepoint(pos):
+                        drawHand('pink')
 
-                elif yellowDeck.collidepoint(pos):
-                    print('added yellow card to your hand')
-                    drawHand('yellow')
+                    elif redDeck.collidepoint(pos):
+                        drawHand('red')
 
-                elif greenDeck.collidepoint(pos):
-                    print('added green card to your hand')
-                    drawHand('green')
+                    elif orangeDeck.collidepoint(pos):
+                        drawHand('orange')
 
-                elif blueDeck.collidepoint(pos):
-                    print('added blue card to your hand')
-                    drawHand('blue')
+                    elif yellowDeck.collidepoint(pos):
+                        drawHand('yellow')
 
-                elif blackDeck.collidepoint(pos):
-                    print('added black card to your hand')
-                    drawHand('black')
+                    elif greenDeck.collidepoint(pos):
+                        drawHand('green')
+
+                    elif blueDeck.collidepoint(pos):
+                        drawHand('blue')
+
+                    elif blackDeck.collidepoint(pos):
+                        drawHand('black')
+
+                    else:
+                        for i in range(len(trackDataArray)):
+                            for j in range(len(trackDataArray[i])):
+                                data = trackDataArray[i][j]
+                                if data != -1:
+                                    if pygame.Rect((data.getLeft(), data.getTop()), (data.getWidth(), data.getHight())).collidepoint(pos):
+                                        print("ok")
+                                        playerTurn = False
+                                        
+            ##ai decision
+            if playerTurn == False:
+                ##Call ai desision method/class here
+                print("ai played its turn")
+                playerTurn = True
+
 
         pygame.display.update()
         clock.tick(10)

@@ -1,9 +1,8 @@
 class Edge:
 
-    def __init__(self, length, connection, color):
+    def __init__(self, length, color):
         self.length = length
         self.occupied = False
-        self.connection = connection
         self.color = color
 
     def getLength(self):
@@ -18,8 +17,3 @@ class Edge:
     def setColor(self, color):
         self.occupied = color
 
-    def getConnection(self):
-        return self.connection
-
-    def setConnection(self, connection):
-        self.connection = connection
