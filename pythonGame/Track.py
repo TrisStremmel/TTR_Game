@@ -1,10 +1,12 @@
 class Track():
-    def __init__(self, top, left, height, width, color):
+    def __init__(self, top, left, height, width, color, img, rot):
         self.top = top
         self.left = left
         self.height = height
         self.width = width
         self.color = color
+        self.img = img
+        self.rot = rot
 
     def setTop(self,top):
         self.top = top
@@ -35,3 +37,8 @@ class Track():
 
     def getColor(self):
         return self.color
+
+    def getImg(self):
+        return self.img
+    def getRot(self):
+        return self.rot

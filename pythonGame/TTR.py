@@ -230,7 +230,7 @@ def drawGameBoard():
     screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
     screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
 
-trackDataArray = [[-1 for x in range(len(cityConnection))] for y in range(len(cityConnection[1]))]
+trackDataArray = [[-1 for x in range(11)] for y in range(11)]
     #draws the tracks
 def drawTracks():
     for i in range(0, len(cityConnection), 1):
@@ -258,7 +258,14 @@ def drawTracks():
                     top = y1 + (perLeny*pri*.8) - 50
                     screen.blit(trackImgFin, (left, top))
 
-                    trackDataArray[i][pri-1] = Track(top, left, abs(dify), abs(difx), color)
+                    trackDataArray[i][pri-1] = Track(top, left, abs(dify), abs(difx), color, trackImgFin, -rot)
+
+                    '''
+                    print(top)
+                    print(left)
+                    print(difx)
+                    print(dify)
+                    '''
 
 def gameLoop():
     numCards = 0
@@ -325,14 +332,20 @@ def gameLoop():
                         drawHand('black')
 
                     else:
-                        for i in range(len(trackDataArray)):
-                            for j in range(len(trackDataArray[i])):
+                        for i in range(0, len(trackDataArray), 1):
+                            for j in range(0, len(trackDataArray[i]), 1):
                                 data = trackDataArray[i][j]
-                                if data != -1:
-                                    if pygame.Rect((data.getLeft(), data.getTop()), (data.getWidth(), data.getHight())).collidepoint(pos):
-                                        print("ok")
+
+                                if data == -1:
+                                    break
+                                else:
+                                    #print(i)
+                                    #print(data.getColor())
+                                    pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
+                                    if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos):
+                                        print(trackDataArray[0][0].getColor())
                                         playerTurn = False
-                                        
+
             ##ai decision
             if playerTurn == False:
                 ##Call ai desision method/class here
