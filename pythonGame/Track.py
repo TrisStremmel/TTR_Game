@@ -1,14 +1,16 @@
 class Track():
-    def __init__(self, top, left, height, width, color, img, rot):
+    def __init__(self, top, left, color, img, length, rot, perX, perY, occupied):
         self.top = top
         self.left = left
-        self.height = height
-        self.width = width
         self.color = color
         self.img = img
         self.rot = rot
+        self.length = length
+        self.perX = perX
+        self.perY = perY
+        self.occupied = occupied
 
-    def setTop(self,top):
+    def setTop(self, top):
         self.top = top
 
     def getTop(self):
@@ -40,5 +42,21 @@ class Track():
 
     def getImg(self):
         return self.img
+
     def getRot(self):
         return self.rot
+
+    def getLength(self):
+        return self.length
+
+    def getPerX(self):
+        return self.perX
+
+    def getPerY(self):
+        return self.perY
+
+    def getOccupied(self):
+        return self.occupied
+
+    def setOccupied(self, occupied):
+        self.occupied = occupied

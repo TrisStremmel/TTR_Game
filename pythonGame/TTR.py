@@ -31,7 +31,7 @@ blue = (0, 0, 255)
 darkBlue = (0, 0, 139)
 
 # makes the screen as wide and tall as above variables, makes a white background, adds TTR title, and starts a clock
-screen = pygame.display.set_mode([display_width, display_height])
+screen = pygame.display.set_mode([display_width, display_height], pygame.FULLSCREEN)
 pygame.display.set_caption("Ticket To Ride")
 clock = pygame.time.Clock()
 
@@ -64,16 +64,25 @@ blueDeckImg = pygame.image.load('Ticket To Ride Assets\Blue\BlueDeck.png')
 blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 
 #loads images of the train tracks
+blankTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Blank.png')
+redTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Red.png')
+orangeTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Orange.png')
+yellowTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Yellow.png')
+greenTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Green.png')
+blueTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Blue.png')
+pinkTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Pink.png')
+whiteTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_White.png')
+blackTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Black.png')
 
-blankTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Blank.png')
-redTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Red.png')
-orangeTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Orange.png')
-yellowTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Yellow.png')
-greenTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Green.png')
-blueTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Blue.png')
-pinkTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Pink.png')
-whiteTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_White.png')
-blackTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Bar\Track_Black.png')
+#loads images of the occupied train tracks
+redTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Red.png')
+orangeTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Orange.png')
+yellowTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Yellow.png')
+greenTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Green.png')
+blueTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Blue.png')
+pinkTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Pink.png')
+whiteTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_White.png')
+blackTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Black.png')
 
 human = Player()
 bot = Player()
@@ -142,9 +151,9 @@ def titleScreen():
                 start = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-        button("Start Train-ing", 20, 400, 100, 200, 75, green, darkGreen, gameLoop)
-        button("Settings", 20, 400, 200, 200, 75, blue, darkBlue, settings)
-        button("Quit", 20, 400, 300, 200, 75, red, darkRed, quitGame)
+        button("Start Train-ing", 20, display_width * 0.45, display_height * 0.4, 200, 75, green, darkGreen, gameLoop)
+        button("Settings", 20, display_width * 0.45, display_height * 0.5, 200, 75, blue, darkBlue, settings)
+        button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
         clock.tick(10)
@@ -155,8 +164,8 @@ def settings():
     screen.blit(BackGround.image, BackGround.rect)
     running = True
     while running:
-        button("Title Screen", 20, 400, 100, 200, 75, blue, darkBlue, titleScreen)
-        button("Quit", 20, 400, 300, 200, 75, red, darkRed, quitGame)
+        button("Title Screen", 20, display_width * 0.45, display_height * 0.4, 200, 75, blue, darkBlue, titleScreen)
+        button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -171,7 +180,7 @@ def strToObj(name):
 
 def drawHand(color):
     print('added ' + color + ' card to your hand')
-    human.handCards.append(Card('white', randint(1, 10)))
+    human.handCards.append(Card(color, randint(1, 10)))
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
     human.cardIndex += 1
 
@@ -192,6 +201,7 @@ NY = City(int(display_width * 0.75), int(display_height * 0.2))
 stateArray = [WA, MT, NY, TX, CO, KS, OK]
 
 def drawGameBoard():
+
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (CO.getX(), CO.getY()))
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (TX.getX(), TX.getY()))
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (MT.getX(), MT.getY()))
@@ -204,6 +214,22 @@ def drawGameBoard():
     pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (KS.getX(), KS.getY()))
 
 
+    # draws the black and white train card on the card piles over the hit boxes
+    screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75))
+    screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.75))
+    screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.75))
+    screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.75))
+    screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.75))
+    screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.75))
+    screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
+    screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
+
+    pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
+    cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
+
+    drawCities()
+
+def drawCities():
     pygame.draw.circle(screen, white, [WA.getX(), WA.getY()], 50, 50)
     pygame.draw.circle(screen, white, [CO.getX(), CO.getY()], 50, 50)
     pygame.draw.circle(screen, white, [MT.getX(), MT.getY()], 50, 50)
@@ -220,23 +246,15 @@ def drawGameBoard():
     cityNameDisplay("KS", KS.getX(), KS.getY())
     cityNameDisplay("NY", NY.getX(), NY.getY())
 
-    # draws the black and white train card on the card piles over the hit boxes
-    screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75))
-    screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.75))
-    screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.75))
-    screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.75))
-    screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.75))
-    screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.75))
-    screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
-    screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
-
-trackDataArray = [[-1 for x in range(11)] for y in range(11)]
+trackDataArray = [[-1 for x in range(20)] for y in range(11)]
     #draws the tracks
 def drawTracks():
+    row=0
     for i in range(0, len(cityConnection), 1):
         for j in range(i, len(cityConnection[i]), 1):
             if cityConnection[i][j] != -1:
                 length = cityConnection[i][j].getLength()
+                testLength = length
                 color = cityConnection[i][j].getColor()
                 x1 = stateArray[i].getX()
                 y1 = stateArray[i].getY()
@@ -248,30 +266,57 @@ def drawTracks():
                 rot = math.degrees(radians)
 
                 perLenX= difx/length
-                perLeny= dify/length
+                perLenY= dify/length
 
                 trackImg = pygame.transform.scale(strToObj(color + "Track"), (100, 50))
                 trackImgFin = pygame.transform.rotate(trackImg, -rot)
 
                 for pri in range(1, length+1):
-                    left = x1 + (perLenX*pri*.8) - 50
-                    top = y1 + (perLeny*pri*.8) - 50
-                    screen.blit(trackImgFin, (left, top))
+                    if testLength >=0:
+                        left = x1 + (perLenX*pri*.8) - 50
+                        top = y1 + (perLenY*pri*.8) - 50
+                        screen.blit(trackImgFin, (left, top))
 
-                    trackDataArray[i][pri-1] = Track(top, left, abs(dify), abs(difx), color, trackImgFin, -rot)
+                        trackDataArray[row][pri-1] = Track(top, left, color, trackImgFin, length, rot, perLenX, perLenY, False)
+                        testLength -= 1
+                        if testLength==0:
+                            row+=1
 
-                    '''
-                    print(top)
-                    print(left)
-                    print(difx)
-                    print(dify)
-                    '''
+def claimTrack(track, row):
+    color = track.getColor()
+    trackImg = pygame.transform.scale(strToObj(color + "TrackOcc"), (100, 50))
+    trackImgFin = pygame.transform.rotate(trackImg, -track.getRot())
+    testLength = track.getLength()
+    for pri in range(0, track.getLength()):
+        trackDataArray[row][pri].setOccupied(True)
+        if testLength >= 0:
+            left = track.getLeft() + (track.getPerX() * pri * .8)
+            top = track.getTop() + (track.getPerY() * pri * .8)
+            screen.blit(trackImgFin, (left, top))
+
+    print("claimed")
+
+def removeCardsFromHand(color, numRemove):
+    for k in range(human.handCards.__len__()-1, -1, -1):
+        if human.handCards[k].getColor() == color and numRemove>0:
+            human.handCards.remove(human.handCards[k])
+            human.cardIndex-=1
+            numRemove-=1;
+    pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
+    cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
+    for k in range(0, human.handCards.__len__(), 1):
+        color = human.handCards[k].getColor()
+        screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
+
+firstTrack = None
 
 def gameLoop():
-    numCards = 0
-
+    human.handCards = []
+    human.cardIndex = 0
+    bot.handCards = []
+    bot.cardIndex = 0
     playerTurn = True
-
+    numCards = 0
     screen.fill(white)
 
     screen.blit(BackGround.image, BackGround.rect)
@@ -286,16 +331,20 @@ def gameLoop():
     blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
     blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
 
+    passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
+
     deackArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck]
+
 
     drawTracks()
     drawGameBoard()
     running = True
 
     while running:
+        drawCities()
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
-
+        button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -304,8 +353,28 @@ def gameLoop():
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
 
+                    for i in range(0, len(trackDataArray), 1):
+                        for j in range(0, len(trackDataArray[i]), 1):
+                            data = trackDataArray[i][j]
+
+                            if data != -1:
+                                #pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
+                                if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and data.getOccupied() == False:
+                                    sameColor = 0
+                                    for k in range(0, human.handCards.__len__(), 1):
+                                        if human.handCards[k].getColor() == data.getColor():
+                                            sameColor+=1
+                                        if sameColor == data.getLength():
+                                            firstTrack = trackDataArray[i][0]
+                                            claimTrack(firstTrack, i)
+                                            removeCardsFromHand(data.getColor(), data.getLength())
+                                            break
+
                     if len(human.handCards) >= 14:
                         print('There are 14 cards in your hand, you can not draw any more!')
+
+                    elif passTurn.collidepoint(pos):
+                        playerTurn = False
 
                     elif whiteDeck.collidepoint(pos):
                         drawHand('white')
@@ -331,20 +400,7 @@ def gameLoop():
                     elif blackDeck.collidepoint(pos):
                         drawHand('black')
 
-                    else:
-                        for i in range(0, len(trackDataArray), 1):
-                            for j in range(0, len(trackDataArray[i]), 1):
-                                data = trackDataArray[i][j]
 
-                                if data == -1:
-                                    break
-                                else:
-                                    #print(i)
-                                    #print(data.getColor())
-                                    pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
-                                    if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos):
-                                        print(trackDataArray[0][0].getColor())
-                                        playerTurn = False
 
             ##ai decision
             if playerTurn == False:
@@ -354,7 +410,7 @@ def gameLoop():
 
 
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(60)
     pygame.quit()
     quit()
 
