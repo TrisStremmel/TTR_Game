@@ -84,8 +84,6 @@ pinkTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Pi
 whiteTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_White.png')
 blackTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Black.png')
 
-human = Player()
-bot = Player()
 
 screen.blit(blackTrainImg, (display_width * 0.05, display_height * 0.9))
 screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
@@ -108,6 +106,12 @@ cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas',
 # numNodes = input('How many cities?')
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 # cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
+
+def createPlayers(mode):
+    if mode = 'Single':
+        player
+    human = Player()
+    bot = Player()
 
 def quitGame():
     pygame.quit()
@@ -151,7 +155,7 @@ def titleScreen():
                 start = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-        button("Start Train-ing", 20, display_width * 0.45, display_height * 0.4, 200, 75, green, darkGreen, gameLoop)
+        button("Start Train-ing", 20, display_width * 0.45, display_height * 0.4, 200, 75, green, darkGreen, gameStart)
         button("Settings", 20, display_width * 0.45, display_height * 0.5, 200, 75, blue, darkBlue, settings)
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
@@ -249,7 +253,7 @@ def drawCities():
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
     #draws the tracks
 def drawTracks():
-    row=0
+    row = 0
     for i in range(0, len(cityConnection), 1):
         for j in range(i, len(cityConnection[i]), 1):
             if cityConnection[i][j] != -1:
@@ -310,7 +314,7 @@ def removeCardsFromHand(color, numRemove):
 
 firstTrack = None
 
-def gameLoop():
+def gameStart():
     human.handCards = []
     human.cardIndex = 0
     bot.handCards = []
@@ -417,4 +421,4 @@ def gameLoop():
 
 titleScreen()
 settings()
-gameLoop()
+gameStart()
