@@ -8,6 +8,8 @@ from Edge import Edge
 from City import City
 from Card import Card
 from Player import Player
+from AI import AI
+from Human import Human
 from Track import Track
 
 pygame.init()
@@ -107,11 +109,18 @@ cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas',
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 # cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
 
+playerOne = Player()
+playerTwo = Player()
 def createPlayers(mode):
-    if mode = 'Single':
-        player
-    human = Player()
-    bot = Player()
+    global playerOne
+    global playerTwo
+    if mode == 'Human vs AI':
+        playerOne = Human()
+        playerTwo = AI()
+    if mode == 'AI vs AI':
+        playerOne = AI()
+        playerTwo = AI()
+
 
 def quitGame():
     pygame.quit()
@@ -131,7 +140,7 @@ def button(msg, fs, x, y, w, h, ic, ac, action=None):
 
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
         pygame.draw.rect(screen, ac, (x, y, w, h))
-        if click[0] == 1 and action != None:
+        if click[0] == 1 and action is not None: # changed from:    if click[0] == 1 and action != None:
             action()
 
     else:
@@ -182,17 +191,12 @@ def settings():
 def strToObj(name):
     return eval(name)
 
-def drawHand(color):
-    print('added ' + color + ' card to your hand')
-    human.handCards.append(Card(color, randint(1, 10)))
-    screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * human.cardIndex)))
-    human.cardIndex += 1
-
 def cityNameDisplay(text, x, y):
     largeText = pygame.font.Font('freesansbold.ttf',25)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((x),(y))
+    TextRect.center = (x, y)
     screen.blit(TextSurf, TextRect)
+
 
 WA = City(int(display_width * 0.1), int(display_height * 0.15))
 CO = City(int(display_width * 0.3), int(display_height * 0.35))
@@ -202,7 +206,7 @@ OK = City(int(display_width * 0.475), int(display_height * 0.45))
 KS = City(int(display_width * 0.5), int(display_height * 0.25))
 NY = City(int(display_width * 0.75), int(display_height * 0.2))
 
-stateArray = [WA, MT, NY, TX, CO, KS, OK]
+cityArray = [WA, MT, NY, TX, CO, KS, OK]
 
 def drawGameBoard():
 
@@ -216,7 +220,6 @@ def drawGameBoard():
     pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (CO.getX(), CO.getY()))
     pygame.draw.line(screen, black, (KS.getX(), KS.getY()), (CO.getX(), CO.getY()))
     pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (KS.getX(), KS.getY()))
-
 
     # draws the black and white train card on the card piles over the hit boxes
     screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75))
@@ -250,8 +253,9 @@ def drawCities():
     cityNameDisplay("KS", KS.getX(), KS.getY())
     cityNameDisplay("NY", NY.getX(), NY.getY())
 
+
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
-    #draws the tracks
+#draws the tracks
 def drawTracks():
     row = 0
     for i in range(0, len(cityConnection), 1):
@@ -260,31 +264,31 @@ def drawTracks():
                 length = cityConnection[i][j].getLength()
                 testLength = length
                 color = cityConnection[i][j].getColor()
-                x1 = stateArray[i].getX()
-                y1 = stateArray[i].getY()
-                x2 = stateArray[j].getX()
-                y2 = stateArray[j].getY()
+                x1 = cityArray[i].getX()
+                y1 = cityArray[i].getY()
+                x2 = cityArray[j].getX()
+                y2 = cityArray[j].getY()
                 difx = x2 - x1
                 dify = y2 - y1
                 radians = math.atan2(dify, difx)
                 rot = math.degrees(radians)
 
-                perLenX= difx/length
-                perLenY= dify/length
+                perLenX = difx/length
+                perLenY = dify/length
 
                 trackImg = pygame.transform.scale(strToObj(color + "Track"), (100, 50))
                 trackImgFin = pygame.transform.rotate(trackImg, -rot)
 
                 for pri in range(1, length+1):
-                    if testLength >=0:
+                    if testLength >= 0:
                         left = x1 + (perLenX*pri*.8) - 50
                         top = y1 + (perLenY*pri*.8) - 50
                         screen.blit(trackImgFin, (left, top))
 
                         trackDataArray[row][pri-1] = Track(top, left, color, trackImgFin, length, rot, perLenX, perLenY, False)
                         testLength -= 1
-                        if testLength==0:
-                            row+=1
+                        if testLength == 0:
+                            row += 1
 
 def claimTrack(track, row):
     color = track.getColor()
@@ -300,29 +304,31 @@ def claimTrack(track, row):
 
     print("claimed")
 
+def drawCard(color):
+    print('added ' + color + ' card to your hand')
+    playerOne.handCards.append(Card(color, randint(1, 10)))
+    screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
+    playerOne.cardIndex += 1
+
 def removeCardsFromHand(color, numRemove):
-    for k in range(human.handCards.__len__()-1, -1, -1):
-        if human.handCards[k].getColor() == color and numRemove>0:
-            human.handCards.remove(human.handCards[k])
-            human.cardIndex-=1
-            numRemove-=1;
+    for k in range(playerOne.handCards.__len__()-1, -1, -1):
+        if playerOne.handCards[k].getColor() == color and numRemove>0:
+            playerOne.handCards.remove(playerOne.handCards[k])
+            playerOne.cardIndex -= 1
+            numRemove -= 1
     pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
     cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
-    for k in range(0, human.handCards.__len__(), 1):
-        color = human.handCards[k].getColor()
+    for k in range(0, playerOne.handCards.__len__(), 1):
+        color = playerOne.handCards[k].getColor()
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
+
 
 firstTrack = None
 
 def gameStart():
-    human.handCards = []
-    human.cardIndex = 0
-    bot.handCards = []
-    bot.cardIndex = 0
-    playerTurn = True
-    numCards = 0
-    screen.fill(white)
+    createPlayers('Human vs AI')
 
+    screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
 
     # draws the hit boxes for the white and black card draw piles
@@ -337,8 +343,7 @@ def gameStart():
 
     passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
 
-    deackArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck]
-
+    deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck]
 
     drawTracks()
     drawGameBoard()
@@ -365,44 +370,45 @@ def gameStart():
                                 #pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
                                 if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and data.getOccupied() == False:
                                     sameColor = 0
-                                    for k in range(0, human.handCards.__len__(), 1):
-                                        if human.handCards[k].getColor() == data.getColor():
-                                            sameColor+=1
+                                    for k in range(0, playerOne.handCards.__len__(), 1):
+                                        if playerOne.handCards[k].getColor() == data.getColor():
+                                            sameColor += 1
                                         if sameColor == data.getLength():
                                             firstTrack = trackDataArray[i][0]
                                             claimTrack(firstTrack, i)
                                             removeCardsFromHand(data.getColor(), data.getLength())
                                             break
 
-                    if len(human.handCards) >= 14:
+                    if len(playerOne.handCards) >= 14:
                         print('There are 14 cards in your hand, you can not draw any more!')
+                        messagebox.showinfo("Move Error", "There are 14 cards in your hand, you can not draw any more!")
 
                     elif passTurn.collidepoint(pos):
                         playerTurn = False
 
                     elif whiteDeck.collidepoint(pos):
-                        drawHand('white')
+                        drawCard('white')
 
                     elif pinkDeck.collidepoint(pos):
-                        drawHand('pink')
+                        drawCard('pink')
 
                     elif redDeck.collidepoint(pos):
-                        drawHand('red')
+                        drawCard('red')
 
                     elif orangeDeck.collidepoint(pos):
-                        drawHand('orange')
+                        drawCard('orange')
 
                     elif yellowDeck.collidepoint(pos):
-                        drawHand('yellow')
+                        drawCard('yellow')
 
                     elif greenDeck.collidepoint(pos):
-                        drawHand('green')
+                        drawCard('green')
 
                     elif blueDeck.collidepoint(pos):
-                        drawHand('blue')
+                        drawCard('blue')
 
                     elif blackDeck.collidepoint(pos):
-                        drawHand('black')
+                        drawCard('black')
 
 
 
