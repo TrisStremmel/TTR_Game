@@ -140,7 +140,7 @@ def button(msg, fs, x, y, w, h, ic, ac, action=None):
 
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
         pygame.draw.rect(screen, ac, (x, y, w, h))
-        if click[0] == 1 and action is not None: # changed from:    if click[0] == 1 and action != None:
+        if click[0] == 1 and action is not None:  # changed from:    if click[0] == 1 and action != None:
             action()
 
     else:

@@ -1,0 +1,16 @@
+1)
+Removed the game mechanic of players having a certain number of trains which
+dictated the end of the game.
+The game will now end when there are no more tracks left. I think this change is 
+reasonable because the game board is not so big that train count is needed to 
+determine the end of the game. Also since it will be a lot of AI vs AI they 
+dont care how long the game lasts; they "have nothing better to do".
+
+2)
+DTM will now only include information availiable to the player who the DTM will
+be created for. This will reduce the feature set and allow for interpertation to 
+be seperate for each player. 
+My fear with this is that we will lose important data related to the game state
+but the reason I went ahead with this change anyway is beacuse I think it will be
+more important to be able to evaluate and distinguish the DTM for each player 
+from the same game.
