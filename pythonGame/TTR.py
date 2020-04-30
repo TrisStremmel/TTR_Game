@@ -329,12 +329,8 @@ def getHumanMove(deckArray):
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
         button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
-        print("test 2")
         for event in pygame.event.get():
-            print("bye")
-            if event.type == pygame.QUIT:
-                return None  # this should stop the game, key work being should
-            elif event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
                 for i in range(0, len(trackDataArray), 1):
