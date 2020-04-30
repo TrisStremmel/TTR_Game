@@ -1,7 +1,8 @@
 from Player import Player
 class AI(Player):
-    def __init__(self):
-        Player.__init__(self)
+    def __init__(self, name):
+        Player.__init__(self, name)
 
     def makeMove(self, state):
-        print("player can not make a decision")
+        print("AI has not been programed to make a decision yet")
+        return 'pass'

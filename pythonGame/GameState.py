@@ -8,15 +8,15 @@ class GameState:
         self.trackArray = tracks
         self.p2dCards = p2.getDestCards()
         self.p1dCards = p1.getDestCards()
-        self.p2hand = p2.getHand()
-        self.p1hand = p1.getHand()
+        self.p2Hand = p2.getHand()
+        self.p1Hand = p1.getHand()
         self.p1Action = None
         self.p2Action = None
 
-    def PlayerMove(self, playerName, action):
-        if playerName == 'playerOne':
+    def setPlayerMove(self, player, action):
+        if player.getName() == 'playerOne':
             self.p1Action = action
-        elif playerName == 'playerTwo':
+        elif player.getName() == 'playerTwo':
             self.p2Action = action
         else:
             print("Error: player not found. No action was added")
@@ -36,16 +36,24 @@ class GameState:
     def updateTracks(self, tracks):
         self.trackArray = tracks
 
-    def updatePlayerInfo(self, player, playerName):
-        if playerName == 'playerOne':
+    def updatePlayerInfo(self, player):
+        if player.getName() == 'playerOne':
             if self.p1Action == 'draw t' or self.p1Action == 'claim':
-                self.p1hand = player.getHand()
+                self.p1Hand = player.getHand()
             elif self.p1Action == 'draw d':
                 self.p1dCards = player.getDestCards()
-        elif playerName == 'playerTwo':
+        elif player.getName() == 'playerTwo':
             if self.p2Action == 'draw t' or self.p2Action == 'claim':
-                self.p2hand = player.getHand()
+                self.p2Hand = player.getHand()
             elif self.p2Action == 'draw d':
                 self.p2dCards = player.getDestCards()
         else:
             print("Error: player not found. No state info updated")
+
+    def writeToCSV(self, player):  # as of now a separate csv will be made for each player that will
+        # only include that player's hand, dcards, and action take
+        # I do not know how this will affect the DTM since the tracks will be changing without any action
+        # being showed in the DTM whenever the other player makes a move.
+        # Since there may be unknown downsides this method is subject to change
+        destination = "/some_file_location"
+        print("csv based on gameState for was successfully generated at: " + destination)

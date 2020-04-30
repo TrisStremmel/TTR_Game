@@ -110,17 +110,17 @@ cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas',
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 # cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
 
-playerOne = Player()
-playerTwo = Player()
+playerOne = Player('playerOne')
+playerTwo = Player('playerTwo')
 def createPlayers(mode):
     global playerOne
     global playerTwo
     if mode == 'Human vs AI':
-        playerOne = Human()
-        playerTwo = AI()
+        playerOne = Human('playerOne')
+        playerTwo = AI('playerTwo')
     if mode == 'AI vs AI':
-        playerOne = AI()
-        playerTwo = AI()
+        playerOne = AI('playerOne')
+        playerTwo = AI('playerTwo')
 
 
 def quitGame():
@@ -323,11 +323,85 @@ def removeCardsFromHand(color, numRemove):
         color = playerOne.handCards[k].getColor()
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
 
+def getHumanMove(deckArray):
+    print("test")
+    while True:
+        button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
+        button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
+        button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
+        print("test 2")
+        for event in pygame.event.get():
+            print("bye")
+            if event.type == pygame.QUIT:
+                return None  # this should stop the game, key work being should
+            elif event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
 
-firstTrack = None
+                for i in range(0, len(trackDataArray), 1):
+                    for j in range(0, len(trackDataArray[i]), 1):
+                        data = trackDataArray[i][j]
+
+                        if data != -1:
+                            # pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
+                            if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and not data.getOccupied():
+                                sameColor = 0
+                                for k in range(0, playerOne.handCards.__len__(), 1):
+                                    if playerOne.handCards[k].getColor() == data.getColor():
+                                        sameColor += 1
+                                    if sameColor == data.getLength():
+                                        firstTrack = trackDataArray[i][0]
+                                        claimTrack(firstTrack, i)
+                                        removeCardsFromHand(data.getColor(), data.getLength())
+                                        return 'claim'
+
+                if len(playerOne.handCards) >= 14:
+                    print('There are 14 cards in your hand, you can not draw any more!')
+                    # add a way for the player to see this message in game since they cant see the console while playing
+
+                # deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck, passTurn]
+                elif deckArray[8].collidepoint(pos):  # passTurn
+                    # no need to update the game state since there is no change
+                    return 'pass'
+
+                elif deckArray[0].collidepoint(pos):  # whiteDeck
+                    drawCard('white')
+                    return 'draw t'
+
+                elif deckArray[1].collidepoint(pos):  # pinkDeck
+                    drawCard('pink')
+                    return 'draw t'
+
+                elif deckArray[2].collidepoint(pos):  # redDeck
+                    drawCard('red')
+                    return 'draw t'
+
+                elif deckArray[3].collidepoint(pos):  # orangeDeck
+                    drawCard('orange')
+                    return 'draw t'
+
+                elif deckArray[4].collidepoint(pos):  # yellowDeck
+                    drawCard('yellow')
+                    return 'draw t'
+
+                elif deckArray[5].collidepoint(pos):  # greenDeck
+                    drawCard('green')
+                    return 'draw t'
+
+                elif deckArray[6].collidepoint(pos):  # blueDeck
+                    drawCard('blue')
+                    return 'draw t'
+
+                elif deckArray[7].collidepoint(pos):  # blackDeck
+                    drawCard('black')
+                    return 'draw t'
+        pygame.display.update()
+        clock.tick(60)
+
+#firstTrack = None
 
 def gameStart():
-    createPlayers('Human vs AI')
+    mode = 'Human vs AI'
+    createPlayers(mode)
     currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
 
     screen.fill(white)
@@ -345,82 +419,51 @@ def gameStart():
 
     passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
 
-    deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck]
+    deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck, passTurn]
 
     drawTracks()
     drawGameBoard()
     running = True
 
     while running:
+        print("hi")
         drawCities()
-        button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
-        button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
-        button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
+
+        # AI or Human makes its move and stores it in the game state
+        if mode == 'Human vs AI':  # or type(playerOne) == Human
+            # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
+            # I hope the line above works, it may not since it has the human class calling a TTR class function
+            humanMove = getHumanMove(deckArray)  # since it did not work I use this
+            if humanMove is None:
+                break  # running = False should also work
+            currentTurn.setPlayerMove(playerOne, humanMove)
+        elif mode == 'AI vs AI':
+            AIMove = playerOne.makeMove(currentTurn)
+            currentTurn.setPlayerMove(playerOne, AIMove)
+
+        # updating the game state based on player one's move
+        currentTurn.updatePlayerInfo(playerOne)
+        currentTurn.updateTracks(cityConnection)
+        currentTurn.writeToCSV(playerOne)
+
+        # AI makes its move and stores it in the game state
+        AIMove = playerTwo.makeMove(currentTurn)
+        currentTurn.setPlayerMove(playerTwo, AIMove)
+
+        # updating the game state based on player two's move
+        currentTurn.updatePlayerInfo(playerTwo)
+        currentTurn.updateTracks(cityConnection)
+        currentTurn.writeToCSV(playerTwo)
+
+        # check for deadlock
+        if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
+            print("since both players passed their turn it is likely the game has reached a deadlock so game ends")
+            break  # running = False should also work
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                running = False  # break will not work here since it is in a for loop
 
-            if playerTurn:
-                if event.type == pygame.MOUSEBUTTONUP:
-                    pos = pygame.mouse.get_pos()
-
-                    for i in range(0, len(trackDataArray), 1):
-                        for j in range(0, len(trackDataArray[i]), 1):
-                            data = trackDataArray[i][j]
-
-                            if data != -1:
-                                #pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
-                                if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and data.getOccupied() == False:
-                                    sameColor = 0
-                                    for k in range(0, playerOne.handCards.__len__(), 1):
-                                        if playerOne.handCards[k].getColor() == data.getColor():
-                                            sameColor += 1
-                                        if sameColor == data.getLength():
-                                            firstTrack = trackDataArray[i][0]
-                                            claimTrack(firstTrack, i)
-                                            removeCardsFromHand(data.getColor(), data.getLength())
-                                            break
-
-                    if len(playerOne.handCards) >= 14:
-                        print('There are 14 cards in your hand, you can not draw any more!')
-                        #add a way for the player to see this message in game since they cannot see the console while playing
-
-                    elif passTurn.collidepoint(pos):
-                        playerTurn = False
-
-                    elif whiteDeck.collidepoint(pos):
-                        drawCard('white')
-
-                    elif pinkDeck.collidepoint(pos):
-                        drawCard('pink')
-
-                    elif redDeck.collidepoint(pos):
-                        drawCard('red')
-
-                    elif orangeDeck.collidepoint(pos):
-                        drawCard('orange')
-
-                    elif yellowDeck.collidepoint(pos):
-                        drawCard('yellow')
-
-                    elif greenDeck.collidepoint(pos):
-                        drawCard('green')
-
-                    elif blueDeck.collidepoint(pos):
-                        drawCard('blue')
-
-                    elif blackDeck.collidepoint(pos):
-                        drawCard('black')
-
-
-
-            ##ai decision
-            if not playerTurn:
-                ##Call ai desision method/class here
-                print("ai played its turn")
-                playerTurn = True
-
-
+        currentTurn.incrementTurn()
         pygame.display.update()
         clock.tick(60)
     pygame.quit()
