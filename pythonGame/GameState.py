@@ -3,10 +3,49 @@ class GameState:
     #and data about the game board and turn count
     #this means the AI will have access to the other player's hand and destination cards, however
     #it will not be allowed to uses that info, simply it will not be coded to ever reference those values
-    def __init__(self, turn, tracks, p1hand, p2hand, p1dCards, p2dCards):
-        self.p2dCards = p2dCards
-        self.p1dCards = p1dCards
-        self.p2hand = p2hand
-        self.p1hand = p1hand
+    def __init__(self, turn, tracks, p1, p2):
         self.turn = turn
         self.trackArray = tracks
+        self.p2dCards = p2.getDestCards()
+        self.p1dCards = p1.getDestCards()
+        self.p2hand = p2.getHand()
+        self.p1hand = p1.getHand()
+        self.p1Action = None
+        self.p2Action = None
+
+    def PlayerMove(self, playerName, action):
+        if playerName == 'playerOne':
+            self.p1Action = action
+        elif playerName == 'playerTwo':
+            self.p2Action = action
+        else:
+            print("Error: player not found. No action was added")
+
+    def getTrackArray(self):
+        return self.trackArray
+
+    def getP1Move(self):
+        return self.p1Action
+
+    def getP2Move(self):
+        return self.p2Action
+
+    def incrementTurn(self):
+        self.turn += 1
+
+    def updateTracks(self, tracks):
+        self.trackArray = tracks
+
+    def updatePlayerInfo(self, player, playerName):
+        if playerName == 'playerOne':
+            if self.p1Action == 'draw t' or self.p1Action == 'claim':
+                self.p1hand = player.getHand()
+            elif self.p1Action == 'draw d':
+                self.p1dCards = player.getDestCards()
+        elif playerName == 'playerTwo':
+            if self.p2Action == 'draw t' or self.p2Action == 'claim':
+                self.p2hand = player.getHand()
+            elif self.p2Action == 'draw d':
+                self.p2dCards = player.getDestCards()
+        else:
+            print("Error: player not found. No state info updated")

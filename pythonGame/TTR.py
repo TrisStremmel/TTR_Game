@@ -11,6 +11,7 @@ from Player import Player
 from AI import AI
 from Human import Human
 from Track import Track
+from GameState import GameState
 
 pygame.init()
 
@@ -327,6 +328,7 @@ firstTrack = None
 
 def gameStart():
     createPlayers('Human vs AI')
+    currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
 
     screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
@@ -381,7 +383,7 @@ def gameStart():
 
                     if len(playerOne.handCards) >= 14:
                         print('There are 14 cards in your hand, you can not draw any more!')
-                        messagebox.showinfo("Move Error", "There are 14 cards in your hand, you can not draw any more!")
+                        #add a way for the player to see this message in game since they cannot see the console while playing
 
                     elif passTurn.collidepoint(pos):
                         playerTurn = False
@@ -413,7 +415,7 @@ def gameStart():
 
 
             ##ai decision
-            if playerTurn == False:
+            if not playerTurn:
                 ##Call ai desision method/class here
                 print("ai played its turn")
                 playerTurn = True

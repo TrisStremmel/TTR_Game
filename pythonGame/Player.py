@@ -6,3 +6,12 @@ class Player:
 
     def makeMove(self, state):
         print("player can not make a decision")
+
+    def getHand(self):
+        return self.handCards
+
+    def getCardIndex(self):
+        return self.cardIndex
+
+    def getDestCards(self):
+        return self.destinationCards
