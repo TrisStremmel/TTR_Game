@@ -32,6 +32,9 @@ class GameState:
 
     def incrementTurn(self):
         self.turn += 1
+        # next lines reset the actions for the players since they have not made a move yet on the next turn
+        self.p1Action = None
+        self.p2Action = None
 
     def updateTracks(self, tracks):
         self.trackArray = tracks

@@ -313,7 +313,7 @@ def drawCard(color):
 
 def removeCardsFromHand(color, numRemove):
     for k in range(playerOne.handCards.__len__()-1, -1, -1):
-        if playerOne.handCards[k].getColor() == color and numRemove>0:
+        if playerOne.handCards[k].getColor() == color and numRemove > 0:
             playerOne.handCards.remove(playerOne.handCards[k])
             playerOne.cardIndex -= 1
             numRemove -= 1
@@ -324,11 +324,12 @@ def removeCardsFromHand(color, numRemove):
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
 
 def getHumanMove(deckArray):
-    print("test")
-    while True:
+    while True:  # keeps looping until user makes a valid move
+
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
         button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
+
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
@@ -390,6 +391,8 @@ def getHumanMove(deckArray):
                 elif deckArray[7].collidepoint(pos):  # blackDeck
                     drawCard('black')
                     return 'draw t'
+
+        # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
         clock.tick(60)
 
@@ -422,7 +425,6 @@ def gameStart():
     running = True
 
     while running:
-        print("hi")
         drawCities()
 
         # AI or Human makes its move and stores it in the game state
@@ -430,8 +432,6 @@ def gameStart():
             # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
             # I hope the line above works, it may not since it has the human class calling a TTR class function
             humanMove = getHumanMove(deckArray)  # since it did not work I use this
-            if humanMove is None:
-                break  # running = False should also work
             currentTurn.setPlayerMove(playerOne, humanMove)
         elif mode == 'AI vs AI':
             AIMove = playerOne.makeMove(currentTurn)
@@ -439,8 +439,11 @@ def gameStart():
 
         # updating the game state based on player one's move
         currentTurn.updatePlayerInfo(playerOne)
+        '''
+        Add a line here that either checks and updates or just updates the city connections array based on player move
+        '''
         currentTurn.updateTracks(cityConnection)
-        currentTurn.writeToCSV(playerOne)
+        #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
         # AI makes its move and stores it in the game state
         AIMove = playerTwo.makeMove(currentTurn)
@@ -449,17 +452,31 @@ def gameStart():
         # updating the game state based on player two's move
         currentTurn.updatePlayerInfo(playerTwo)
         currentTurn.updateTracks(cityConnection)
-        currentTurn.writeToCSV(playerTwo)
+        #currentTurn.writeToCSV(playerTwo)  # this line is commented out since the method had not been made yet
 
         # check for deadlock
         if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
             print("since both players passed their turn it is likely the game has reached a deadlock so game ends")
             break  # running = False should also work
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False  # break will not work here since it is in a for loop
+
+        # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
+        edgeLeft = False
+        for i in range(len(cityConnection)):  # !!!! does not work right now due to cityconnection array not being updated ever. FIX!!!
+            toLeave = False
+            for edge in cityConnection[i]:
+                if type(edge) != int:  # aka if there is an edge between those two cities
+                    print("hi")
+                    if edge.occupied == 'False':
+                        toLeave = True
+                        edgeLeft = True
+                        break
+            if toLeave:
+                break
+        if not edgeLeft:
+            break  # running = False should also work
 
         currentTurn.incrementTurn()
+
         pygame.display.update()
         clock.tick(60)
     pygame.quit()

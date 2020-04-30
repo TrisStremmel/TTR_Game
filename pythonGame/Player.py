@@ -4,6 +4,7 @@ class Player:
         self.cardIndex = 0;
         self.destinationCards = []
         self.name = name
+        self.points = 0
 
     def makeMove(self, gameState):
         print("player can not make a decision")

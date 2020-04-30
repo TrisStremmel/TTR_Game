@@ -2,7 +2,7 @@ class Edge:
 
     def __init__(self, length, color):
         self.length = length
-        self.occupied = 'false'
+        self.occupied = 'False'
         self.color = color
 
     def getLength(self):
