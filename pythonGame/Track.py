@@ -1,5 +1,5 @@
-class Track():
-    def __init__(self, top, left, color, img, length, rot, perX, perY, occupied):
+class Track:
+    def __init__(self, top, left, color, img, length, rot, perX, perY, occupied, edge):
         self.top = top
         self.left = left
         self.color = color
@@ -9,6 +9,10 @@ class Track():
         self.perX = perX
         self.perY = perY
         self.occupied = occupied
+        self.edgeData = edge
+
+    def getEdgeData(self):
+        return self.edgeData
 
     def setTop(self, top):
         self.top = top

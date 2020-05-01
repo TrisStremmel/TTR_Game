@@ -170,7 +170,7 @@ def titleScreen():
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(60)
 
 
 def settings():
@@ -178,7 +178,7 @@ def settings():
     screen.blit(BackGround.image, BackGround.rect)
     running = True
     while running:
-        button("Title Screen", 20, display_width * 0.45, display_height * 0.4, 200, 75, blue, darkBlue, titleScreen)
+        button("Title Screen", 20, display_width * 0.45, display_height * 0.2, 200, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         for event in pygame.event.get():
@@ -187,7 +187,7 @@ def settings():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
             pygame.display.update()
-        clock.tick(10)
+        clock.tick(60)
 
 def strToObj(name):
     return eval(name)
@@ -286,7 +286,7 @@ def drawTracks():
                         top = y1 + (perLenY*pri*.8) - 50
                         screen.blit(trackImgFin, (left, top))
 
-                        trackDataArray[row][pri-1] = Track(top, left, color, trackImgFin, length, rot, perLenX, perLenY, False)
+                        trackDataArray[row][pri-1] = Track(top, left, color, trackImgFin, length, rot, perLenX, perLenY, False, [i, j])
                         testLength -= 1
                         if testLength == 0:
                             row += 1
@@ -307,9 +307,8 @@ def claimTrack(track, row):
 
 def drawCard(color):
     print('added ' + color + ' card to your hand')
-    playerOne.handCards.append(Card(color, randint(1, 10)))
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
-    playerOne.cardIndex += 1
+    playerOne.addCardToHand(color)
 
 def removeCardsFromHand(color, numRemove):
     for k in range(playerOne.handCards.__len__()-1, -1, -1):
@@ -324,6 +323,7 @@ def removeCardsFromHand(color, numRemove):
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
 
 def getHumanMove(deckArray):
+    drawCount = 0
     while True:  # keeps looping until user makes a valid move
 
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
@@ -333,64 +333,76 @@ def getHumanMove(deckArray):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
+                if drawCount == 0:  # if draw count is 0 then the player can draw or claim. if draw count is above 0 player can only draw
+                    for i in range(0, len(trackDataArray), 1):
+                        for j in range(0, len(trackDataArray[i]), 1):
+                            data = trackDataArray[i][j]
 
-                for i in range(0, len(trackDataArray), 1):
-                    for j in range(0, len(trackDataArray[i]), 1):
-                        data = trackDataArray[i][j]
-
-                        if data != -1:
-                            # pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
-                            if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and not data.getOccupied():
-                                sameColor = 0
-                                for k in range(0, playerOne.handCards.__len__(), 1):
-                                    if playerOne.handCards[k].getColor() == data.getColor():
-                                        sameColor += 1
-                                    if sameColor == data.getLength():
-                                        firstTrack = trackDataArray[i][0]
-                                        claimTrack(firstTrack, i)
-                                        removeCardsFromHand(data.getColor(), data.getLength())
-                                        return 'claim'
-
-                if len(playerOne.handCards) >= 14:
-                    print('There are 14 cards in your hand, you can not draw any more!')
-                    # add a way for the player to see this message in game since they cant see the console while playing
+                            if data != -1:
+                                # pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
+                                if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and not data.getOccupied():
+                                    sameColor = 0
+                                    for k in range(0, playerOne.handCards.__len__(), 1):
+                                        if playerOne.handCards[k].getColor() == data.getColor():
+                                            sameColor += 1
+                                        if sameColor == data.getLength():
+                                            firstTrack = trackDataArray[i][0]
+                                            claimTrack(firstTrack, i)
+                                            removeCardsFromHand(data.getColor(), data.getLength())
+                                            return ['claim', data.getEdgeData()]
 
                 # deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck, passTurn]
-                elif deckArray[8].collidepoint(pos):  # passTurn
+                if deckArray[8].collidepoint(pos) and drawCount == 0:  # passTurn
                     # no need to update the game state since there is no change
-                    return 'pass'
+                    return ['pass']
 
+                if drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
+                    print('There are 14 cards in your hand, you can not draw any more!')
+                    # add a way for the player to see this message in game since they cant see the console while playing
                 elif deckArray[0].collidepoint(pos):  # whiteDeck
                     drawCard('white')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[1].collidepoint(pos):  # pinkDeck
                     drawCard('pink')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[2].collidepoint(pos):  # redDeck
                     drawCard('red')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[3].collidepoint(pos):  # orangeDeck
                     drawCard('orange')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[4].collidepoint(pos):  # yellowDeck
                     drawCard('yellow')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[5].collidepoint(pos):  # greenDeck
                     drawCard('green')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[6].collidepoint(pos):  # blueDeck
                     drawCard('blue')
-                    return 'draw t'
-
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
                 elif deckArray[7].collidepoint(pos):  # blackDeck
                     drawCard('black')
-                    return 'draw t'
+                    drawCount += 1
+                    if drawCount == 2:
+                        return ['draw t']
+
+                elif drawCount == 1:
+                    print('You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
+                    # add a way for the player to see this message in game since they cant see the console while playing
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
@@ -427,29 +439,40 @@ def gameStart():
     while running:
         drawCities()
 
+        p1Move = None
         # AI or Human makes its move and stores it in the game state
         if mode == 'Human vs AI':  # or type(playerOne) == Human
             # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
             # I hope the line above works, it may not since it has the human class calling a TTR class function
-            humanMove = getHumanMove(deckArray)  # since it did not work I use this
-            currentTurn.setPlayerMove(playerOne, humanMove)
+            p1Move = getHumanMove(deckArray)  # since it did not work I use this
+            currentTurn.setPlayerMove(playerOne, p1Move[0])
         elif mode == 'AI vs AI':
-            AIMove = playerOne.makeMove(currentTurn)
-            currentTurn.setPlayerMove(playerOne, AIMove)
+            p1Move = playerOne.makeMove(currentTurn)
+            currentTurn.setPlayerMove(playerOne, p1Move[0])
+
+        if currentTurn.getP1Move() == 'claim':  # if the player claims a track the cityConnection needs to be updated but for the other
+            # move options the values are just updated in that player's instance
+            x = p1Move[1][0]
+            y = p1Move[1][1]
+            cityConnection[x][y].claim(playerOne)
+            cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
 
         # updating the game state based on player one's move
         currentTurn.updatePlayerInfo(playerOne)
-        '''
-        Add a line here that either checks and updates or just updates the city connections array based on player move
-        '''
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
         # AI makes its move and stores it in the game state
-        AIMove = playerTwo.makeMove(currentTurn)
-        currentTurn.setPlayerMove(playerTwo, AIMove)
+        p2Move = playerTwo.makeMove(currentTurn)
+        currentTurn.setPlayerMove(playerTwo, p2Move[0])
+
+        if currentTurn.getP2Move() == 'claim':
+            x = p2Move[1][0]
+            y = p2Move[1][1]
+            cityConnection[x][y].claim(playerTwo)
 
         # updating the game state based on player two's move
+        #remember to update trackDataArray when AI makes move since it affects the player
         currentTurn.updatePlayerInfo(playerTwo)
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerTwo)  # this line is commented out since the method had not been made yet
@@ -465,8 +488,9 @@ def gameStart():
             toLeave = False
             for edge in cityConnection[i]:
                 if type(edge) != int:  # aka if there is an edge between those two cities
-                    print("hi")
+                    print(edge.occupied)
                     if edge.occupied == 'False':
+                        print("hi")
                         toLeave = True
                         edgeLeft = True
                         break

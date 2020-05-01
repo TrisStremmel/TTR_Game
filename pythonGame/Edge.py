@@ -1,5 +1,4 @@
 class Edge:
-
     def __init__(self, length, color):
         self.length = length
         self.occupied = 'False'
@@ -16,3 +15,6 @@ class Edge:
 
     def setColor(self, color):
         self.color = color
+
+    def claim(self, player):
+        self.occupied = player.getName()
