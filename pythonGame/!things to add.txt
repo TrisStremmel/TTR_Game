@@ -2,9 +2,8 @@ broad/general
 implement settings
 add many new AI to play game
 minor/specific
-finish game state and allow player and AI to take a turn
 when you have 14 cards in hand have error message pop up or be displayed somewhere othere then the console
-
+add destination cards
 
 
 

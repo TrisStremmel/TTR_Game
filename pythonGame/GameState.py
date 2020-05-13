@@ -54,9 +54,9 @@ class GameState:
             print("Error: player not found. No state info updated")
 
     def writeToCSV(self, player):  # as of now a separate csv will be made for each player that will
-        # only include that player's hand, dcards, and action take
+        # only include that player's hand, dcards, and action taken
         # I do not know how this will affect the DTM since the tracks will be changing without any action
         # being showed in the DTM whenever the other player makes a move.
         # Since there may be unknown downsides this method is subject to change
         destination = "/some_file_location"
-        print("csv based on gameState for was successfully generated at: " + destination)
+        print("csv based on gameState for " + player.getName() + " was successfully generated at: " + destination)

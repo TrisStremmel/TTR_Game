@@ -94,7 +94,7 @@ screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
-##numNodes = input('How many cities?')
+#destinationDeck = [[], [], [], [], [], [], [], [], []]
 
 cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
                    [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
@@ -303,7 +303,7 @@ def claimTrack(track, row):
             top = track.getTop() + (track.getPerY() * pri * .8)
             screen.blit(trackImgFin, (left, top))
 
-    print("claimed")
+    print("claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
 
 def drawCard(color):
     print('added ' + color + ' card to your hand')
@@ -346,8 +346,9 @@ def getHumanMove(deckArray):
                                         if playerOne.handCards[k].getColor() == data.getColor():
                                             sameColor += 1
                                         if sameColor == data.getLength():
-                                            firstTrack = trackDataArray[i][0]
-                                            claimTrack(firstTrack, i)
+                                            #next to lines moved elsewhere so it is update the same it is an AI or human claiming a track
+                                            #firstTrack = trackDataArray[i][0]
+                                            #claimTrack(firstTrack, i)
                                             removeCardsFromHand(data.getColor(), data.getLength())
                                             return ['claim', data.getEdgeData()]
 
@@ -444,19 +445,26 @@ def gameStart():
         if mode == 'Human vs AI':  # or type(playerOne) == Human
             # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
             # I hope the line above works, it may not since it has the human class calling a TTR class function
-            p1Move = getHumanMove(deckArray)  # since it did not work I use this
+            p1Move = getHumanMove(deckArray)  # since the line above did not work I use this
             currentTurn.setPlayerMove(playerOne, p1Move[0])
         elif mode == 'AI vs AI':
             p1Move = playerOne.makeMove(currentTurn)
             currentTurn.setPlayerMove(playerOne, p1Move[0])
 
-        if currentTurn.getP1Move() == 'claim':  # if the player claims a track the cityConnection needs to be updated but for the other
-            # move options the values are just updated in that player's instance
+        print(trackDataArray)
+        if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
+            # needs to be updated but for the other move options the values are just updated in that player's instance
             x = p1Move[1][0]
             y = p1Move[1][1]
             cityConnection[x][y].claim(playerOne)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
+            for row in range(0, len(trackDataArray)):
+                if trackDataArray[row] != -1 and trackDataArray[row][0].getEdgeData() == p1Move[1]:
+                    claimTrack(trackDataArray[row][0], row)  # updates track data array
+                    break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
+                    # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
+        print(currentTurn.getP1Move())
         # updating the game state based on player one's move
         currentTurn.updatePlayerInfo(playerOne)
         currentTurn.updateTracks(cityConnection)
@@ -470,9 +478,14 @@ def gameStart():
             x = p2Move[1][0]
             y = p2Move[1][1]
             cityConnection[x][y].claim(playerTwo)
+            cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
+            for row in trackDataArray:
+                if row != -1 and row[0].getEdgeData() == p1Move[1]:
+                    claimTrack(row[0], row[0].getEdgeData()[0])  # updates track data array
+                    break
 
         # updating the game state based on player two's move
-        #remember to update trackDataArray when AI makes move since it affects the player
+        #remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
         currentTurn.updatePlayerInfo(playerTwo)
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerTwo)  # this line is commented out since the method had not been made yet
@@ -484,25 +497,33 @@ def gameStart():
 
         # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
         edgeLeft = False
-        for i in range(len(cityConnection)):  # !!!! does not work right now due to cityconnection array not being updated ever. FIX!!!
+        for i in range(len(cityConnection)):
             toLeave = False
             for edge in cityConnection[i]:
                 if type(edge) != int:  # aka if there is an edge between those two cities
-                    print(edge.occupied)
                     if edge.occupied == 'False':
-                        print("hi")
                         toLeave = True
                         edgeLeft = True
                         break
             if toLeave:
                 break
         if not edgeLeft:
+            print("All tracks have been claimed so the game is over!")
             break  # running = False should also work
 
         currentTurn.incrementTurn()
 
         pygame.display.update()
         clock.tick(60)
+
+    # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
+    if playerOne.points > playerTwo.points:
+        print("Player one won with " + playerOne.points + " over player two who had " + playerTwo.points + ".")  # add destination cards completed
+    elif playerOne.points < playerTwo.points:
+        print("Player two won with " + playerTwo.points + " over player one who had " + playerOne.points + ".")  # add destination cards completed
+    else:  # then test number of destination cards as a tie breaker
+        print("It was a draw! Both players had " + playerTwo.points + " points.")
+
     pygame.quit()
     quit()
 
