@@ -40,15 +40,17 @@ class randomAI(Player):
             arg = edgeHash[arg]
 
             chosenEdge = state.trackArray[arg[0]][arg[1]]
-            if chosenEdge.length > len([x == chosenEdge.color for x in self.getHand()]):
+            if chosenEdge.length > np.sum([x == chosenEdge.color for x in self.getHand()]):
                 move = 'draw t'
                 arg = [chosenEdge.color, chosenEdge.color]
             else:
                 handcolors = np.array([x.color for x in self.handCards])
+                tot = []
                 opp = handcolors[handcolors != chosenEdge.color].tolist()
-                sub = handcolors[handcolors == chosenEdge.color][:-chosenEdge.length]
-                for col in sub: opp.append(col)
-                self.handCards = [Card(x) for x in opp]
+                sub = handcolors[handcolors == chosenEdge.color][:-chosenEdge.length].tolist()
+                for col in sub: tot.append(col)
+                for col in opp: tot.append(col)
+                self.handCards = [Card(x) for x in tot]
 
         if move == 'draw t':
             super().addCardToHand(arg[0])
