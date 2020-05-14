@@ -50,11 +50,13 @@ class GameState:
         if player.getName() == 'playerOne':
             if self.p1Action == 'draw t' or self.p1Action == 'claim':
                 self.p1Hand = player.getHand()
+                self.p1Points = player.points
             elif self.p1Action == 'draw d':
                 self.p1dCards = player.getDestCards()
         elif player.getName() == 'playerTwo':
             if self.p2Action == 'draw t' or self.p2Action == 'claim':
                 self.p2Hand = player.getHand()
+                self.p2Points = player.points
             elif self.p2Action == 'draw d':
                 self.p2dCards = player.getDestCards()
         else:
