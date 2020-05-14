@@ -37,11 +37,9 @@ class randomAI(Player):
             arg = edgeHash[arg]
 
             chosenEdge = state.trackArray[arg[0]][arg[1]]
-            print([x.color for x in self.handCards])
             if chosenEdge.length > len([x == chosenEdge.color for x in self.getHand()]):
                 move = 'draw t'
                 arg = [chosenEdge.color, chosenEdge.color]
-                print(arg)
             else:
                 handcolors = np.array([x.color for x in self.handCards])
                 opp = handcolors[handcolors != chosenEdge.color].tolist()
