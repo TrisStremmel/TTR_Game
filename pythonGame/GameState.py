@@ -20,6 +20,10 @@ class GameState:
         self.p1Action = None
         self.p2Action = None
 
+        #
+        self.p1FullAction = None
+        self.p2FullAction = None
+
     def setPlayerMove(self, player, action):
         if player.getName() == 'playerOne':
             self.p1Action = action
