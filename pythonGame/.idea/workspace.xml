@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04f4a6ab-b48b-46c5-9b90-06fa8482c476" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DestinationCard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../notes/changes from original.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../notes/changes from original.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../other/blacktrain.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../other/whitetrain.png" beforeDir="false" />
+    <list default="true" id="5b9853bd-3d87-4d57-99c6-f3102046f172" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/pythonGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonGame.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameState.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameState.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TTR.py" beforeDir="false" afterPath="$PROJECT_DIR$/TTR.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1bBcFZ47RkFYvRKBhgnJhzhJ5X9" />
+  <component name="ProjectId" id="1bsuBrcf5jUAPxHxSblzUc5Vuci" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -39,14 +25,35 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
-    <configuration name="TTR" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonGame" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Tris Stremmel\PycharmProjects\TTR_Game_V1\venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\Alex\PycharmProjects\binarycompression\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ignore" type="PythonConfigurationType" factoryName="Python">
+      <module name="pythonGame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Alex\PycharmProjects\untitled\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -66,58 +73,46 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="04f4a6ab-b48b-46c5-9b90-06fa8482c476" name="Default Changelist" comment="" />
-      <created>1588108823620</created>
+      <changelist id="5b9853bd-3d87-4d57-99c6-f3102046f172" name="Default Changelist" comment="" />
+      <created>1589432989381</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1588108823620</updated>
+      <updated>1589432989381</updated>
     </task>
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="210" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588110075763">
-      <screen x="0" y="30" width="1920" height="1050" />
+    <state x="479" y="211" width="1089" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589433457932">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="414" y="210" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1588110075763" />
-    <state x="690" y="302" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589400659816">
-      <screen x="0" y="30" width="1920" height="1050" />
+    <state x="479" y="211" width="1089" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433457932" />
+    <state x="804" y="319" key="FileChooserDialogImpl" timestamp="1589433449825">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="690" y="302" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589400659816" />
-    <state x="740" y="310" key="FileChooserDialogImpl" timestamp="1588110061361">
-      <screen x="0" y="30" width="1920" height="1050" />
+    <state x="804" y="319" key="FileChooserDialogImpl/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433449825" />
+    <state width="2027" height="305" key="GridCell.Tab.0.bottom" timestamp="1589433540546">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="740" y="310" key="FileChooserDialogImpl/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1588110061361" />
-    <state width="1899" height="202" key="GridCell.Tab.0.bottom" timestamp="1589423149532">
-      <screen x="-1920" y="30" width="1920" height="1050" />
+    <state width="2027" height="305" key="GridCell.Tab.0.bottom/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433540546" />
+    <state width="2027" height="305" key="GridCell.Tab.0.center" timestamp="1589433540546">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="1899" height="202" key="GridCell.Tab.0.bottom/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@-1920.30.1920.1050" timestamp="1589423149532" />
-    <state width="1899" height="202" key="GridCell.Tab.0.bottom/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589423144703" />
-    <state width="1899" height="202" key="GridCell.Tab.0.center" timestamp="1589423149531">
-      <screen x="-1920" y="30" width="1920" height="1050" />
+    <state width="2027" height="305" key="GridCell.Tab.0.center/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433540546" />
+    <state width="2027" height="305" key="GridCell.Tab.0.left" timestamp="1589433540546">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="1899" height="202" key="GridCell.Tab.0.center/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@-1920.30.1920.1050" timestamp="1589423149531" />
-    <state width="1899" height="202" key="GridCell.Tab.0.center/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589423144702" />
-    <state width="1899" height="202" key="GridCell.Tab.0.left" timestamp="1589423149531">
-      <screen x="-1920" y="30" width="1920" height="1050" />
+    <state width="2027" height="305" key="GridCell.Tab.0.left/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433540546" />
+    <state width="2027" height="305" key="GridCell.Tab.0.right" timestamp="1589433540546">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="1899" height="202" key="GridCell.Tab.0.left/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@-1920.30.1920.1050" timestamp="1589423149531" />
-    <state width="1899" height="202" key="GridCell.Tab.0.left/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589423144702" />
-    <state width="1899" height="202" key="GridCell.Tab.0.right" timestamp="1589423149532">
-      <screen x="-1920" y="30" width="1920" height="1050" />
+    <state width="2027" height="305" key="GridCell.Tab.0.right/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433540546" />
+    <state x="533" y="199" key="SettingsEditor" timestamp="1589433207428">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="1899" height="202" key="GridCell.Tab.0.right/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@-1920.30.1920.1050" timestamp="1589423149532" />
-    <state width="1899" height="202" key="GridCell.Tab.0.right/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589423144703" />
-    <state x="461" y="197" key="SettingsEditor" timestamp="1588123752386">
-      <screen x="0" y="30" width="1920" height="1050" />
+    <state x="533" y="199" key="SettingsEditor/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433207428" />
+    <state x="721" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1589433577718">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="461" y="197" key="SettingsEditor/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1588123752386" />
-    <state x="701" y="198" key="refactoring.ChangeSignatureDialog" timestamp="1588233001990">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="701" y="198" key="refactoring.ChangeSignatureDialog/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1588233001990" />
-    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1589355597383">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup/-1920.30.1920.1050/0.30.1920.1050/1920.-281.1050.1650@0.30.1920.1050" timestamp="1589355597383" />
+    <state x="721" y="380" key="com.intellij.ide.util.TipDialog/-1920.353.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1589433577718" />
   </component>
 </project>
