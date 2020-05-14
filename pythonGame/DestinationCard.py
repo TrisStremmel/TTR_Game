@@ -15,6 +15,26 @@ class DestinationCard:
     def getCity2(self):
         return self.city2
 
+    def __eq__(self, obj):
+        if type(obj) == DestinationCard:
+            if self.city1 != obj.city1:
+                return False
+            elif self.city2 != obj.city2:
+                return False
+            elif self.points != obj.points:
+                return False
+            else:
+                return True
+        elif type(obj) == list:
+            if self.city1 != obj[0]:
+                return False
+            elif self.city2 != obj[1]:
+                return False
+            elif self.points != obj[2]:
+                return False
+            else:
+                return True
+
     @staticmethod
     def drawDestinationCard():
         destinationDeck = [['Washington', 'New York', 10], ['Texas', 'Colorado', 4], ['Montana', 'Texas', 7],

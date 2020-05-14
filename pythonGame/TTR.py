@@ -184,7 +184,7 @@ def button(msg, fs, x, y, w, h, ic, ac, action=None):
     textRect.center = (x + (w / 2), (y + (h / 2)))
     screen.blit(textSurf, textRect)
 
-def cityNameDisplay(text, x, y):
+def displayText(text, x, y):
     largeText = pygame.font.Font('freesansbold.ttf', 25)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = (x, y)
@@ -203,14 +203,14 @@ cityArray = [WA, MT, NY, TX, CO, KS, OK]
 
 def drawDecks(color):
     return {
-        'white': lambda: screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75)),
-        'pink': lambda: screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.75)),
-        'red': lambda: screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.75)),
-        'orange': lambda: screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.75)),
-        'yellow': lambda: screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.75)),
-        'green': lambda: screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.75)),
-        'blue': lambda: screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75)),
-        'black': lambda: screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75)),
+        'white': lambda: screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.85)),
+        'pink': lambda: screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.85)),
+        'red': lambda: screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.85)),
+        'orange': lambda: screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.85)),
+        'yellow': lambda: screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.85)),
+        'green': lambda: screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.85)),
+        'blue': lambda: screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.85)),
+        'black': lambda: screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.85)),
 
     }.get(color, lambda: None)()
 
@@ -238,16 +238,16 @@ def createBoard():
                         Edge(2, chosenColors[randrange(0, len(chosenColors))]), -1]])
 
 
-whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
-pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
-redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
-orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.77, 100, 100), 1)
-yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.77, 100, 100), 1)
-greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.77, 100, 100), 1)
-blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
-blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
+whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.85, 100, 100), 1)
+pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.85, 100, 100), 1)
+redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.85, 100, 100), 1)
+orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.85, 100, 100), 1)
+yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.85, 100, 100), 1)
+greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.85, 100, 100), 1)
+blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.85, 100, 100), 1)
+blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.85, 100, 100), 1)
 passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
-destDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
+destDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.70, display_height * 0.6, 200, 75), 1)
 
 
 def drawGameBoard():
@@ -268,7 +268,7 @@ def drawGameBoard():
         drawDecks(chosenColors[x])
 
     pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
-    cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
+    displayText("HAND", display_width * 0.95, display_height * 0.14)
 
     drawCities()
 
@@ -281,13 +281,13 @@ def drawCities():
     pygame.draw.circle(screen, white, [KS.getX(), KS.getY()], 50, 50)
     pygame.draw.circle(screen, white, [NY.getX(), NY.getY()], 50, 50)
 
-    cityNameDisplay("WA", WA.getX(), WA.getY())
-    cityNameDisplay("CO", CO.getX(), CO.getY())
-    cityNameDisplay("MT", MT.getX(), MT.getY())
-    cityNameDisplay("TX", TX.getX(), TX.getY())
-    cityNameDisplay("OK", OK.getX(), OK.getY())
-    cityNameDisplay("KS", KS.getX(), KS.getY())
-    cityNameDisplay("NY", NY.getX(), NY.getY())
+    displayText("WA", WA.getX(), WA.getY())
+    displayText("CO", CO.getX(), CO.getY())
+    displayText("MT", MT.getX(), MT.getY())
+    displayText("TX", TX.getX(), TX.getY())
+    displayText("OK", OK.getX(), OK.getY())
+    displayText("KS", KS.getX(), KS.getY())
+    displayText("NY", NY.getX(), NY.getY())
 
 
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
@@ -352,7 +352,7 @@ def removeCardsFromHand(color, numRemove):
             playerOne.cardIndex -= 1
             numRemove -= 1
     pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
-    cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
+    displayText("HAND", display_width * 0.95, display_height * 0.14)
     for k in range(0, playerOne.handCards.__len__(), 1):
         color = playerOne.handCards[k].getColor()
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
@@ -363,7 +363,17 @@ def getHumanMove():
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
         button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
-        button("Draw Destination Card", 17, display_width * 0.75, display_height * 0.6, 100, 75, white, grey)
+        button("Draw Destination Card", 17, display_width * 0.70, display_height * 0.6, 200, 75, white, grey)
+
+        displayText("Destination", display_width * 0.1, display_height * 0.32)
+        displayText("Cards", display_width * 0.1, display_height * 0.34)
+        height = 0.36
+        for i in range(0, len(playerOne.destinationCards)):
+            toDisplay = str(playerOne.destinationCards[i].city1)
+            toDisplay += ", " + str(playerOne.destinationCards[i].city2)
+            toDisplay += " = " + str(playerOne.destinationCards[i].points)
+            displayText(toDisplay, display_width * 0.1, display_height * height)
+            height += 0.02
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
@@ -391,10 +401,13 @@ def getHumanMove():
                     # no need to update the game state since there is no change
                     return ['pass']
 
+                elif drawCount == 0 and destDeck.collidepoint(pos):
+                    playerOne.addDestCardToHand()
+                    return ['draw d']
                 elif drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
                     print('There are 14 cards in your hand, you can not draw any more!')
+                    displayText("There are 14 cards in your hand, you can not draw any more!", display_width * 0.5, display_height * 0.1)
                     # add a way for the player to see this message in game since they cant see the console while playing
-                #elif drawCount == 0 and
                 elif drawCount == 0 or drawCount == 1:  # this is basically an else statement since drawCount will always be 0 or 1 at this point
                     outputBuffer = True
                     for x in range(0, len(chosenColors), 1):
@@ -406,6 +419,8 @@ def getHumanMove():
                                 return ['draw t']
                     if outputBuffer and drawCount == 1:  # if you exit the above for loop and outputBuffer = true then the player did not click on a card
                         print('You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.')
+                        displayText("You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.", display_width * 0.5,
+                                    display_height * 0.1)
                         # add a way for the player to see this message in game since they cant see the console while playing
 
 
@@ -557,6 +572,7 @@ def gameStart():
 
     while running:
 
+        drawCities()  # they do not change but sometimes the tracks are drawn over them making the names unreadable so we just redraw them again here
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
         p1Move = None
@@ -604,6 +620,7 @@ def gameStart():
                     claimTrack(row[0], row[0].getEdgeData()[0])  # updates track data array
                     break
 
+        print("Player two choose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move
         #remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
         currentTurn.updatePlayerInfo(playerTwo)

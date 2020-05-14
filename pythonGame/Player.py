@@ -21,10 +21,10 @@ class Player:
     def addDestCardToHand(self):
         breaker = 0
         tempCard = DestinationCard.drawDestinationCard()
-        while self.destinationCards.__contains__(tempCard):
+        while tempCard in self.destinationCards:
             tempCard = DestinationCard.drawDestinationCard()
             breaker += 1
-            if breaker > 20:
+            if breaker > 200:
                 break
         self.destinationCards.append(tempCard)
 
