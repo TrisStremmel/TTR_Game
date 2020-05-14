@@ -362,7 +362,7 @@ def removeCardsFromHand(color, numRemove):
 def getHumanMove():
     drawCount = 0
     while True:  # keeps looping until user makes a valid move
-        button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
+        button("Title Screen", 17, display_width * 0.85, display_height * 0.055, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
         button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
         button("Draw Destination Card", 17, display_width * 0.70, display_height * 0.6, 200, 75, white, grey)
@@ -591,6 +591,9 @@ def gameStart():
     while running:
 
         drawCities()  # they do not change but sometimes the tracks are drawn over them making the names unreadable so we just redraw them again here
+
+        pygame.draw.rect(screen, grey, (display_width * 0.075, display_height * 0.01, 1600, 50), 0)
+        displayText("Error Msg: ", display_width * 0.04, display_height * 0.04)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
         p1Move = None
