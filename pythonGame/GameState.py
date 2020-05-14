@@ -4,10 +4,10 @@ from DestinationCard import DestinationCard
 
 
 class GameState:
-    #the game state is made up of data from each player which may change from turn to turn
-    #and data about the game board and turn count
-    #this means the AI will have access to the other player's hand and destination cards, however
-    #it will not be allowed to uses that info, simply it will not be coded to ever reference those values
+    # the game state is made up of data from each player which may change from turn to turn
+    # and data about the game board and turn count
+    # this means the AI will have access to the other player's hand and destination cards, however
+    # it will not be allowed to uses that info, simply it will not be coded to ever reference those values
     def __init__(self, turn, tracks, p1, p2):
         self.turn = turn
         self.trackArray = tracks
@@ -77,12 +77,12 @@ class GameState:
     def writeToNPY(self):
         UtrackArray = np.array(self.trackArray)
         UtrackArray = UtrackArray[UtrackArray != -1]
-        UtrackArray = np.array([[x.length,x.color,x.occupied] for x in UtrackArray])
+        UtrackArray = np.array([[x.length, x.color, x.occupied] for x in UtrackArray])
         UtrackArray = UtrackArray.flatten()
 
         destDeck = DestinationCard.getDestinationDeck()
 
-        destPoints = destDeck[:,2]
+        destPoints = destDeck[:, 2]
 
         Up1d = np.zeros(len(destDeck))
         for i in range(len(self.p1dCards)):
@@ -94,7 +94,7 @@ class GameState:
             for j in range(len(destDeck)):
                 if self.p1dCards[i] == destDeck[j]: Up2d[j] += 1
 
-        allColors = ['white','pink','red','orange','yellow','green','blue','black']
+        allColors = ['white', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'black']
 
         Up1c = np.zeros(len(allColors))
         for i in range(len(self.p1Hand)):
@@ -106,5 +106,5 @@ class GameState:
             for j in range(len(allColors)):
                 if self.p2Hand[i] == allColors[j]: Up2c[j] += 1
 
-        np.save(file=os.getcwd()+'/thisturn.npy',arr=[self.turn, UtrackArray,Up1c,Up1d,Up2c,Up2d,destPoints
-            ,self.p1Points,self.p2Points,self.p1Action,self.p2Action],allow_pickle=True)
+        np.save(file=os.getcwd() + '/thisturn.npy', arr=[self.turn, UtrackArray, Up1c, Up1d, Up2c, Up2d, destPoints
+            , self.p1Points, self.p2Points, self.p1Action, self.p2Action], allow_pickle=True)
