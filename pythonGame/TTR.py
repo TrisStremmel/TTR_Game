@@ -8,7 +8,7 @@ from Edge import Edge
 from City import City
 from Card import Card
 from Player import Player
-from AI import AI
+from AI import AI, randomAI
 from Human import Human
 from Track import Track
 from GameState import GameState
@@ -114,7 +114,8 @@ def createPlayers(mode):
     if mode == 'AI vs AI':
         playerOne = AI('playerOne')
 
-    playerTwo = AI('playerTwo')
+    playerTwo = randomAI('playerTwo')
+    #playerTwo = AI('playerTwo')
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
 
@@ -149,6 +150,7 @@ def switchDeck(color):
         'blue': lambda: 'blueDeck1',
         'black': lambda: 'blackDeck1',
     }.get(color, lambda: None)()
+    # return color + 'Deck1'
 
 def checkHitBoxes(color):
     return {
@@ -160,8 +162,8 @@ def checkHitBoxes(color):
         'green': lambda: drawCard("green"),
         'blue': lambda: drawCard("blue"),
         'black': lambda: drawCard("black"),
-
     }.get(color, lambda: None)()
+    # return drawCard(color)
 
 # Draws the surface where the text will be written
 def text_objects(text, font):
@@ -360,6 +362,7 @@ def removeCardsFromHand(color, numRemove):
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
 
 def getHumanMove():
+    colorsdrawn = []
     drawCount = 0
     while True:  # keeps looping until user makes a valid move
         button("Title Screen", 17, display_width * 0.85, display_height * 0.055, 100, 75, blue, darkBlue, titleScreen)
@@ -397,7 +400,7 @@ def getHumanMove():
                                             #firstTrack = trackDataArray[i][0]
                                             #claimTrack(firstTrack, i)
                                             removeCardsFromHand(data.getColor(), data.getLength())
-                                            return ['claim', data.getEdgeData()]
+                                            return ['claim', np.array(data.getEdgeData())]
 
                 if passTurn.collidepoint(pos):  # passTurn   statement previously included: and drawCount == 0:
                     # no need to update the game state since there is no change
@@ -415,10 +418,11 @@ def getHumanMove():
                     for x in range(0, len(chosenColors), 1):
                         if eval(chosenColors[x] + "Deck").collidepoint(pos):
                             checkHitBoxes(chosenColors[x])
+                            colorsdrawn.append(chosenColors[x])
                             drawCount += 1
                             outputBuffer = False
                             if drawCount == 2:
-                                return ['draw t']
+                                return ['draw t', colorsdrawn]
                     if outputBuffer and drawCount == 1:  # if you exit the above for loop and outputBuffer = true then the player did not click on a card
                         print('You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.')
                         displayText("You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.", display_width * 0.5,
@@ -607,6 +611,8 @@ def gameStart():
             p1Move = playerOne.makeMove(currentTurn)
             currentTurn.setPlayerMove(playerOne, p1Move[0])
 
+        currentTurn.LastFullAction = p1Move
+
         if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
             # needs to be updated but for the other move options the values are just updated in that player's instance
             x = p1Move[1][0]
@@ -615,10 +621,12 @@ def gameStart():
             cityConnection[x][y].claim(playerOne)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
-                if trackDataArray[row] != -1 and trackDataArray[row][0].getEdgeData() == p1Move[1]:
-                    claimTrack(trackDataArray[row][0], row)  # updates track data array
-                    break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
-                    # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
+                if type(trackDataArray[row]) != int:
+                    if type(trackDataArray[row][0]) != int:
+                        if (trackDataArray[row][0].getEdgeData() == p1Move[1]).all():
+                            claimTrack(trackDataArray[row][0], row)  # updates track data array
+                            break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
+                            # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
         print("Player one chose to " + currentTurn.getP1Move())
         # updating the game state based on player one's move
@@ -626,21 +634,32 @@ def gameStart():
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
+        GameStateArray.append(currentTurn)
         # AI makes its move and stores it in the game state
         p2Move = playerTwo.makeMove(currentTurn)
         currentTurn.setPlayerMove(playerTwo, p2Move[0])
+
+        currentTurn.LastFullAction = p2Move
 
         if currentTurn.getP2Move() == 'claim':
             x = p2Move[1][0]
             y = p2Move[1][1]
             playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
+            print(p2Move)
             cityConnection[x][y].claim(playerTwo)
             cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
-                if trackDataArray[row] != -1:
-                    if trackDataArray[row][0].getEdgeData() == p2Move[1]:
-                        claimTrack(trackDataArray[row][0], row)  # updates track data array
-                        break
+                if type(trackDataArray[row]) != int:
+                    if type(trackDataArray[row][0]) != int:
+                        if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
+                            claimTrack(trackDataArray[row][0], row)  # updates track data array
+                            break
+            '''for row in range(0, len(trackDataArray)):
+                if type(trackDataArray[row][0]) == Track:
+                    if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
+                        claimTrack(trackDataArray[row][0], row)   # updates track data array
+                        print("hi")
+                        break'''
 
         print("Player two chose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move
@@ -670,10 +689,10 @@ def gameStart():
             print("All tracks have been claimed so the game is over!")
             break  # running = False should also work
 
-        #save each turn before moving on
+        #save each turn for debugging/prototyping
         currentTurn.writeToNPY()
-        # GameStateArray.append(currentTurn.outputP1())
-        # GameStateArray.append(currentTurn.outputP2())
+
+        GameStateArray.append(currentTurn)
         currentTurn.incrementTurn()
 
         pygame.display.update()

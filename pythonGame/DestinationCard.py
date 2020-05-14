@@ -34,14 +34,14 @@ class DestinationCard:
 
     @staticmethod
     def drawDestinationCard():
-        destinationDeck = [['Washington', 'New York', 10], ['Texas', 'Colorado', 4], ['Montana', 'Texas', 7],
-                           ['Washington', 'Oklahoma', 4], ['New York', 'Colorado', 5], ['Washington', 'Kansas', 2],
-                           ['Montana', 'Oklahoma', 8], ['Texas', 'Kansas', 3], ['Montana', 'Colorado', 7]]
+        destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
+                           ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
+                           ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
         randomNum = randint(0, len(destinationDeck)-1)
         return DestinationCard(destinationDeck[randomNum][0], destinationDeck[randomNum][1], destinationDeck[randomNum][2])
 
     @staticmethod
     def getDestinationDeck():
-        return np.array([['Washington', 'New York', 10], ['Texas', 'Colorado', 4], ['Montana', 'Texas', 7],
-                           ['Washington', 'Oklahoma', 4], ['New York', 'Colorado', 5], ['Washington', 'Kansas', 2],
-                           ['Montana', 'Oklahoma', 8], ['Texas', 'Kansas', 3], ['Montana', 'Colorado', 7]])
+        return np.array([['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
+                           ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
+                           ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]])

@@ -19,6 +19,8 @@ class GameState:
         self.p2Points = p2.points
         self.p1Action = None
         self.p2Action = None
+        #
+        self.LastFullAction = None
 
     def setPlayerMove(self, player, action):
         if player.getName() == 'playerOne':
@@ -40,8 +42,7 @@ class GameState:
     def incrementTurn(self):
         self.turn += 1
         # next lines reset the actions for the players since they have not made a move yet on the next turn
-        self.p1Action = None
-        self.p2Action = None
+        self.lastAction = None
 
     def updateTracks(self, tracks):
         self.trackArray = tracks
@@ -76,9 +77,12 @@ class GameState:
     # alexs function to test input output data for nn
     def writeToNPY(self):
         UtrackArray = np.array(self.trackArray)
+        UtrackArray = UtrackArray[np.triu_indices(len(UtrackArray))]
         UtrackArray = UtrackArray[UtrackArray != -1]
         UtrackArray = np.array([[x.length, x.color, x.occupied] for x in UtrackArray])
         UtrackArray = UtrackArray.flatten()
+
+        # square[np.triu_indices(10, 1)].shape
 
         destDeck = DestinationCard.getDestinationDeck()
 
