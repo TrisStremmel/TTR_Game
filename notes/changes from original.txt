@@ -23,9 +23,12 @@ A destination card can be drawn as a turn option. This has always been the plan 
 was accidently left out of the "TTR_Rules". When you draw a destination card there 
 is no longer an option to not keep it. When you draw a destination card you get a 
 random destination card added to your hand of destination cards. It is now possible
-to have both players draw the same destination card
+to have both players draw the same destination card.
 
 4)
+When the game starts 
+
+5)
 A limit of 14 cards in you hand at any point was added. Originally there was no
 limit on hand size. This change was made since we needed to display the cards
 in the human player's hand visually and there is a limit to how much space the 
