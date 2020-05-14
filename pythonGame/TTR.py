@@ -635,11 +635,12 @@ def gameStart():
             y = p2Move[1][1]
             playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
             cityConnection[x][y].claim(playerTwo)
-            cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
-            for row in trackDataArray:
-                if row != -1 and row[0].getEdgeData() == p1Move[1]:
-                    claimTrack(row[0], row[0].getEdgeData()[0])  # updates track data array
-                    break
+            cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
+            for row in range(0, len(trackDataArray)):
+                if trackDataArray[row] != -1:
+                    if trackDataArray[row][0].getEdgeData() == p2Move[1]:
+                        claimTrack(trackDataArray[row][0], row)  # updates track data array
+                        break
 
         print("Player two chose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move

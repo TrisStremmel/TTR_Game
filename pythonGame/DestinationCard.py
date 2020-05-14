@@ -30,7 +30,7 @@ class DestinationCard:
         return self.city2
 
     def getValues(self):
-        return [self.city1,self.city2,self.points]
+        return [self.city1, self.city2, self.points]
 
     @staticmethod
     def drawDestinationCard():
