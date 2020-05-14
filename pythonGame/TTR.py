@@ -1,5 +1,7 @@
 from random import *
 import pygame
+import numpy as np
+import os
 import math
 from Background import Background
 from Edge import Edge
@@ -569,6 +571,9 @@ def gameStart():
     drawCities()
     running = True
 
+    # game state array for saving every turn
+    GameStateArray = []
+
     while running:
 
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
@@ -643,10 +648,17 @@ def gameStart():
             print("All tracks have been claimed so the game is over!")
             break  # running = False should also work
 
+        #save each turn before moving on
+        currentTurn.writeToNPY()
+        # GameStateArray.append(currentTurn.outputP1())
+        # GameStateArray.append(currentTurn.outputP2())
         currentTurn.incrementTurn()
 
         pygame.display.update()
         clock.tick(60)
+
+    # saving full gamestate array to file at end of game
+    np.save(os.getcwd()+'/saves/save.npy',np.array(GameStateArray))
 
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:

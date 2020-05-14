@@ -1,3 +1,8 @@
+import numpy as np
+import os
+from DestinationCard import DestinationCard
+
+
 class GameState:
     #the game state is made up of data from each player which may change from turn to turn
     #and data about the game board and turn count
@@ -62,3 +67,42 @@ class GameState:
         # Since there may be unknown downsides this method is subject to change
         destination = "/some_file_location"
         print("csv based on gameState for " + player.getName() + " was successfully generated at: " + destination)
+
+    # def output(self):
+    #     return [self.turn,]
+
+    # alexs function to test input output data for nn
+    def writeToNPY(self):
+        UtrackArray = np.array(self.trackArray)
+        UtrackArray = UtrackArray[UtrackArray != -1]
+        UtrackArray = np.array([[x.length,x.color,x.occupied] for x in UtrackArray])
+        UtrackArray = UtrackArray.flatten()
+
+        destDeck = DestinationCard.getDestinationDeck()
+
+        destPoints = destDeck[:,2]
+
+        Up1d = np.zeros(len(destDeck))
+        for i in range(len(self.p1dCards)):
+            for j in range(len(destDeck)):
+                if self.p1dCards[i] == destDeck[j]: Up1d[j] += 1
+
+        Up2d = np.zeros(len(destDeck))
+        for i in range(len(self.p2dCards)):
+            for j in range(len(destDeck)):
+                if self.p1dCards[i] == destDeck[j]: Up2d[j] += 1
+
+        allColors = ['white','pink','red','orange','yellow','green','blue','black']
+
+        Up1c = np.zeros(len(allColors))
+        for i in range(len(self.p1Hand)):
+            for j in range(len(allColors)):
+                if self.p1Hand[i] == allColors[j]: Up1c[j] += 1
+
+        Up2c = np.zeros(len(allColors))
+        for i in range(len(self.p2Hand)):
+            for j in range(len(allColors)):
+                if self.p2Hand[i] == allColors[j]: Up2c[j] += 1
+
+        np.save(file=os.getcwd()+'/thisturn.npy',arr=[self.turn, UtrackArray,Up1c,Up1d,Up2c,Up2d,destPoints
+            ,self.p1Points,self.p2Points,self.p1Action,self.p2Action],allow_pickle=True)
