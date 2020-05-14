@@ -60,3 +60,28 @@ class Track():
 
     def setOccupied(self, occupied):
         self.occupied = occupied
+'''
+elif whiteDeck.collidepoint(pos):
+drawHand('white')
+
+elif pinkDeck.collidepoint(pos):
+drawHand('pink')
+
+elif redDeck.collidepoint(pos):
+drawHand('red')
+
+elif orangeDeck.collidepoint(pos):
+drawHand('orange')
+
+elif yellowDeck.collidepoint(pos):
+drawHand('yellow')
+
+elif greenDeck.collidepoint(pos):
+drawHand('green')
+
+elif blueDeck.collidepoint(pos):
+drawHand('blue')
+
+elif blackDeck.collidepoint(pos):
+drawHand('black')
+'''
