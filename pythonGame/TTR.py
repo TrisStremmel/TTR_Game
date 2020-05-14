@@ -654,12 +654,6 @@ def gameStart():
                         if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
                             claimTrack(trackDataArray[row][0], row)  # updates track data array
                             break
-            '''for row in range(0, len(trackDataArray)):
-                if type(trackDataArray[row][0]) == Track:
-                    if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
-                        claimTrack(trackDataArray[row][0], row)   # updates track data array
-                        print("hi")
-                        break'''
 
         print("Player two chose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move
