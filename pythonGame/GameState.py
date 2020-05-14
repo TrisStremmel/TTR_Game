@@ -21,6 +21,7 @@ class GameState:
         self.p2Action = None
         #
         self.LastFullAction = None
+        self.LastP = 'playerOne'
 
     def setPlayerMove(self, player, action):
         if player.getName() == 'playerOne':
@@ -91,12 +92,12 @@ class GameState:
         Up1d = np.zeros(len(destDeck))
         for i in range(len(self.p1dCards)):
             for j in range(len(destDeck)):
-                if self.p1dCards[i] == destDeck[j]: Up1d[j] += 1
+                if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up1d[j] += 1
 
         Up2d = np.zeros(len(destDeck))
         for i in range(len(self.p2dCards)):
             for j in range(len(destDeck)):
-                if self.p1dCards[i] == destDeck[j]: Up2d[j] += 1
+                if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up2d[j] += 1
 
         allColors = ['white', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'black']
 
@@ -112,3 +113,41 @@ class GameState:
 
         np.save(file=os.getcwd() + '/thisturn.npy', arr=[self.turn, UtrackArray, Up1c, Up1d, Up2c, Up2d, destPoints
             , self.p1Points, self.p2Points, self.p1Action, self.p2Action], allow_pickle=True)
+
+    def returnListedforP(self):
+        UtrackArray = np.array(self.trackArray)
+        UtrackArray = UtrackArray[np.triu_indices(len(UtrackArray))]
+        UtrackArray = UtrackArray[UtrackArray != -1]
+        UtrackArray = np.array([[x.length, x.color, x.occupied] for x in UtrackArray])
+        UtrackArray = UtrackArray.flatten()
+
+        destDeck = DestinationCard.getDestinationDeck()
+        destPoints = destDeck[:, 2]
+
+        allColors = ['white', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'black']
+
+        if self.LastP == 'playerOne':
+            Up1d = np.zeros(len(destDeck))
+            for i in range(len(self.p1dCards)):
+                for j in range(len(destDeck)):
+                    if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up1d[j] += 1
+
+            Up1c = np.zeros(len(allColors))
+            for i in range(len(self.p1Hand)):
+                for j in range(len(allColors)):
+                    if self.p1Hand[i] == allColors[j]: Up1c[j] += 1
+
+            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up1d, Up1c, self.p1Points]
+
+        elif self.LastP == 'playerTwo':
+            Up2d = np.zeros(len(destDeck))
+            for i in range(len(self.p2dCards)):
+                for j in range(len(destDeck)):
+                    if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up2d[j] += 1
+
+            Up2c = np.zeros(len(allColors))
+            for i in range(len(self.p2Hand)):
+                for j in range(len(allColors)):
+                    if self.p2Hand[i] == allColors[j]: Up2c[j] += 1
+
+            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up2d, Up2c, self.p2Points]

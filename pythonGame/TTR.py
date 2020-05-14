@@ -612,6 +612,7 @@ def gameStart():
             currentTurn.setPlayerMove(playerOne, p1Move[0])
 
         currentTurn.LastFullAction = p1Move
+        currentTurn.LastP = 'playerOne'
 
         if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
             # needs to be updated but for the other move options the values are just updated in that player's instance
@@ -634,12 +635,13 @@ def gameStart():
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
-        GameStateArray.append(currentTurn)
+        GameStateArray.append(currentTurn.returnListedforP())
         # AI makes its move and stores it in the game state
         p2Move = playerTwo.makeMove(currentTurn)
         currentTurn.setPlayerMove(playerTwo, p2Move[0])
 
         currentTurn.LastFullAction = p2Move
+        currentTurn.LastP = 'playerTwo'
 
         if currentTurn.getP2Move() == 'claim':
             x = p2Move[1][0]
@@ -684,9 +686,9 @@ def gameStart():
             break  # running = False should also work
 
         #save each turn for debugging/prototyping
-        currentTurn.writeToNPY()
+        # currentTurn.writeToNPY()
 
-        GameStateArray.append(currentTurn)
+        GameStateArray.append(currentTurn.returnListedforP())
         currentTurn.incrementTurn()
 
         pygame.display.update()
