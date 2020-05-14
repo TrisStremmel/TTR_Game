@@ -112,7 +112,7 @@ def createPlayers(mode):
     if mode == 'Human vs AI':
         playerOne = Human('playerOne')
     if mode == 'AI vs AI':
-        playerOne = AI('playerOne')
+        playerOne = randomAI('playerOne')
 
     playerTwo = randomAI('playerTwo')
     playerOne.addDestCardToHand()
@@ -595,6 +595,7 @@ def gameStart():
             currentTurn.setPlayerMove(playerOne, p1Move[0])
 
         currentTurn.LastFullAction = p1Move
+        currentTurn.LastP = 'playerOne'
 
         if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
             # needs to be updated but for the other move options the values are just updated in that player's instance
@@ -603,7 +604,7 @@ def gameStart():
             playerOne.points += getEdgeValue(cityConnection[x][y].getLength())
             cityConnection[x][y].claim(playerOne)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
-            for row in range(0, len(trackDataArray)):
+            for row in range(len(trackDataArray)):
                 if trackDataArray[row] != -1 and trackDataArray[row][0].getEdgeData() == p1Move[1]:
                     claimTrack(trackDataArray[row][0], row)  # updates track data array
                     break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
@@ -615,12 +616,13 @@ def gameStart():
         currentTurn.updateTracks(cityConnection)
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
-        GameStateArray.append(currentTurn)
+        GameStateArray.append(currentTurn.returnListedforP())
         # AI makes its move and stores it in the game state
         p2Move = playerTwo.makeMove(currentTurn)
         currentTurn.setPlayerMove(playerTwo, p2Move[0])
 
         currentTurn.LastFullAction = p2Move
+        currentTurn.LastP = 'playerTwo'
 
 
 
@@ -631,10 +633,9 @@ def gameStart():
             cityConnection[x][y].claim(playerTwo)
             cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
-                if trackDataArray[row] != -1:
-                    if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
-                        claimTrack(trackDataArray[row][0], row)   # updates track data array
-                        break
+                if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
+                    claimTrack(trackDataArray[row][0], row)   # updates track data array
+                    break
 
         print("Player two choose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move
@@ -665,9 +666,9 @@ def gameStart():
             break  # running = False should also work
 
         #save each turn for debugging/prototyping
-        currentTurn.writeToNPY()
+        # currentTurn.writeToNPY()
 
-        GameStateArray.append(currentTurn)
+        GameStateArray.append(currentTurn.returnListedforP())
         currentTurn.incrementTurn()
 
         pygame.display.update()
