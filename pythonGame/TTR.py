@@ -116,6 +116,22 @@ def createPlayers(mode):
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
 
+def getEdgeValue(lenght):
+    if lenght == 1:
+        return 1
+    elif lenght == 2:
+        return 2
+    elif lenght == 3:
+        return 4
+    elif lenght == 4:
+        return 7
+    elif lenght == 5:
+        return 10
+    elif lenght == 6:
+        return 15
+    else:
+        return -1
+
 
 colors = ["white", "pink", "red", "orange", "yellow", "green", "blue", "black"]
 chosenColors = ["white", "black"]
@@ -248,14 +264,8 @@ def drawGameBoard():
     pygame.draw.line(screen, black, (OK.getX(), OK.getY()), (KS.getX(), KS.getY()))
 
     # draws the black and white train card on the card piles over the hit boxes
-    screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.75))
-    screen.blit(pinkDeckImg, (display_width * 0.117, display_height * 0.75))
-    screen.blit(redDeckImg, (display_width * 0.217, display_height * 0.75))
-    screen.blit(orangeDeckImg, (display_width * 0.317, display_height * 0.75))
-    screen.blit(yellowDeckImg, (display_width * 0.417, display_height * 0.75))
-    screen.blit(greenDeckImg, (display_width * 0.517, display_height * 0.75))
-    screen.blit(blueDeckImg, (display_width * 0.617, display_height * 0.75))
-    screen.blit(blackDeckImg, (display_width * 0.717, display_height * 0.75))
+    for x in range(0, len(chosenColors), 1):
+        drawDecks(chosenColors[x])
 
     pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
     cityNameDisplay("HAND", display_width * 0.95, display_height * 0.14)
@@ -529,10 +539,8 @@ def settings():
         clock.tick(60)
 
 def gameStart():
-
-    for x in range(len(chosenColors)):
-        print("here:")
-        print(chosenColors[x])
+    print("colors: ")
+    print(chosenColors)
 
     global playerMode
     createPlayers(playerMode)
@@ -540,28 +548,6 @@ def gameStart():
 
     screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
-
-    '''
-    if deckMode == 'Full Color':
-        # draws the hit boxes for the white and black card draw piles
-        whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
-        pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
-        redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
-        orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.77, 100, 100), 1)
-        yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.77, 100, 100), 1)
-        greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.77, 100, 100), 1)
-        blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
-        blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
-        passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
-
-        deckArray = [passTurn, whiteDeck, blackDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, pinkDeck]
-    elif deckMode == 'Black and White':
-        whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
-        blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
-        passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
-
-        deckArray = [passTurn, whiteDeck, blackDeck]
-    '''
 
     createBoard()
     drawTracks()
@@ -588,6 +574,7 @@ def gameStart():
             # needs to be updated but for the other move options the values are just updated in that player's instance
             x = p1Move[1][0]
             y = p1Move[1][1]
+            playerOne.points += getEdgeValue(cityConnection[x][y].getLength())
             cityConnection[x][y].claim(playerOne)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
@@ -596,7 +583,7 @@ def gameStart():
                     break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
                     # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
-        print(currentTurn.getP1Move())
+        print("Player one choose to " + currentTurn.getP1Move())
         # updating the game state based on player one's move
         currentTurn.updatePlayerInfo(playerOne)
         currentTurn.updateTracks(cityConnection)
@@ -609,6 +596,7 @@ def gameStart():
         if currentTurn.getP2Move() == 'claim':
             x = p2Move[1][0]
             y = p2Move[1][1]
+            playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
             cityConnection[x][y].claim(playerTwo)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
             for row in trackDataArray:
@@ -656,7 +644,7 @@ def gameStart():
     else:  # then test number of destination cards as a tie breaker
         print("It was a draw! Both players had " + str(playerTwo.points) + " points.")
 
-    pygame.quit()
+    quitGame()
     quit()
 
 

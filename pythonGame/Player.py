@@ -19,7 +19,14 @@ class Player:
         self.cardIndex += 1
 
     def addDestCardToHand(self):
-        self.destinationCards.append(DestinationCard.drawDestinationCard())
+        breaker = 0
+        tempCard = DestinationCard.drawDestinationCard()
+        while self.destinationCards.__contains__(tempCard):
+            tempCard = DestinationCard.drawDestinationCard()
+            breaker += 1
+            if breaker > 20:
+                break
+        self.destinationCards.append(tempCard)
 
     def getCardIndex(self):
         return self.cardIndex
