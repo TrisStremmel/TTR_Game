@@ -2,3 +2,4 @@
 pythonGame/.idea/workspace.xml
 pythonGame/.idea/pythonGame.iml
 pythonGame/thisturn.npy
+*.pyc
