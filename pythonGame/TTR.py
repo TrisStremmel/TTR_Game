@@ -631,7 +631,6 @@ def gameStart():
             cityConnection[x][y].claim(playerTwo)
             cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
-                print(p2Move[1])
                 if trackDataArray[row] != -1:
                     if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
                         claimTrack(trackDataArray[row][0], row)   # updates track data array

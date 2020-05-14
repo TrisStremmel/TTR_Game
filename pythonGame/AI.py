@@ -1,5 +1,7 @@
 import random
 import numpy as np
+
+from Card import Card
 from Player import Player
 
 
@@ -24,6 +26,7 @@ class randomAI(Player):
         openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
         edgeHash = edgeHash[openEdges]
         numEdges = len(edgeHash)
+        if numEdges == 0: return ['pass', None]
 
         move = random.choices(['draw t', 'claim', 'draw d', 'pass'], [0.0, 1.0, 0.0, 0.0])[0]
         arg = None;
@@ -34,11 +37,17 @@ class randomAI(Player):
             arg = edgeHash[arg]
 
             chosenEdge = state.trackArray[arg[0]][arg[1]]
-            print([x.color for x in self.getHand()])
+            print([x.color for x in self.handCards])
             if chosenEdge.length > len([x == chosenEdge.color for x in self.getHand()]):
                 move = 'draw t'
                 arg = [chosenEdge.color, chosenEdge.color]
                 print(arg)
+            else:
+                handcolors = np.array([x.color for x in self.handCards])
+                opp = handcolors[handcolors != chosenEdge.color].tolist()
+                sub = handcolors[handcolors == chosenEdge.color][:-chosenEdge.length]
+                for col in sub: opp.append(col)
+                self.handCards = [Card(x) for x in opp]
 
         if move == 'draw t':
             super().addCardToHand(arg[0])
@@ -46,4 +55,5 @@ class randomAI(Player):
         elif move == 'draw d':
             super().addDestCardToHand()
 
+        self.cardIndex = len(self.getHand())
         return [move, arg]
