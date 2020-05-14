@@ -6,10 +6,12 @@ class GameState:
     def __init__(self, turn, tracks, p1, p2):
         self.turn = turn
         self.trackArray = tracks
-        self.p2dCards = p2.getDestCards()
         self.p1dCards = p1.getDestCards()
-        self.p2Hand = p2.getHand()
+        self.p2dCards = p2.getDestCards()
         self.p1Hand = p1.getHand()
+        self.p2Hand = p2.getHand()
+        self.p1Points = p1.points
+        self.p2Points = p2.points
         self.p1Action = None
         self.p2Action = None
 

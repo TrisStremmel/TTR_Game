@@ -1,4 +1,5 @@
 from Card import Card
+from DestinationCard import DestinationCard
 class Player:
     def __init__(self, name):
         self.handCards = []
@@ -16,6 +17,9 @@ class Player:
     def addCardToHand(self, color):
         self.handCards.append(Card(color))
         self.cardIndex += 1
+
+    def addDestCardToHand(self):
+        self.destinationCards.append(DestinationCard.drawDestinationCard())
 
     def getCardIndex(self):
         return self.cardIndex

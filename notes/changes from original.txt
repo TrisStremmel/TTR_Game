@@ -1,3 +1,6 @@
+This file explains all the things that are in the coded game that are different 
+from the rules described in the "TTR_Rules" file
+
 1)
 Removed the game mechanic of players having a certain number of trains which
 dictated the end of the game.
@@ -14,3 +17,16 @@ My fear with this is that we will lose important data related to the game state
 but the reason I went ahead with this change anyway is beacuse I think it will be
 more important to be able to evaluate and distinguish the DTM for each player 
 from the same game.
+
+3)
+A destination card can be drawn as a turn option. This has always been the plan but
+was accidently left out of the "TTR_Rules". When you draw a destination card there 
+is no longer an option to not keep it. When you draw a destination card you get a 
+random destination card added to your hand of destination cards. It is now possible
+to have both players draw the same destination card
+
+4)
+A limit of 14 cards in you hand at any point was added. Originally there was no
+limit on hand size. This change was made since we needed to display the cards
+in the human player's hand visually and there is a limit to how much space the 
+player's hand could take up on the screen. 

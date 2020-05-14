@@ -5,4 +5,4 @@ class AI(Player):
 
     def makeMove(self, state):
         print("AI has not been programed to make a decision yet")
-        return ['pass']
+        return ['draw t']

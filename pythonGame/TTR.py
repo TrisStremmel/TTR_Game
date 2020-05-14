@@ -94,8 +94,6 @@ screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
-#destinationDeck = [[], [], [], [], [], [], [], [], []]
-
 cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
                    [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
                    [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
@@ -106,21 +104,28 @@ cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'
 
 cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas', 'Oklahoma']
 
+destinationDeck = [['Washington', 'New York', 10], ['Texas', 'Colorado', 4], ['Montana', 'Texas', 7],
+                   ['Washington', 'Oklahoma', 4], ['New York', 'Colorado', 5], ['Washington', 'Kansas', 2],
+                   ['Montana', 'Oklahoma', 8], ['Texas',  'Kansas', 3], ['Montana', 'Colorado', 7]]
+
 # numNodes = input('How many cities?')
 # cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
 # cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
 
+playerMode = 'Human vs AI'  # or could be 'AI vs AI'
+deckMode = 'Black and White'  # or could be 'Full Color'
 playerOne = Player('playerOne')
 playerTwo = Player('playerTwo')
 def createPlayers(mode):
-    global playerOne
-    global playerTwo
+    global playerOne, playerTwo
     if mode == 'Human vs AI':
         playerOne = Human('playerOne')
-        playerTwo = AI('playerTwo')
     if mode == 'AI vs AI':
         playerOne = AI('playerOne')
-        playerTwo = AI('playerTwo')
+
+    playerTwo = AI('playerTwo')
+    playerOne.addDestCardToHand()
+    playerTwo.addDestCardToHand()
 
 
 def quitGame():
@@ -172,6 +177,8 @@ def titleScreen():
         pygame.display.update()
         clock.tick(60)
 
+colors = ["white", "pink", "red", "orange", "yellow", "green", "blue", "black"]
+chosenColors = ["white", "black"]
 
 def settings():
     screen.fill(white)
@@ -193,7 +200,7 @@ def strToObj(name):
     return eval(name)
 
 def cityNameDisplay(text, x, y):
-    largeText = pygame.font.Font('freesansbold.ttf',25)
+    largeText = pygame.font.Font('freesansbold.ttf', 25)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = (x, y)
     screen.blit(TextSurf, TextRect)
@@ -208,6 +215,17 @@ KS = City(int(display_width * 0.5), int(display_height * 0.25))
 NY = City(int(display_width * 0.75), int(display_height * 0.2))
 
 cityArray = [WA, MT, NY, TX, CO, KS, OK]
+
+whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
+pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
+redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
+orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.77, 100, 100), 1)
+yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.77, 100, 100), 1)
+greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.77, 100, 100), 1)
+blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
+blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
+passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
+destDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
 
 def drawGameBoard():
 
@@ -322,13 +340,26 @@ def removeCardsFromHand(color, numRemove):
         color = playerOne.handCards[k].getColor()
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
 
-def getHumanMove(deckArray):
+def checkHitBoxes(color):
+    return {
+        'white': lambda: drawCard("white"),
+        'pink': lambda: drawCard("pink"),
+        'red': lambda: drawCard("red"),
+        'orange': lambda: drawCard("orange"),
+        'yellow': lambda: drawCard("yellow"),
+        'green': lambda: drawCard("green"),
+        'blue': lambda: drawCard("blue"),
+        'black': lambda: drawCard("black"),
+
+    }.get(color, lambda: None)()
+
+def getHumanMove():
     drawCount = 0
     while True:  # keeps looping until user makes a valid move
-
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
         button("Pass Turn", 17, display_width * 0.75, display_height * 0.5, 100, 75, white, grey)
+        button("Draw Destination Card", 17, display_width * 0.75, display_height * 0.6, 100, 75, white, grey)
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
@@ -352,58 +383,83 @@ def getHumanMove(deckArray):
                                             removeCardsFromHand(data.getColor(), data.getLength())
                                             return ['claim', data.getEdgeData()]
 
-                # deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck, passTurn]
-                if deckArray[8].collidepoint(pos) and drawCount == 0:  # passTurn
+                # deckArray = [passTurn, whiteDeck, blackDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, pinkDeck]
+                if passTurn.collidepoint(pos) and drawCount == 0:  # passTurn
                     # no need to update the game state since there is no change
                     return ['pass']
 
                 if drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
                     print('There are 14 cards in your hand, you can not draw any more!')
                     # add a way for the player to see this message in game since they cant see the console while playing
-                elif deckArray[0].collidepoint(pos):  # whiteDeck
+                elif drawCount == 0 or drawCount == 1:
+                    outputBuffer = True
+                    for x in range(0, len(chosenColors), 1):
+                        if eval(chosenColors[x] + "Deck").collidepoint(pos):
+                            checkHitBoxes(chosenColors[x])
+                            drawCount += 1
+                            outputBuffer = False
+                            if drawCount == 2:
+                                return ['draw t']
+                    if outputBuffer and drawCount == 1:  # if you exit the above for loop and outputBuffer = true then the player did not click on a card
+                        print('You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
+                        # add a way for the player to see this message in game since they cant see the console while playing
+
+
+                '''
+                if drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
+                    print('There are 14 cards in your hand, you can not draw any more!')
+                    # add a way for the player to see this message in game since they cant see the console while playing
+                elif deckArray[1].collidepoint(pos):  # whiteDeck
                     drawCard('white')
                     drawCount += 1
                     if drawCount == 2:
                         return ['draw t']
-                elif deckArray[1].collidepoint(pos):  # pinkDeck
-                    drawCard('pink')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[2].collidepoint(pos):  # redDeck
-                    drawCard('red')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[3].collidepoint(pos):  # orangeDeck
-                    drawCard('orange')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[4].collidepoint(pos):  # yellowDeck
-                    drawCard('yellow')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[5].collidepoint(pos):  # greenDeck
-                    drawCard('green')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[6].collidepoint(pos):  # blueDeck
-                    drawCard('blue')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[7].collidepoint(pos):  # blackDeck
+                elif deckArray[2].collidepoint(pos):  # blackDeck
                     drawCard('black')
                     drawCount += 1
                     if drawCount == 2:
                         return ['draw t']
+                elif len(deckArray) > 3:  # if true then deckMode is Full Color
+                    if deckArray[3].collidepoint(pos):  # redDeck
+                        drawCard('red')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[4].collidepoint(pos):  # orangeDeck
+                        drawCard('orange')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[5].collidepoint(pos):  # yellowDeck
+                        drawCard('yellow')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[6].collidepoint(pos):  # greenDeck
+                        drawCard('green')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[7].collidepoint(pos):  # blueDeck
+                        drawCard('blue')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[8].collidepoint(pos):  # pinkDeck
+                        drawCard('pink')
+                        drawCount += 1
+                        if drawCount == 2:
+                            return ['draw t']
+                    elif deckArray[9].collidepoint(pos)
+                    elif drawCount == 1:
+                        print(
+                            'You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
+                        # add a way for the player to see this message in game since they cant see the console while playing
 
                 elif drawCount == 1:
                     print('You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
                     # add a way for the player to see this message in game since they cant see the console while playing
+                '''
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
@@ -412,26 +468,32 @@ def getHumanMove(deckArray):
 #firstTrack = None
 
 def gameStart():
-    mode = 'Human vs AI'
-    createPlayers(mode)
+    global playerMode, deckMode
+    createPlayers(playerMode)
     currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
 
     screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
 
-    # draws the hit boxes for the white and black card draw piles
-    whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
-    pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
-    redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
-    orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.77, 100, 100), 1)
-    yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.77, 100, 100), 1)
-    greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.77, 100, 100), 1)
-    blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
-    blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
+    if deckMode == 'Full Color':
+        # draws the hit boxes for the white and black card draw piles
+        whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
+        pinkDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.13, display_height * 0.77, 100, 100), 1)
+        redDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.23, display_height * 0.77, 100, 100), 1)
+        orangeDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.33, display_height * 0.77, 100, 100), 1)
+        yellowDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.43, display_height * 0.77, 100, 100), 1)
+        greenDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.53, display_height * 0.77, 100, 100), 1)
+        blueDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.63, display_height * 0.77, 100, 100), 1)
+        blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
+        passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
 
-    passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
+        deckArray = [passTurn, whiteDeck, blackDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, pinkDeck]
+    elif deckMode == 'Black and White':
+        whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.77, 100, 100), 1)
+        blackDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.73, display_height * 0.77, 100, 100), 1)
+        passTurn = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.75, display_height * 0.5, 100, 75), 1)
 
-    deckArray = [whiteDeck, pinkDeck, redDeck, orangeDeck, yellowDeck, greenDeck, blueDeck, blackDeck, passTurn]
+        deckArray = [passTurn, whiteDeck, blackDeck]
 
     drawTracks()
     drawGameBoard()
@@ -439,19 +501,19 @@ def gameStart():
 
     while running:
         drawCities()
+        button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
         p1Move = None
         # AI or Human makes its move and stores it in the game state
-        if mode == 'Human vs AI':  # or type(playerOne) == Human
+        if playerMode == 'Human vs AI':  # or type(playerOne) == Human
             # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
             # I hope the line above works, it may not since it has the human class calling a TTR class function
-            p1Move = getHumanMove(deckArray)  # since the line above did not work I use this
+            p1Move = getHumanMove()  # since the line above did not work I use this
             currentTurn.setPlayerMove(playerOne, p1Move[0])
-        elif mode == 'AI vs AI':
+        elif playerMode == 'AI vs AI':
             p1Move = playerOne.makeMove(currentTurn)
             currentTurn.setPlayerMove(playerOne, p1Move[0])
 
-        print(trackDataArray)
         if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
             # needs to be updated but for the other move options the values are just updated in that player's instance
             x = p1Move[1][0]
@@ -492,7 +554,7 @@ def gameStart():
 
         # check for deadlock
         if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
-            print("since both players passed their turn it is likely the game has reached a deadlock so game ends")
+            print("Since both players passed their turn it is likely the game has reached a deadlock so game ends")
             break  # running = False should also work
 
         # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
@@ -518,11 +580,11 @@ def gameStart():
 
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:
-        print("Player one won with " + playerOne.points + " over player two who had " + playerTwo.points + ".")  # add destination cards completed
+        print("Player one won with " + str(playerOne.points) + " over player two who had " + str(playerTwo.points) + ".")  # add destination cards completed
     elif playerOne.points < playerTwo.points:
-        print("Player two won with " + playerTwo.points + " over player one who had " + playerOne.points + ".")  # add destination cards completed
+        print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(playerOne.points) + ".")  # add destination cards completed
     else:  # then test number of destination cards as a tie breaker
-        print("It was a draw! Both players had " + playerTwo.points + " points.")
+        print("It was a draw! Both players had " + str(playerTwo.points) + " points.")
 
     pygame.quit()
     quit()
