@@ -12,8 +12,6 @@ class AI(Player):
 
     def makeMove(self, state):
         decision = self.strategy.makeDecision(state, self)
-        for card in self.handCards:
-            print(card.color)
         return decision
 
 
@@ -22,7 +20,6 @@ class randomAI(Player):
         super().__init__(name)
 
     def makeMove(self, state):
-        print("randomAI uses splash!")
 
         UtrackArray = np.array(state.trackArray).copy()
         edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[(UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]

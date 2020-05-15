@@ -112,10 +112,9 @@ def createPlayers(mode):
     if mode == 'Human vs AI':
         playerOne = Human('playerOne')
     if mode == 'AI vs AI':
-        playerOne = AI('playerOne')
+        playerOne = randomAI('playerOne')
 
-    playerTwo = randomAI('playerTwo')
-    #playerTwo = AI('playerTwo')
+    playerTwo = AI('playerTwo')
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
 
@@ -345,7 +344,6 @@ def claimTrack(track, row):
     print("claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
 
 def drawCard(color):
-    print('added ' + color + ' card to your hand')
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
     playerOne.addCardToHand(color)
 
@@ -428,63 +426,6 @@ def getHumanMove():
                         displayText("You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.", display_width * 0.5,
                                     display_height * 0.03)
                         # add a way for the player to see this message in game since they cant see the console while playing
-
-
-                '''
-                if drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
-                    print('There are 14 cards in your hand, you can not draw any more!')
-                    # add a way for the player to see this message in game since they cant see the console while playing
-                elif deckArray[1].collidepoint(pos):  # whiteDeck
-                    drawCard('white')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif deckArray[2].collidepoint(pos):  # blackDeck
-                    drawCard('black')
-                    drawCount += 1
-                    if drawCount == 2:
-                        return ['draw t']
-                elif len(deckArray) > 3:  # if true then deckMode is Full Color
-                    if deckArray[3].collidepoint(pos):  # redDeck
-                        drawCard('red')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[4].collidepoint(pos):  # orangeDeck
-                        drawCard('orange')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[5].collidepoint(pos):  # yellowDeck
-                        drawCard('yellow')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[6].collidepoint(pos):  # greenDeck
-                        drawCard('green')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[7].collidepoint(pos):  # blueDeck
-                        drawCard('blue')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[8].collidepoint(pos):  # pinkDeck
-                        drawCard('pink')
-                        drawCount += 1
-                        if drawCount == 2:
-                            return ['draw t']
-                    elif deckArray[9].collidepoint(pos)
-                    elif drawCount == 1:
-                        print(
-                            'You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
-                        # add a way for the player to see this message in game since they cant see the console while playing
-
-                elif drawCount == 1:
-                    print('You drew one card already this turn you cannot claim a track and must draw one more card this turn.')
-                    # add a way for the player to see this message in game since they cant see the console while playing
-                '''
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
@@ -573,8 +514,6 @@ def settings():
         clock.tick(60)
 
 def gameStart():
-    print("colors: ")
-    print(chosenColors)
 
     global playerMode
     createPlayers(playerMode)
@@ -647,7 +586,6 @@ def gameStart():
             x = p2Move[1][0]
             y = p2Move[1][1]
             playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
-            print(p2Move)
             cityConnection[x][y].claim(playerTwo)
             cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
             for row in range(0, len(trackDataArray)):
@@ -693,20 +631,21 @@ def gameStart():
 
         pygame.display.update()
         clock.tick(60)
-
-    # saving full gamestate array to file at end of game
-    # np.save(os.getcwd()+'/saves/save.npy', np.array(GameStateArray))
-
+    #check destination cards and update player score
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:
-        print("Player one won with " + str(playerOne.points) + " over player two who had " + str(playerTwo.points) + ".")  # add destination cards completed
+        print("Player one won with " + str(playerOne.points) + " over player two who had " + str(
+            playerTwo.points) + ".")  # add num destination cards completed
     elif playerOne.points < playerTwo.points:
-        print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(playerOne.points) + ".")  # add destination cards completed
+        print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(
+            playerOne.points) + ".")  # add num destination cards completed
     else:  # then test number of destination cards as a tie breaker
         print("It was a draw! Both players had " + str(playerTwo.points) + " points.")
 
     titleScreen()
     quit()
+    # saving full gamestate array to file at end of game
+    # np.save(os.getcwd()+'/saves/save.npy', np.array(GameStateArray))
 
 
 titleScreen()
