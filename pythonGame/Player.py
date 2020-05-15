@@ -19,7 +19,14 @@ class Player:
         self.cardIndex += 1
 
     def addDestCardToHand(self):
-        self.destinationCards.append(DestinationCard.drawDestinationCard())
+        breaker = 0
+        tempCard = DestinationCard.drawDestinationCard()
+        while tempCard in self.destinationCards:  # so dup dest cards are not added to hand
+            tempCard = DestinationCard.drawDestinationCard()
+            breaker += 1
+            if breaker > 200:
+                break
+        self.destinationCards.append(tempCard)
 
     def getCardIndex(self):
         return self.cardIndex
