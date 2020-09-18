@@ -1,18 +1,10 @@
 # card class, holds color
 class Card:
-    def __init__(self, color, length):
+    def __init__(self, color):
         self.color = color
-        self.length = length
 
     def getColor(self):
         return self.color
 
     def setColor(self, color):
         self.color = color
-
-    def getLength(self):
-        return self.length
-
-    def setLength(self, length):
-        self.length = length
-
