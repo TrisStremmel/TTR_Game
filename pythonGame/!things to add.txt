@@ -1,8 +1,3 @@
-hi Ian
-
-
-
-
 broad/general
 implement settings
 add many new AI to play game
