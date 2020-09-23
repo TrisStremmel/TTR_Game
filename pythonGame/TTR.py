@@ -629,7 +629,7 @@ def gameStart():
         # currentTurn.writeToNPY()
 
         GameStateArray.append(currentTurn.returnListedforP())
-
+        currentTurn.writeToCSV()
         currentTurn.incrementTurn()
 
         pygame.display.update()

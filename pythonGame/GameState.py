@@ -28,7 +28,6 @@ class GameState:
         self.p2Points = p2.points
         self.p1Action = None
         self.p2Action = None
-        #
         self.LastFullAction = None
         self.LastP = 'playerOne'
         self.append_list_as_row(self.player1, self.fields)
@@ -66,18 +65,18 @@ class GameState:
                 self.p1Points = player.points
             elif self.p1Action == 'draw d':
                 self.p1dCards = player.getDestCards()
-            self.writeToCSV("player1.csv")
+
         elif player.getName() == 'playerTwo':
             if self.p2Action == 'draw t' or self.p2Action == 'claim':
                 self.p2Hand = player.getHand()
                 self.p2Points = player.points
             elif self.p2Action == 'draw d':
                 self.p2dCards = player.getDestCards()
-            self.writeToCSV("player2.csv")
+
         else:
             print("Error: player not found. No state info updated")
 
-    def writeToCSV(self, playerFileName):  # as of now a separate csv will be made for each player that will
+    def writeToCSV(self):  # as of now a separate csv will be made for each player that will
         # only include that player's hand, dcards, and action taken
         # I do not know how this will affect the DTM since the tracks will be changing without any action
         # being showed in the DTM whenever the other player makes a move.
@@ -85,11 +84,16 @@ class GameState:
         # writing to csv file
         player1HandCount = self.blackWhiteCount(self.p1Hand)
         player2HandCount = self.blackWhiteCount(self.p2Hand)
-        turnData = [self.turn, self.destinationCards(self.p1dCards), player1HandCount[0], player1HandCount[1], player1HandCount[2], self.p1Points, self.p1Action]
-        self.append_list_as_row(playerFileName, turnData)
-
+        turnDataP1 = [self.turn, self.destinationCards(self.p1dCards), player1HandCount[0], player1HandCount[1],
+                    player1HandCount[2], self.p1Points, self.p1Action]
+        turnDataP2 = [self.turn, self.destinationCards(self.p2dCards), player2HandCount[0], player2HandCount[1],
+                    player2HandCount[2], self.p2Points, self.p2Action]
+        self.append_list_as_row(self.player1, turnDataP1)
+        print("csv based on gameState for player 1 was successfully updated at: " + self.player1)
+        self.append_list_as_row(self.player2, turnDataP2)
+        print("csv based on gameState for player 2 was successfully updated at: " + self.player2)
         destination = "/some_file_location"
-        print("csv based on gameState for " + playerFileName + " was successfully generated at: " + destination)
+
 
     def append_list_as_row(self, file_name, list_of_elem):
         # Open file in append mode
