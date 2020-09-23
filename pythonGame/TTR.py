@@ -572,6 +572,7 @@ def gameStart():
         # updating the game state based on player one's move
         currentTurn.updatePlayerInfo(playerOne)
         currentTurn.updateTracks(cityConnection)
+
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
         GameStateArray.append(currentTurn.returnListedforP())
@@ -600,6 +601,7 @@ def gameStart():
         #remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
         currentTurn.updatePlayerInfo(playerTwo)
         currentTurn.updateTracks(cityConnection)
+
         #currentTurn.writeToCSV(playerTwo)  # this line is commented out since the method had not been made yet
 
         # check for deadlock
@@ -627,6 +629,7 @@ def gameStart():
         # currentTurn.writeToNPY()
 
         GameStateArray.append(currentTurn.returnListedforP())
+
         currentTurn.incrementTurn()
 
         pygame.display.update()

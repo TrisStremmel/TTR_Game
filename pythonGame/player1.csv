@@ -1,0 +1,185 @@
+turn,destination_cards,hand,points,action
+0,help
+1,help
+2,help
+3,help
+4,help
+5,help
+6,help
+7,help
+8,help
+9,help
+10,help
+11,help
+12,help
+13,help
+14,help
+15,help
+turn,destination_cards,hand,points,action
+0,help
+1,help
+2,help
+3,help
+4,help
+5,help
+6,help
+7,help
+8,help
+9,help
+10,help
+11,help
+12,help
+13,help
+14,help
+15,help
+turn,destination_cards,hand,points,action
+0,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E59B358>]",0,draw t
+1,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E58FA20>, <Card.Card object at 0x000002D04E58F9B0>]",0,draw t
+2,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E58FA20>, <Card.Card object at 0x000002D04E58F9B0>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58FAC8>]",0,draw t
+3,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E58FA20>, <Card.Card object at 0x000002D04E58F9B0>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58FAC8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E58FB38>]",0,draw t
+4,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58FAC8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E58FB38>]",10,claim
+5,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],[],14,claim
+6,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>]",14,draw t
+7,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>]",14,draw t
+8,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>, <Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E58F898>]",14,draw t
+9,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>, <Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E58F898>, <Card.Card object at 0x000002D04E58F5F8>, <Card.Card object at 0x000002D04E58FB70>]",14,draw t
+10,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>, <Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E58F898>, <Card.Card object at 0x000002D04E58F5F8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E59B3C8>]",14,draw t
+11,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>, <Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E58F898>, <Card.Card object at 0x000002D04E58F5F8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E59B3C8>, <Card.Card object at 0x000002D04E59B470>, <Card.Card object at 0x000002D04E59B5F8>]",14,draw t
+12,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F748>, <Card.Card object at 0x000002D04E58FB38>, <Card.Card object at 0x000002D04E58F320>, <Card.Card object at 0x000002D04E58F9E8>, <Card.Card object at 0x000002D04E597898>, <Card.Card object at 0x000002D04E58F898>, <Card.Card object at 0x000002D04E58F5F8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E59B3C8>, <Card.Card object at 0x000002D04E59B470>, <Card.Card object at 0x000002D04E59B5F8>, <Card.Card object at 0x000002D04E59B4A8>, <Card.Card object at 0x000002D04E59B668>]",14,draw t
+13,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E58F5F8>, <Card.Card object at 0x000002D04E58FB70>, <Card.Card object at 0x000002D04E59B358>, <Card.Card object at 0x000002D04E59B3C8>, <Card.Card object at 0x000002D04E59B470>, <Card.Card object at 0x000002D04E59B5F8>, <Card.Card object at 0x000002D04E59B4A8>, <Card.Card object at 0x000002D04E59B668>]",29,claim
+14,[<DestinationCard.DestinationCard object at 0x000002D04E58F4A8>],"[<Card.Card object at 0x000002D04E59B470>, <Card.Card object at 0x000002D04E59B5F8>, <Card.Card object at 0x000002D04E59B4A8>, <Card.Card object at 0x000002D04E59B668>]",36,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,2,2,0,draw t
+1,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,4,4,0,draw t
+2,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,6,6,0,draw t
+3,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,3,3,4,claim
+4,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,0,0,8,claim
+5,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,2,2,8,draw t
+6,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,4,4,8,draw t
+7,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,1,1,12,claim
+8,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,3,3,12,draw t
+9,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,5,5,12,draw t
+10,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,1,1,19,claim
+11,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,3,3,19,draw t
+12,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,5,5,19,draw t
+13,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,7,7,19,draw t
+14,[<DestinationCard.DestinationCard object at 0x000001FB820B1DD8>],0,1,1,34,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],0,2,2,0,draw t
+1,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],0,4,4,0,draw t
+2,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],0,1,1,4,claim
+3,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],0,3,3,4,draw t
+4,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],0,0,0,8,claim
+5,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],2,0,2,8,draw t
+6,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,0,4,8,draw t
+7,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,2,6,8,draw t
+8,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,4,8,8,draw t
+9,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,6,10,8,draw t
+10,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,1,5,18,claim
+11,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,3,7,18,draw t
+12,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,5,9,18,draw t
+13,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,1,5,25,claim
+14,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,3,7,25,draw t
+15,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,5,9,25,draw t
+16,[<DestinationCard.DestinationCard object at 0x0000015E63065208>],4,7,11,25,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texa,0,2,2,0,draw t
+1,Texa,0,4,4,0,draw t
+2,Texa,0,1,1,4,claim
+3,Texa,0,3,3,4,draw t
+4,Texa,0,5,5,4,draw t
+5,Texa,0,0,0,14,claim
+6,Texa,2,0,2,14,draw t
+7,Texa,4,0,4,14,draw t
+8,Texa,1,0,1,18,claim
+9,Texa,3,0,3,18,draw t
+10,Texa,4,1,5,18,draw t
+11,Texa,0,1,1,25,claim
+12,Texa,0,3,3,25,draw t
+13,Texa,0,5,5,25,draw t
+14,Texa,0,7,7,25,draw t
+15,Texa,0,1,1,40,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,s->Colorado and,0,2,2,0,draw t
+1,s->Colorado and,0,4,4,0,draw t
+2,s->Colorado and,0,2,2,2,claim
+3,s->Colorado and,0,4,4,2,draw t
+4,s->Colorado and,0,1,1,6,claim
+5,s->Colorado and,0,3,3,6,draw t
+6,s->Colorado and,1,4,5,6,draw t
+7,s->Colorado and,1,0,1,13,claim
+8,s->Colorado and,3,0,3,13,draw t
+9,s->Colorado and,5,0,5,13,draw t
+10,s->Colorado and,6,1,7,13,draw t
+11,s->Colorado and,0,1,1,28,claim
+12,s->Colorado and,0,3,3,28,draw t
+13,s->Colorado and,0,5,5,28,draw t
+14,s->Colorado and,0,0,0,38,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Colorado,0,2,2,0,draw t
+1,Texas->Colorado,0,0,0,2,claim
+2,Texas->Colorado,0,2,2,2,draw t
+3,Texas->Colorado,1,3,4,2,draw t
+4,Texas->Colorado,1,0,1,6,claim
+5,Texas->Colorado,3,0,3,6,draw t
+6,Texas->Colorado,0,0,0,10,claim
+7,Texas->Colorado,2,0,2,10,draw t
+8,Texas->Colorado,4,0,4,10,draw t
+9,Texas->Colorado,0,0,0,17,claim
+10,Texas->Colorado,2,0,2,17,draw t
+11,Texas->Colorado,4,0,4,17,draw t
+12,Texas->Colorado,6,0,6,17,draw t
+13,Texas->Colorado,0,0,0,32,claim
+14,Texas->Colorado,2,0,2,32,draw t
+15,Texas->Colorado,4,0,4,32,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Colorado andWashington->Kansas,0,0,0,0,draw d
+1,Texas->Colorado andWashington->Kansas andMontana->Colorado,0,0,0,0,draw d
+2,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado,0,0,0,0,draw d
+3,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas,0,0,0,0,draw d
+4,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma,0,0,0,0,draw d
+5,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York,0,0,0,0,draw d
+6,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma,0,0,0,0,draw d
+7,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas,0,0,0,0,draw d
+8,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma,0,0,0,0,draw d
+9,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado,0,0,0,0,draw d
+10,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado,0,0,0,0,draw d
+11,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma,0,0,0,0,draw d
+12,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas,0,0,0,0,draw d
+13,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado,0,0,0,0,draw d
+14,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas,0,0,0,0,draw d
+15,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado,0,0,0,0,draw d
+16,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas,0,0,0,0,draw d
+17,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas,0,0,0,0,draw d
+18,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas,0,0,0,0,draw d
+19,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas,0,0,0,0,draw d
+20,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York,0,0,0,0,draw d
+21,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma,0,0,0,0,draw d
+22,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas,0,0,0,0,draw d
+23,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas andWashington->Kansas,0,0,0,0,draw d
+24,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas andWashington->Kansas andMontana->Texas,0,0,0,0,draw d
+25,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas andWashington->Kansas andMontana->Texas andTexas->Kansas,0,0,0,0,draw d
+26,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas andWashington->Kansas andMontana->Texas andTexas->Kansas andWashington->Oklahoma,0,0,0,0,draw d
+27,Texas->Colorado andWashington->Kansas andMontana->Colorado andNew York->Colorado andMontana->Texas andMontana->Oklahoma andWashington->New York andWashington->Oklahoma andTexas->Kansas andMontana->Oklahoma andNew York->Colorado andMontana->Colorado andWashington->Oklahoma andMontana->Texas andNew York->Colorado andMontana->Texas andTexas->Colorado andMontana->Texas andMontana->Texas andTexas->Kansas andWashington->Kansas andWashington->New York andWashington->Oklahoma andMontana->Texas andWashington->Kansas andMontana->Texas andTexas->Kansas andWashington->Oklahoma andWashington->Oklahoma,0,0,0,0,draw d
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Washington->Oklahoma and Texas->Colorado,0,0,0,0,draw d
+1,Washington->Oklahoma and Texas->Colorado and Montana->Texas,0,0,0,0,draw d
+2,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas,0,0,0,0,draw d
+3,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas,0,0,0,0,draw d
+4,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado,0,0,0,0,draw d
+5,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma,0,0,0,0,draw d
+6,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado,0,0,0,0,draw d
+7,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York,0,0,0,0,draw d
+8,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma,0,0,0,0,draw d
+9,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas,0,0,0,0,draw d
+10,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado,0,0,0,0,draw d
+11,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado,0,0,0,0,draw d
+12,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,0,0,0,0,draw d
+13,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,0,2,2,0,draw t
+14,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,0,4,4,0,draw t
+15,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,0,0,0,7,claim
+16,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,2,0,2,7,draw t
+17,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,4,0,4,7,draw t
+18,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,5,1,6,7,draw t
+19,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,6,2,8,7,draw t
+20,Washington->Oklahoma and Texas->Colorado and Montana->Texas and Texas->Kansas and Washington->Kansas and Montana->Colorado and Montana->Oklahoma and New York->Colorado and Washington->New York and Washington->Oklahoma and Texas->Kansas and New York->Colorado and Texas->Colorado and Montana->Texas,0,2,2,22,claim

@@ -32,6 +32,9 @@ class DestinationCard:
     def getValues(self):
         return [self.city1, self.city2, self.points]
 
+    def toString(self):
+        return self.city1 + "->" + self.city2
+
     @staticmethod
     def drawDestinationCard():
         destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
