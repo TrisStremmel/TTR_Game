@@ -219,6 +219,15 @@ def drawDecks(color):
 
 def createBoard():
     global cityConnection
+    #this is not commented out since it just sets the game over when starting a new round
+    cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2, 'black'), -1, -1],
+                       [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
+                       [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
+                       [Edge(5, 'white'), -1, Edge(6, 'black'), -1, -1, -1, Edge(3, 'white')],
+                       [Edge(2, 'black'), -1, -1, -1, -1, Edge(3, 'white'), Edge(3, 'white')],
+                       [-1, -1, Edge(4, 'black'), -1, Edge(3, 'white'), -1, Edge(2, 'black')],
+                       [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]])
+    ''' This is commented out because it adds randomness to what tracks are what colors, for AI we dont want this
     cityConnection = ([[-1, Edge(3, chosenColors[randrange(0, len(chosenColors))]), -1,
                         Edge(5, chosenColors[randrange(0, len(chosenColors))]),
                         Edge(2, chosenColors[randrange(0, len(chosenColors))]), -1, -1],
@@ -239,6 +248,7 @@ def createBoard():
                        [-1, -1, -1, Edge(3, chosenColors[randrange(0, len(chosenColors))]),
                         Edge(3, chosenColors[randrange(0, len(chosenColors))]),
                         Edge(2, chosenColors[randrange(0, len(chosenColors))]), -1]])
+    '''
 
 
 whiteDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.03, display_height * 0.85, 100, 100), 1)

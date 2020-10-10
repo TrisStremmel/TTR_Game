@@ -21,6 +21,7 @@ class Strategy:
 
             wanted = edges[0]
             wantedIndex = [0, 0]
+            ''' This is the old way which ends up being shortest track not empty hand
             shortestLength = 1000000  # python has not int.max_value so this is a sub
             #this strategy wants to claim the shortest available track or draw cards to try to claim it next turn. This is greedy
             for i in range(0, len(edges)):
@@ -38,7 +39,28 @@ class Strategy:
                         shortestLength = edges[i].length
                         wanted = edges[i]
                         wantedIndex = edgeHash[i]
+            '''
 
+            smallestCardDif = 1000000  # python has not int.max_value so this is a sub
+            for i in range(len(edges)):
+                #if the edge length is closest to the amount of a color that it has
+                if edges[i].length - player.handCards.count(edges[i].color) < smallestCardDif:
+                    smallestCardDif = edges[i].length - player.handCards.count(edges[i].color)
+                    wanted = edges[i]
+                    wantedIndex = edgeHash[i]
+                elif edges[i].length - player.handCards.count(edges[i].color) == smallestCardDif:
+                    # if there are multiple shortest tracks it picks one that it has more cards of its color
+                    if player.handCards.count(edges[i].color) > player.handCards.count(wanted.color):
+                        smallestCardDif = edges[i].length - player.handCards.count(edges[i].color)
+                        wanted = edges[i]
+                        wantedIndex = edgeHash[i]
+                    elif player.handCards.count(edges[i].color) == player.handCards.count(wanted.color) and randint(0, 1) == 1:  # at random (stretch goal)
+                        smallestCardDif = edges[i].length - player.handCards.count(edges[i].color)
+                        wanted = edges[i]
+                        wantedIndex = edgeHash[i]
+
+            print(smallestCardDif)
+            print(wanted.color)
             neededCards = []
             for card in player.handCards:
                 if card.color == wanted.color:

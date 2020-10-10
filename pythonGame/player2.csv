@@ -14,3 +14,158 @@ turn,destination_cards,black_cards,white_cards,total_cards,points,action
 12,Washington->Kansas,1,0,1,22,claim
 13,Washington->Kansas,1,2,3,22,draw t
 14,Washington->Kansas,1,4,5,22,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,New York->Colorado,2,0,2,0,draw t
+1,New York->Colorado,2,2,4,0,draw t
+2,New York->Colorado,2,0,2,2,claim
+3,New York->Colorado,4,0,4,2,draw t
+4,New York->Colorado,1,0,1,6,claim
+5,New York->Colorado,1,2,3,6,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Washington->Kansas,0,0,2,0,draw t
+1,Washington->Kansas,0,0,0,2,claim
+2,Washington->Kansas,0,2,2,2,draw t
+3,Washington->Kansas,0,0,0,4,claim
+4,Washington->Kansas,2,0,2,4,draw t
+5,Washington->Kansas,3,0,4,4,draw t
+6,Washington->Kansas,0,0,1,8,claim
+7,Washington->Kansas,0,0,3,8,draw t
+8,Washington->Kansas,0,0,0,12,claim
+9,Washington->Kansas,2,0,2,12,draw t
+10,Washington->Kansas,3,1,4,12,draw t
+11,Washington->Kansas,0,1,1,16,claim
+12,Washington->Kansas,0,3,3,16,draw t
+13,Washington->Kansas,0,5,5,16,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Montana->Texas,2,0,2,0,draw t
+1,Montana->Texas,0,0,0,2,claim
+2,Montana->Texas,2,0,2,2,draw t
+3,Montana->Texas,0,0,0,4,claim
+4,Montana->Texas,0,2,2,4,draw t
+5,Montana->Texas,0,4,4,4,draw t
+6,Montana->Texas,0,1,1,8,claim
+7,Montana->Texas,0,3,3,8,draw t
+8,Montana->Texas,0,0,0,12,claim
+9,Montana->Texas,2,0,2,12,draw t
+10,Montana->Texas,4,0,4,12,draw t
+11,Montana->Texas,1,0,1,16,claim
+12,Montana->Texas,3,0,3,16,draw t
+13,Montana->Texas,5,0,5,16,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Montana->Colorado,2,0,2,0,draw t
+1,Montana->Colorado,0,0,0,2,claim
+2,Montana->Colorado,2,0,2,2,draw t
+3,Montana->Colorado,0,0,0,4,claim
+4,Montana->Colorado,0,2,2,4,draw t
+5,Montana->Colorado,0,4,4,4,draw t
+6,Montana->Colorado,0,1,1,8,claim
+7,Montana->Colorado,0,3,3,8,draw t
+8,Montana->Colorado,0,0,0,12,claim
+9,Montana->Colorado,2,0,2,12,draw t
+10,Montana->Colorado,4,0,4,12,draw t
+11,Montana->Colorado,1,0,1,16,claim
+12,Montana->Colorado,1,2,3,16,draw t
+13,Montana->Colorado,1,4,5,16,draw t
+14,Montana->Colorado,1,1,2,20,claim
+15,Montana->Colorado,1,3,4,20,draw t
+16,Montana->Colorado,1,5,6,20,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Washington->New York,2,0,2,0,draw t
+1,Washington->New York,0,0,0,2,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Kansas,2,0,2,0,draw t
+1,Texas->Kansas,0,0,0,2,claim
+2,Texas->Kansas,0,2,2,2,draw t
+3,Texas->Kansas,1,3,4,2,draw t
+4,Texas->Kansas,1,0,1,6,claim
+5,Texas->Kansas,3,0,3,6,draw t
+6,Texas->Kansas,0,0,0,10,claim
+7,Texas->Kansas,0,2,2,10,draw t
+8,Texas->Kansas,1,3,4,10,draw t
+9,Texas->Kansas,1,0,1,14,claim
+10,Texas->Kansas,3,0,3,14,draw t
+11,Texas->Kansas,4,1,5,14,draw t
+12,Texas->Kansas,0,1,1,21,claim
+13,Texas->Kansas,0,3,3,21,draw t
+14,Texas->Kansas,0,5,5,21,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Washington->New York,2,0,2,0,draw t
+1,Washington->New York,0,0,0,2,claim
+2,Washington->New York,0,2,2,2,draw t
+3,Washington->New York,1,3,4,2,draw t
+4,Washington->New York,1,0,1,6,claim
+5,Washington->New York,3,0,3,6,draw t
+6,Washington->New York,0,0,0,10,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Kansas,0,2,2,0,draw t
+1,Texas->Kansas,1,3,4,0,draw t
+2,Texas->Kansas,1,0,1,4,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Colorado,2,0,2,0,draw t
+1,Texas->Colorado,0,0,0,2,claim
+2,Texas->Colorado,2,0,2,2,draw t
+3,Texas->Colorado,0,0,0,4,claim
+4,Texas->Colorado,0,2,2,4,draw t
+5,Texas->Colorado,1,3,4,4,draw t
+6,Texas->Colorado,1,0,1,8,claim
+7,Texas->Colorado,3,0,3,8,draw t
+8,Texas->Colorado,0,0,0,12,claim
+9,Texas->Colorado,2,0,2,12,draw t
+10,Texas->Colorado,4,0,4,12,draw t
+11,Texas->Colorado,6,0,6,12,draw t
+12,Texas->Colorado,0,0,0,27,claim
+13,Texas->Colorado,0,2,2,27,draw t
+14,Texas->Colorado,0,4,4,27,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Montana->Colorado,2,0,2,0,draw t
+1,Montana->Colorado,0,0,0,2,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Colorado,2,0,2,0,draw t
+1,Texas->Colorado,0,0,0,2,claim
+2,Texas->Colorado,2,0,2,2,draw t
+3,Texas->Colorado,4,0,4,2,draw t
+4,Texas->Colorado,1,0,1,6,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Washington->New York,2,0,2,0,draw t
+1,Washington->New York,0,0,0,2,claim
+2,Washington->New York,0,2,2,2,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Montana->Texas,2,0,2,0,draw t
+1,Montana->Texas,0,0,0,2,claim
+2,Montana->Texas,2,0,2,2,draw t
+3,Montana->Texas,3,1,4,2,draw t
+4,Montana->Texas,0,1,1,6,claim
+5,Montana->Texas,0,3,3,6,draw t
+6,Montana->Texas,0,0,0,10,claim
+7,Montana->Texas,0,2,2,10,draw t
+8,Montana->Texas,0,4,4,10,draw t
+9,Montana->Texas,0,1,1,14,claim
+10,Montana->Texas,0,3,3,14,draw t
+11,Montana->Texas,0,5,5,14,draw t
+12,Montana->Texas,0,1,1,21,claim
+13,Montana->Texas,0,3,3,21,draw t
+14,Montana->Texas,2,3,5,21,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Kansas,2,0,2,0,draw t
+1,Texas->Kansas,0,0,0,2,claim
+2,Texas->Kansas,2,0,2,2,draw t
+3,Texas->Kansas,0,0,0,4,claim
+4,Texas->Kansas,0,2,2,4,draw t
+5,Texas->Kansas,0,4,4,4,draw t
+6,Texas->Kansas,0,1,1,8,claim
+7,Texas->Kansas,0,3,3,8,draw t
+8,Texas->Kansas,0,0,0,12,claim
+9,Texas->Kansas,2,0,2,12,draw t
+10,Texas->Kansas,4,0,4,12,draw t
+11,Texas->Kansas,1,0,1,16,claim
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
+0,Texas->Colorado,2,0,2,0,draw t
+turn,destination_cards,black_cards,white_cards,total_cards,points,action
