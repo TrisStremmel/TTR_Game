@@ -7,6 +7,7 @@ class DestinationCard:
         self.city1 = c1
         self.city2 = c2
         self.points = p
+        self.completed = False
 
     def __eq__(self, obj):
         if type(obj) == DestinationCard:

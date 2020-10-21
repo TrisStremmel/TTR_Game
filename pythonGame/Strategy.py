@@ -1,11 +1,18 @@
 from random import randint
 import numpy as np
+
+stratList = ['emptyHand']
+
 class Strategy:
+
     def __init__(self, sName=None):
         if sName is None:
             self.strategyName = self.randomStrategy()
         else:
-            self.strategyName = sName
+            if sName in stratList:
+                self.strategyName = sName
+            else:
+                self.strategyName = self.randomStrategy()
 
     def makeDecision(self, state, player):
         if self.strategyName == 'emptyHand':
@@ -59,8 +66,6 @@ class Strategy:
                         wanted = edges[i]
                         wantedIndex = edgeHash[i]
 
-            print(smallestCardDif)
-            print(wanted.color)
             neededCards = []
             for card in player.handCards:
                 if card.color == wanted.color:
@@ -69,7 +74,6 @@ class Strategy:
                     for toRemove in neededCards:
                         player.handCards.remove(toRemove)
                     player.cardIndex = len(player.handCards)
-                    print(wantedIndex)
                     #wantedIndex.reverse()
                     return ['claim', wantedIndex]
 
@@ -88,6 +92,5 @@ class Strategy:
 
     @staticmethod
     def randomStrategy():
-        stratList = ['emptyHand']
         x = randint(0, len(stratList)-1)
         return stratList[x]

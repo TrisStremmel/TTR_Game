@@ -1,3 +1,4 @@
+import warnings
 from random import *
 import pygame
 import numpy as np
@@ -14,6 +15,8 @@ from Track import Track
 from GameState import GameState
 
 pygame.init()
+warnings.filterwarnings("ignore")
+
 
 # sets the window size to 800x600px
 display_width = 1920
@@ -94,15 +97,16 @@ screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
-cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
+cityConnection = [[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
                    [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
                    [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
                    [Edge(5, 'white'), -1, Edge(6, 'black'), -1, -1, -1, Edge(3, 'white')],
                    [Edge(2, 'black'), -1, -1, -1, -1, Edge(3, 'white'), Edge(3, 'white')],
                    [-1, -1, Edge(4, 'black'), -1, Edge(3, 'white'), -1, Edge(2, 'black')],
-                   [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]])
+                   [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]]
 
 cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas', 'Oklahoma']
+cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5, 'Oklahoma': 6}
 
 playerMode = 'Human vs AI'  # or could be 'AI vs AI'
 playerOne = Player('playerOne')
@@ -118,18 +122,18 @@ def createPlayers(mode):
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
 
-def getEdgeValue(lenght):
-    if lenght == 1:
+def getEdgeValue(length):
+    if length == 1:
         return 1
-    elif lenght == 2:
+    elif length == 2:
         return 2
-    elif lenght == 3:
+    elif length == 3:
         return 4
-    elif lenght == 4:
+    elif length == 4:
         return 7
-    elif lenght == 5:
+    elif length == 5:
         return 10
-    elif lenght == 6:
+    elif length == 6:
         return 15
     else:
         return -1
@@ -302,7 +306,6 @@ def drawCities():
     displayText("KS", KS.getX(), KS.getY())
     displayText("NY", NY.getX(), NY.getY())
 
-
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
 #draws the tracks
 def drawTracks():
@@ -339,7 +342,7 @@ def drawTracks():
                         if testLength == 0:
                             row += 1
 
-def claimTrack(track, row):
+def claimTrack(track, row, playerName): #player name variable is just for print statement
     color = track.getColor()
     trackImg = pygame.transform.scale(eval(color + "TrackOcc"), (100, 50))
     trackImgFin = pygame.transform.rotate(trackImg, -track.getRot())
@@ -351,7 +354,7 @@ def claimTrack(track, row):
             top = track.getTop() + (track.getPerY() * pri * .8)
             screen.blit(trackImgFin, (left, top))
 
-    print("claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
+    print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
 
 def drawCard(color):
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
@@ -570,16 +573,18 @@ def gameStart():
             playerOne.points += getEdgeValue(cityConnection[x][y].getLength())
             cityConnection[x][y].claim(playerOne)
             cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
+            #also now update if claiming this track happens to complete a destination card
             for row in range(0, len(trackDataArray)):
                 if type(trackDataArray[row]) != int:
                     if type(trackDataArray[row][0]) != int:
                         if (trackDataArray[row][0].getEdgeData() == p1Move[1]).all():
-                            claimTrack(trackDataArray[row][0], row)  # updates track data array
+                            claimTrack(trackDataArray[row][0], row, "Player one")  # updates track data array
                             break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
                             # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
         print("Player one chose to " + currentTurn.getP1Move())
         # updating the game state based on player one's move
+        playerOne.checkDestCardCompletion(cityConnection)  # this will update the players points if a dcard was completed
         currentTurn.updatePlayerInfo(playerOne)
         currentTurn.updateTracks(cityConnection)
 
@@ -603,12 +608,13 @@ def gameStart():
                 if type(trackDataArray[row]) != int:
                     if type(trackDataArray[row][0]) != int:
                         if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
-                            claimTrack(trackDataArray[row][0], row)  # updates track data array
+                            claimTrack(trackDataArray[row][0], row, "Player two")  # updates track data array
                             break
 
         print("Player two chose to " + currentTurn.getP2Move())
         # updating the game state based on player two's move
         #remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
+        playerTwo.checkDestCardCompletion(cityConnection)  # this will update the players points if a dcard was completed
         currentTurn.updatePlayerInfo(playerTwo)
         currentTurn.updateTracks(cityConnection)
 
@@ -633,18 +639,30 @@ def gameStart():
                 break
         if not edgeLeft:
             print("All tracks have been claimed so the game is over!")
-            break  # running = False should also work
+            running = False  # break should also work
 
         #save each turn for debugging/prototyping
         # currentTurn.writeToNPY()
 
-        GameStateArray.append(currentTurn.returnListedforP())
+        GameStateArray.append(currentTurn.returnListedforP()) #used for alex's numpy stuff i think, if not idk what its for
         currentTurn.writeToCSV()
         currentTurn.incrementTurn()
 
         pygame.display.update()
         clock.tick(60)
-    #check destination cards and update player score
+    #check which destination cards are not completed and update player score
+    for card in playerOne.getDestCards():
+        if not card.completed:
+            playerOne.points -= card.points
+            print("Player one did not complete the destination card between " + card.city1 + " and " + card.city2 +
+                  " thus lost " + str(card.points) + " points.")
+    for card in playerTwo.getDestCards():
+        if not card.completed:
+            playerTwo.points -= card.points
+            print("Player two did not complete the destination card between " + card.city1 + " and " + card.city2 +
+                  " thus lost " + str(card.points) + " points.")
+
+
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:
         print("Player one won with " + str(playerOne.points) + " over player two who had " + str(

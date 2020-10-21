@@ -15,8 +15,8 @@ class GameState:
 
     # the game state is made up of data from each player which may change from turn to turn
     # and data about the game board and turn count
-    # this means the AI will have access to the other player's hand and destination cards, however
-    # it will not be allowed to uses that info, simply it will not be coded to ever reference those values
+    # this means the AI will have access to the other player's hand and destination cards
+    # it will be allowed to uses that info, this could change in teh future
     def __init__(self, turn, tracks, p1, p2):
         self.turn = turn
         self.trackArray = tracks
@@ -121,7 +121,7 @@ class GameState:
     # def output(self):
     #     return [self.turn,]
 
-    # alexs function to test input output data for nn
+    # alex's function to test input output data for nn
     def writeToNPY(self):
         UtrackArray = np.array(self.trackArray)
         UtrackArray = UtrackArray[np.triu_indices(len(UtrackArray))]
