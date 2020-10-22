@@ -1,14 +1,34 @@
 import numpy as np
 import os
+from copy import deepcopy
 import csv
 from csv import writer
 from DestinationCard import DestinationCard
 
+#if true saves only limited feature set csv, if flase saves only extended set
+limitedFlag = True;
+
+#ovrights limitedFlag, prints both limited and extended set
+bothCSVFlag = True;
 
 class GameState:
-    player1 = "player1.csv"
-    player2 = "player2.csv"
-    fields = ['turn', 'P1 vs P2 Point Dif', 'Card Color Dif', 'Track 1', 'Track 2', 'Track 3', 'Track 4', 'Track 5', 'Track 6', 'Track 7', 'Track 8', 'Track 9', 'Track 10', 'Destination Cards']
+    player1lim = "player1lim.csv"
+    player2lim = "player2lim.csv"
+    player1ex = "player1ex.csv"
+    player2ex = "player2ex.csv"
+    limFields = ['turn', 'P1 vs P2 Point Dif', 'Card Color Dif', 'Track 1', 'Track 2', 'Track 3', 'Track 4', 'Track 5', 'Track 6', 'Track 7', 'Track 8', 'Track 9', 'Track 10', 'Destination Cards']
+    exFields = ['turn', 'P1 points', 'P2 Points', 'P1 Num Black', 'P1 Num White', 'P2 Num Black', 'P2 Num White',
+                  'Track 1 Owned', 'Track 1 Length', 'Track 1 Color', 'Track 1 Cities',
+                  'Track 2 Owned', 'Track 2 Length', 'Track 2 Color', 'Track 2 Cities',
+                  'Track 3 Owned', 'Track 3 Length', 'Track 3 Color', 'Track 3 Cities',
+                  'Track 4 Owned', 'Track 4 Length', 'Track 4 Color', 'Track 4 Cities',
+                  'Track 5 Owned', 'Track 5 Length', 'Track 5 Color', 'Track 5 Cities',
+                  'Track 6 Owned', 'Track 6 Length', 'Track 6 Color', 'Track 6 Cities',
+                  'Track 7 Owned', 'Track 7 Length', 'Track 7 Color', 'Track 7 Cities',
+                  'Track 8 Owned', 'Track 8 Length', 'Track 8 Color', 'Track 8 Cities',
+                  'Track 9 Owned', 'Track 9 Length', 'Track 9 Color', 'Track 9 Cities',
+                  'Track 10 Owned', 'Track 10 Length', 'Track 10 Color', 'Track 10 Cities',
+                  'Destination Cards Cities', 'Destination Cards Worth', 'Destination Cards Completed']
 
 
 
@@ -30,8 +50,12 @@ class GameState:
         self.p2Action = None
         self.LastFullAction = None
         self.LastP = 'playerOne'
-        self.append_list_as_row(self.player1, self.fields)
-        self.append_list_as_row(self.player2, self.fields)
+        if limitedFlag or bothCSVFlag:
+            self.append_list_as_row(self.player1lim, self.limFields)
+            self.append_list_as_row(self.player2lim, self.limFields)
+        if (not limitedFlag) or bothCSVFlag:
+            self.append_list_as_row(self.player1ex, self.exFields)
+            self.append_list_as_row(self.player2ex, self.exFields)
 
     def setPlayerMove(self, player, action):
         if player.getName() == 'playerOne':
@@ -94,75 +118,104 @@ class GameState:
         track9 = self.trackArray[4][6]
         track10 = self.trackArray[5][6]
 
-        limitedFlag = False;
-        if(limitedFlag):
-            player1HandCount = self.blackWhiteCount(self.p1Hand)
-            player2HandCount = self.blackWhiteCount(self.p2Hand)
 
-            limitedP1Data = [self.turn+1, abs(self.p1Points - self.p2Points), player1HandCount[3],
-                             track1.getClaimed() + " " + str(track1.getLength()) + " " + track1.getColor(),
-                             track2.getClaimed() + " " + str(track2.getLength()) + " " + track2.getColor(),
-                             track3.getClaimed() + " " + str(track3.getLength()) + " " + track3.getColor(),
-                             track4.getClaimed() + " " + str(track4.getLength()) + " " + track4.getColor(),
-                             track5.getClaimed() + " " + str(track5.getLength()) + " " + track5.getColor(),
-                             track6.getClaimed() + " " + str(track6.getLength()) + " " + track6.getColor(),
-                             track7.getClaimed() + " " + str(track7.getLength()) + " " + track7.getColor(),
-                             track8.getClaimed() + " " + str(track8.getLength()) + " " + track8.getColor(),
-                             track9.getClaimed() + " " + str(track9.getLength()) + " " + track9.getColor(),
-                             track10.getClaimed() + " " +str(track10.getLength()) + " " +track10.getColor(),
-                             self.destinationCards(self.p1dCards)]
-            limitedP2Data = [self.turn + 1, abs(self.p1Points - self.p2Points), player2HandCount[3],
-                             track1.getClaimed() + " " + str(track1.getLength()) + " " + track1.getColor(),
-                             track2.getClaimed() + " " + str(track2.getLength()) + " " + track2.getColor(),
-                             track3.getClaimed() + " " + str(track3.getLength()) + " " + track3.getColor(),
-                             track4.getClaimed() + " " + str(track4.getLength()) + " " + track4.getColor(),
-                             track5.getClaimed() + " " + str(track5.getLength()) + " " + track5.getColor(),
-                             track6.getClaimed() + " " + str(track6.getLength()) + " " + track6.getColor(),
-                             track7.getClaimed() + " " + str(track7.getLength()) + " " + track7.getColor(),
-                             track8.getClaimed() + " " + str(track8.getLength()) + " " + track8.getColor(),
-                             track9.getClaimed() + " " + str(track9.getLength()) + " " + track9.getColor(),
-                             track10.getClaimed() + " " + str(track10.getLength()) + " "+track10.getColor(),
-                             self.destinationCards(self.p2dCards)]
-            self.append_list_as_row(self.player1, limitedP1Data)
-            print("csv based on gameState for player 1 was successfully updated at: " + self.player1)
-            self.append_list_as_row(self.player2, limitedP2Data)
-            print("csv based on gameState for player 2 was successfully updated at: " + self.player2)
+        player1HandCount = self.blackWhiteCount(self.p1Hand)
+        player2HandCount = self.blackWhiteCount(self.p2Hand)
+
+        limitedP1Data = [self.turn+1, abs(self.p1Points - self.p2Points), player1HandCount[3],
+                         track1.getClaimed() + " " + str(track1.getLength()) + " " + track1.getColor(),
+                         track2.getClaimed() + " " + str(track2.getLength()) + " " + track2.getColor(),
+                         track3.getClaimed() + " " + str(track3.getLength()) + " " + track3.getColor(),
+                         track4.getClaimed() + " " + str(track4.getLength()) + " " + track4.getColor(),
+                         track5.getClaimed() + " " + str(track5.getLength()) + " " + track5.getColor(),
+                         track6.getClaimed() + " " + str(track6.getLength()) + " " + track6.getColor(),
+                         track7.getClaimed() + " " + str(track7.getLength()) + " " + track7.getColor(),
+                         track8.getClaimed() + " " + str(track8.getLength()) + " " + track8.getColor(),
+                         track9.getClaimed() + " " + str(track9.getLength()) + " " + track9.getColor(),
+                         track10.getClaimed() + " " +str(track10.getLength()) + " " +track10.getColor(),
+                         self.destinationCards(self.p1dCards)]
+        limitedP2Data = [self.turn + 1, abs(self.p1Points - self.p2Points), player2HandCount[3],
+                         track1.getClaimed() + " " + str(track1.getLength()) + " " + track1.getColor(),
+                         track2.getClaimed() + " " + str(track2.getLength()) + " " + track2.getColor(),
+                         track3.getClaimed() + " " + str(track3.getLength()) + " " + track3.getColor(),
+                         track4.getClaimed() + " " + str(track4.getLength()) + " " + track4.getColor(),
+                         track5.getClaimed() + " " + str(track5.getLength()) + " " + track5.getColor(),
+                         track6.getClaimed() + " " + str(track6.getLength()) + " " + track6.getColor(),
+                         track7.getClaimed() + " " + str(track7.getLength()) + " " + track7.getColor(),
+                         track8.getClaimed() + " " + str(track8.getLength()) + " " + track8.getColor(),
+                         track9.getClaimed() + " " + str(track9.getLength()) + " " + track9.getColor(),
+                         track10.getClaimed() + " " + str(track10.getLength()) + " "+track10.getColor(),
+                         self.destinationCards(self.p2dCards)]
+        if limitedFlag or bothCSVFlag:
+            self.append_list_as_row(self.player1lim, limitedP1Data)
+            print("csv based on gameState for player 1 was successfully updated at: " + self.player1lim)
+            self.append_list_as_row(self.player2lim, limitedP2Data)
+            print("csv based on gameState for player 2 was successfully updated at: " + self.player2lim)
             destination = "/some_file_location"
-        else:
-            player1HandCount = self.blackWhiteCount(self.p1Hand)
-            player2HandCount = self.blackWhiteCount(self.p2Hand)
 
-            player1DesinationCards = self.sortedDestination(self.destinationCards(self.p1dCards))
-            dcardNames = ''
-            dcardWorth = ''
-            dcardComplete = ''
-            for x in player1DesinationCards:
-                dcardNames += str(x) + ' '
-                dcardWorth += str(x) + ' '
-                #dcardComplete += x.
+        dcardNames1 = ""
+        dcardWorth1 = ""
+        dcardNames2 = ""
+        dcardWorth2 = ""
+        dcardsCopy1 = deepcopy(self.p1dCards)
+        dcardsCopy2 = deepcopy(self.p2dCards)
 
-            robustP1Data = [self.turn + 1, self.p1Points, self.p2Points,
-                             'Player 1 '+str(player1HandCount[0])+' black',
-                             'Player 1 '+str(player1HandCount[1])+' white',
-                             'Player 2 '+str(player2HandCount[0])+' black',
-                             'Player 2 '+str(player2HandCount[1])+' white',
-                             track1.getClaimed(), track1.getLength(), track1.getColor(), 'WA MT',
-                             track2.getClaimed(), track2.getLength(), track2.getColor(), 'WA TX',
-                             track3.getClaimed(), track3.getLength(), track3.getColor(), 'WA CO',
-                             track4.getClaimed(), track4.getLength(), track4.getColor(), 'MT NY',
-                             track5.getClaimed(), track5.getLength(), track5.getColor(), 'NY TX',
-                             track6.getClaimed(), track6.getLength(), track6.getColor(), 'NY KS',
-                             track7.getClaimed(), track7.getLength(), track7.getColor(), 'TX OK',
-                             track8.getClaimed(), track8.getLength(), track8.getColor(), 'CO KS',
-                             track9.getClaimed(), track9.getLength(), track9.getColor(), 'CO OK',
-                             track10.getClaimed(),track10.getLength(),track10.getColor(),'KS OK',
-                             dcardNames, dcardWorth
-                             ]
-            robustP2Data = [];
-            self.append_list_as_row(self.player1, robustP1Data)
-            print("csv based on gameState for player 1 was successfully updated at: " + self.player1)
-            self.append_list_as_row(self.player2, robustP2Data)
-            print("csv based on gameState for player 2 was successfully updated at: " + self.player2)
+        player1DesinationCards = self.sortedDestination(dcardsCopy1)
+        player2DesinationCards = self.sortedDestination(dcardsCopy2)
+
+        for x in player1DesinationCards:
+            dcardNames1 += x.citiesNoPoints() + ' '
+            dcardWorth1 += str(x.getPoints()) + ' '
+            #dcardComplete1 = ''
+        for x in player2DesinationCards:
+            dcardNames2 += x.citiesNoPoints() + ' '
+            dcardWorth2 += str(x.getPoints()) + ' '
+            # dcardComplete2 = ''
+
+        dcardNames1 = dcardNames1[:-1]
+        dcardWorth1 = dcardWorth1[:-1]
+        dcardNames2 = dcardNames2[:-1]
+        dcardWorth2 = dcardWorth2[:-1]
+
+        robustP1Data = [self.turn + 1, self.p1Points, self.p2Points,
+                         'Player 1 '+str(player1HandCount[0])+' black',
+                         'Player 1 '+str(player1HandCount[1])+' white',
+                         'Player 2 '+str(player2HandCount[0])+' black',
+                         'Player 2 '+str(player2HandCount[1])+' white',
+                         track1.getClaimed(), track1.getLength(), track1.getColor(), 'WA MT',
+                         track2.getClaimed(), track2.getLength(), track2.getColor(), 'WA TX',
+                         track3.getClaimed(), track3.getLength(), track3.getColor(), 'WA CO',
+                         track4.getClaimed(), track4.getLength(), track4.getColor(), 'MT NY',
+                         track5.getClaimed(), track5.getLength(), track5.getColor(), 'NY TX',
+                         track6.getClaimed(), track6.getLength(), track6.getColor(), 'NY KS',
+                         track7.getClaimed(), track7.getLength(), track7.getColor(), 'TX OK',
+                         track8.getClaimed(), track8.getLength(), track8.getColor(), 'CO KS',
+                         track9.getClaimed(), track9.getLength(), track9.getColor(), 'CO OK',
+                         track10.getClaimed(),track10.getLength(),track10.getColor(),'KS OK',
+                         dcardNames1, dcardWorth1
+                         ]
+        robustP2Data = [self.turn + 1, self.p1Points, self.p2Points,
+                         'Player 1 '+str(player1HandCount[0])+' black',
+                         'Player 1 '+str(player1HandCount[1])+' white',
+                         'Player 2 '+str(player2HandCount[0])+' black',
+                         'Player 2 '+str(player2HandCount[1])+' white',
+                         track1.getClaimed(), track1.getLength(), track1.getColor(), 'WA MT',
+                         track2.getClaimed(), track2.getLength(), track2.getColor(), 'WA TX',
+                         track3.getClaimed(), track3.getLength(), track3.getColor(), 'WA CO',
+                         track4.getClaimed(), track4.getLength(), track4.getColor(), 'MT NY',
+                         track5.getClaimed(), track5.getLength(), track5.getColor(), 'NY TX',
+                         track6.getClaimed(), track6.getLength(), track6.getColor(), 'NY KS',
+                         track7.getClaimed(), track7.getLength(), track7.getColor(), 'TX OK',
+                         track8.getClaimed(), track8.getLength(), track8.getColor(), 'CO KS',
+                         track9.getClaimed(), track9.getLength(), track9.getColor(), 'CO OK',
+                         track10.getClaimed(),track10.getLength(),track10.getColor(),'KS OK',
+                         dcardNames2, dcardWorth2
+                        ];
+        if (not limitedFlag) or bothCSVFlag:
+            self.append_list_as_row(self.player1ex, robustP1Data)
+            print("csv based on gameState for player 1 was successfully updated at: " + self.player1ex)
+            self.append_list_as_row(self.player2ex, robustP2Data)
+            print("csv based on gameState for player 2 was successfully updated at: " + self.player2ex)
             destination = "/some_file_location"
 
 
@@ -201,14 +254,13 @@ class GameState:
     # def output(self):
     #     return [self.turn,]
 
-    def sortedDestination(self, dcards):
-        for x in range(0, len(dcards), 1):
-            for y in range(1, len(dcards), 1):
-                if str(dcards[x].citiesNoPoints) > str(dcards[y].citiesNoPoints):
-                    temp = dcards[x]
-                    dcards[x] = dcards[y]
-                    dcards[y] = temp
-        return dcards
+    def sortedDestination(self, dcard):
+        for x in range(0, len(dcard), 1):
+            for y in range(0, len(dcard), 1):
+                if dcard[x].citiesNoPoints() < dcard[y].citiesNoPoints():
+                    #print(dcard[x].citiesNoPoints())
+                    dcard[x], dcard[y] = dcard[y], dcard[x]
+        return dcard
 
 
     # alexs function to test input output data for nn
