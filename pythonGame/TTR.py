@@ -138,7 +138,6 @@ def getEdgeValue(length):
     else:
         return -1
 
-
 colors = ["white", "pink", "red", "orange", "yellow", "green", "blue", "black"]
 chosenColors = ["white", "black"]
 
@@ -306,6 +305,7 @@ def drawCities():
     displayText("KS", KS.getX(), KS.getY())
     displayText("NY", NY.getX(), NY.getY())
 
+
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
 #draws the tracks
 def drawTracks():
@@ -355,6 +355,7 @@ def claimTrack(track, row, playerName): #player name variable is just for print 
             screen.blit(trackImgFin, (left, top))
 
     print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
+
 
 def drawCard(color):
     screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
@@ -443,6 +444,7 @@ def getHumanMove():
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
         clock.tick(60)
+
 
 def quitGame():
     pygame.quit()
@@ -650,6 +652,7 @@ def gameStart():
 
         pygame.display.update()
         clock.tick(60)
+
     #check which destination cards are not completed and update player score
     for card in playerOne.getDestCards():
         if not card.completed:
@@ -661,7 +664,6 @@ def gameStart():
             playerTwo.points -= card.points
             print("Player two did not complete the destination card between " + card.city1 + " and " + card.city2 +
                   " thus lost " + str(card.points) + " points.")
-
 
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:

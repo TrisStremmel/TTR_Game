@@ -18,3 +18,6 @@ class Edge:
 
     def claim(self, player):
         self.occupied = player.getName()
+
+    def getClaimed(self):
+        return self.occupied

@@ -34,6 +34,9 @@ class DestinationCard:
         return [self.city1, self.city2, self.points]
 
     def toString(self):
+        return self.city1 + "->" + self.city2 + ": " + str(self.points)
+
+    def citiesNoPoints(self):
         return self.city1 + "->" + self.city2
 
     @staticmethod
