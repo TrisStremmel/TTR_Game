@@ -16,6 +16,12 @@ class Strategy:
 
     def makeDecision(self, state, player):
         if self.strategyName == 'emptyHand':
+            return self.emptyHand(state, player)
+
+        return ['pass']
+
+    def emptyHand(self, state, player):
+        if self.strategyName == 'emptyHand':
 
             UtrackArray = np.array(state.trackArray).copy()
             edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[

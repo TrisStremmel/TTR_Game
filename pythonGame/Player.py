@@ -42,7 +42,7 @@ class Player:
                     for j in range(len(cityConnection[i])):
                         if cityConnection[i][j] != -1 and cityConnection[i][j].occupied == self.name:
                             tempArray[i][j] = 1
-                
+
                 # check if there is a path made up of tracks completed by this player
                 if self.DFS(tempArray, cityIndices[dCard.city1], cityIndices[dCard.city2], [False] * len(cityConnection)):
                     self.points += dCard.getPoints()
