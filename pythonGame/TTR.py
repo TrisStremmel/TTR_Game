@@ -532,7 +532,7 @@ def gameStart():
 
     global playerMode
     createPlayers(playerMode)
-    currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
+    currentTurn = GameState(1, cityConnection, playerOne, playerTwo)
 
     screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
@@ -625,7 +625,7 @@ def gameStart():
         # check for deadlock
         if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
             print("Since both players passed their turn it is likely the game has reached a deadlock so game ends")
-            break  # running = False should also work
+            running = False  # break should also work
 
         # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
         edgeLeft = False
@@ -646,9 +646,11 @@ def gameStart():
         #save each turn for debugging/prototyping
         # currentTurn.writeToNPY()
 
+        currentTurn.writeToCSV() # btw you def what this before you increment the turn
+
         GameStateArray.append(currentTurn.returnListedforP()) #used for alex's numpy stuff i think, if not idk what its for
-        currentTurn.writeToCSV()
         currentTurn.incrementTurn()
+
 
         pygame.display.update()
         clock.tick(60)
@@ -664,6 +666,10 @@ def gameStart():
             playerTwo.points -= card.points
             print("Player two did not complete the destination card between " + card.city1 + " and " + card.city2 +
                   " thus lost " + str(card.points) + " points.")
+
+    currentTurn.addFinalScores(playerOne, playerTwo)
+    currentTurn.writeToCSV()
+
 
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:

@@ -34,7 +34,9 @@ class DestinationCard:
         return [self.city1, self.city2, self.points]
 
     def toString(self):
-        return self.city1 + "->" + self.city2 + ": " + str(self.points)
+        # hehe I had fun with the if else conditional statement. basically if its not complete it will append
+        # the points it is worth, else it will append 0
+        return self.city1 + "->" + self.city2 + ": " + (str(self.points) if not self.completed else str(0))
 
     def citiesNoPoints(self):
         return self.city1 + "->" + self.city2

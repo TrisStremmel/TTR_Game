@@ -34,7 +34,6 @@ class Player:
                        'Oklahoma': 6}
         for dCard in self.destinationCards:
             if not dCard.completed:
-                #check if there is a path made up of tracks completed by this player
                 tempArray = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
                              [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
                              [0, 0, 0, 0, 0, 0, 0]]
@@ -43,8 +42,8 @@ class Player:
                     for j in range(len(cityConnection[i])):
                         if cityConnection[i][j] != -1 and cityConnection[i][j].occupied == self.name:
                             tempArray[i][j] = 1
-
-                # if yes then:
+                
+                # check if there is a path made up of tracks completed by this player
                 if self.DFS(tempArray, cityIndices[dCard.city1], cityIndices[dCard.city2], [False] * len(cityConnection)):
                     self.points += dCard.getPoints()
                     dCard.completed = True
@@ -60,7 +59,9 @@ class Player:
     def getName(self):
         return self.name
 
-    # Function to perform DFS on the graph
+    # Function to perform DFS on the graph... uh kinda, it does DFS until it reaches the end vertex if it does it
+    # returns True up the recursive stack. Thus when called it returns True if the two specified vertices are connected
+    # and false if they are not, given a certain graph.
     def DFS(self, array, start, end, visited):
         toReturn = False
         #checks if it has reached the 2nd city (aka the destination card has been completed)
@@ -75,5 +76,13 @@ class Player:
             # If some node is adjacent to the current node and it has not already been visited
             if array[start][i] == 1 and (not visited[i]):
                 toReturn = self.DFS(array, i, end, visited)
+                ''' hey future Tris, remember when the algorithm didnt work and you could not figure out why?
+                 Yea well it took like 4 hrs but I finally figured it out. I needed to add the if statement bellow these
+                 comments. This shall be known as the 10% fail error. Oh and as for why this fixes the issue, sometimes 
+                 it would keep looping after finding the 2nd city on the dest card and find another node which would
+                 come to a stop without reaching the 2nd city thus overwriting the true with a false causing the algorithm
+                 to return false when it should return true'''
+                if toReturn:
+                    break
 
         return toReturn
