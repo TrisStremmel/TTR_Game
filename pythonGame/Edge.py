@@ -4,6 +4,9 @@ class Edge:
         self.occupied = 'False'
         self.color = color
 
+    def __getitem__(self):
+        return self
+
     def getLength(self):
         return self.length
 

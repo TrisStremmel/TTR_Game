@@ -20,9 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4af57635-1663-4028-ac33-12fb01e29fe8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/player1ex.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/player1lim.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/player2ex.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/player2lim.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameState.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameState.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Edge.py" beforeDir="false" afterPath="$PROJECT_DIR$/Edge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TTR.py" beforeDir="false" afterPath="$PROJECT_DIR$/TTR.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output_CSVs/yes i know its empty i will code it later its 1am.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output_CSVs/yes i know its empty i will code it later its 1am.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +49,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/venv" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -121,26 +131,26 @@
     </state>
     <state x="730" y="288" key="FileChooserDialogImpl/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1602789567468" />
     <state x="2650" y="296" key="FileChooserDialogImpl/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1600990665085" />
-    <state width="1362" height="250" key="GridCell.Tab.0.bottom" timestamp="1603407178938">
+    <state width="1362" height="326" key="GridCell.Tab.0.bottom" timestamp="1604519822389">
       <screen x="1920" y="8" width="1920" height="1040" />
     </state>
-    <state width="1362" height="250" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1603403176441" />
-    <state width="1362" height="250" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1603407178938" />
-    <state width="1362" height="250" key="GridCell.Tab.0.center" timestamp="1603407178938">
+    <state width="1362" height="241" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1604070802093" />
+    <state width="1362" height="326" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1604519822389" />
+    <state width="1362" height="326" key="GridCell.Tab.0.center" timestamp="1604519822389">
       <screen x="1920" y="8" width="1920" height="1040" />
     </state>
-    <state width="1362" height="250" key="GridCell.Tab.0.center/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1603403176440" />
-    <state width="1362" height="250" key="GridCell.Tab.0.center/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1603407178938" />
-    <state width="1362" height="250" key="GridCell.Tab.0.left" timestamp="1603407178937">
+    <state width="1362" height="241" key="GridCell.Tab.0.center/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1604070802092" />
+    <state width="1362" height="326" key="GridCell.Tab.0.center/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1604519822389" />
+    <state width="1362" height="326" key="GridCell.Tab.0.left" timestamp="1604519822388">
       <screen x="1920" y="8" width="1920" height="1040" />
     </state>
-    <state width="1362" height="250" key="GridCell.Tab.0.left/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1603403176440" />
-    <state width="1362" height="250" key="GridCell.Tab.0.left/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1603407178937" />
-    <state width="1362" height="250" key="GridCell.Tab.0.right" timestamp="1603407178938">
+    <state width="1362" height="241" key="GridCell.Tab.0.left/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1604070802092" />
+    <state width="1362" height="326" key="GridCell.Tab.0.left/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1604519822388" />
+    <state width="1362" height="326" key="GridCell.Tab.0.right" timestamp="1604519822389">
       <screen x="1920" y="8" width="1920" height="1040" />
     </state>
-    <state width="1362" height="250" key="GridCell.Tab.0.right/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1603403176440" />
-    <state width="1362" height="250" key="GridCell.Tab.0.right/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1603407178938" />
+    <state width="1362" height="241" key="GridCell.Tab.0.right/0.0.1920.1040/1920.8.1920.1040@0.0.1920.1040" timestamp="1604070802093" />
+    <state width="1362" height="326" key="GridCell.Tab.0.right/0.0.1920.1040/1920.8.1920.1040@1920.8.1920.1040" timestamp="1604519822389" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1602789657359">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

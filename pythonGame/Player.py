@@ -34,9 +34,7 @@ class Player:
                        'Oklahoma': 6}
         for dCard in self.destinationCards:
             if not dCard.completed:
-                tempArray = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
-                             [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
-                             [0, 0, 0, 0, 0, 0, 0]]
+                tempArray = [[0] * 7] * 7
                 # this loop makes the temp array into a adjacency matrix of all the tracks this player has claimed
                 for i in range(len(cityConnection)):
                     for j in range(len(cityConnection[i])):
