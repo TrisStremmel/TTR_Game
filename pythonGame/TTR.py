@@ -579,7 +579,7 @@ def gameStart():
             for row in range(0, len(trackDataArray)):
                 if type(trackDataArray[row]) != int:
                     if type(trackDataArray[row][0]) != int:
-                        if (trackDataArray[row][0].getEdgeData() == p1Move[1]).all():
+                        if (trackDataArray[row][0].getEdgeData() == p1Move[1]):#.all():
                             claimTrack(trackDataArray[row][0], row, "Player one")  # updates track data array
                             break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
                             # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
@@ -609,7 +609,7 @@ def gameStart():
             for row in range(0, len(trackDataArray)):
                 if type(trackDataArray[row]) != int:
                     if type(trackDataArray[row][0]) != int:
-                        if (trackDataArray[row][0].getEdgeData() == p2Move[1]).all():
+                        if (trackDataArray[row][0].getEdgeData() == p2Move[1]):#.all():
                             claimTrack(trackDataArray[row][0], row, "Player two")  # updates track data array
                             break
 
