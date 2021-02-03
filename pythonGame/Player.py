@@ -1,5 +1,6 @@
 from Card import Card
 from DestinationCard import DestinationCard
+from copy import deepcopy
 
 class Player:
     def __init__(self, name):
@@ -15,6 +16,13 @@ class Player:
     def getHand(self):
         return self.handCards
 
+    def numCardsOfColor(self, color):
+        count = 0
+        for card in self.handCards:
+            if card.color == color:
+                count += 1
+        return count
+
     def addCardToHand(self, color):
         self.handCards.append(Card(color))
         self.cardIndex += 1
@@ -25,7 +33,7 @@ class Player:
         while tempCard in self.destinationCards:  # so dup dest cards are not added to hand
             tempCard = DestinationCard.drawDestinationCard()
             breaker += 1
-            if breaker > 200:
+            if breaker > 1000:
                 break
         self.destinationCards.append(tempCard)
 
@@ -34,13 +42,23 @@ class Player:
                        'Oklahoma': 6}
         for dCard in self.destinationCards:
             if not dCard.completed:
-                tempArray = [[0] * 7] * 7
+                #tempArray = [[0] * 7] * 7
                 # this loop makes the temp array into a adjacency matrix of all the tracks this player has claimed
-                for i in range(len(cityConnection)):
+                '''for i in range(len(cityConnection)):
                     for j in range(len(cityConnection[i])):
                         if cityConnection[i][j] != -1 and cityConnection[i][j].occupied == self.name:
+                            tempArray[i][j] = 1'''
+                tempArray = deepcopy(cityConnection)
+                for i in range(len(tempArray)):
+                    for j in range(len(tempArray)):
+                        if tempArray[i][j] == -1:
+                            tempArray[i][j] = 0
+                        elif self.name == tempArray[i][j].getClaimed():
                             tempArray[i][j] = 1
-
+                        else:
+                            tempArray[i][j] = 0
+                #print(cityConnection)
+                #print(tempArray)
                 # check if there is a path made up of tracks completed by this player
                 if self.DFS(tempArray, cityIndices[dCard.city1], cityIndices[dCard.city2], [False] * len(cityConnection)):
                     self.points += dCard.getPoints()

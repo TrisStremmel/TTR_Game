@@ -2,8 +2,15 @@ from random import randint
 import sys
 import numpy as np
 from copy import deepcopy
+from DestinationCard import DestinationCard
 
-stratList = ['commitBlock']
+# when you update stratList here make sure to also update it in TTR.py (its early)
+stratList = ['emptyHand', 'commitBlock', 'blindDestination', 'longestFirst']
+destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
+                   ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
+                   ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
+
+cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5, 'Oklahoma': 6}
 
 class Strategy:
 
@@ -17,11 +24,65 @@ class Strategy:
                 self.strategyName = self.randomStrategy()
 
     def makeDecision(self, state, player):
-        if self.strategyName == 'emptyHand':
-            return self.emptyHand(state, player)
-        if self.strategyName == 'commitBlock':
-            return self.commitBlock(state, player)
-        return ['pass']
+        #next line is cool huh. it calls self.strategyNameFunction(state. player), it works cuz self.strategyName is the
+        #exact name of the method for that strat. for ex it would call self.emptyHand(state, player)
+        return getattr(self, self.strategyName)(state, player)
+
+    def longestFirst(self, state, player):
+        UtrackArray = np.array(state.trackArray).copy()
+        edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
+            (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
+        openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
+        edgeHash = edgeHash[openEdges]
+        edges = np.array(state.trackArray)[tuple(edgeHash.T)]
+        if len(edges) == 0:
+            return ['pass']  # game is actually already over
+
+        wanted = edges[0]
+        wantedIndex = [0, 0]
+
+        longestLength = 0
+        #this strategy wants to claim the longest available track or draw cards to try to claim it next turn.
+        # This is greedy
+        for i in range(0, len(edges)):
+            if edges[i].length > longestLength:
+                longestLength = edges[i].length
+                wanted = edges[i]
+                wantedIndex = edgeHash[i]
+            elif edges[i].length == longestLength:
+                # if there are multiple longest tracks it picks one that it has more cards of its color
+                if player.handCards.count(edges[i].color) > player.handCards.count(wanted.color):
+                    longestLength = edges[i].length
+                    wanted = edges[i]
+                    wantedIndex = edgeHash[i]
+                elif player.handCards.count(edges[i].color) == player.handCards.count(wanted.color) and randint(0, 1) == 1:  # at random (stretch goal)
+                    longestLength = edges[i].length
+                    wanted = edges[i]
+                    wantedIndex = edgeHash[i]
+
+        neededCards = []
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+            if len(neededCards) == wanted.length:  # if you can claim that track do so
+                for toRemove in neededCards:
+                    player.handCards.remove(toRemove)
+                player.cardIndex = len(player.handCards)
+                # wantedIndex.reverse()
+                return ['claim', wantedIndex.tolist()]
+
+        player.addCardToHand(wanted.color)
+        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then the 2nd card its draws will be random
+            colorsAvail = []
+            for i in range(0, len(edges)):
+                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
+                    colorsAvail.append(edges[i].color)
+            player.addCardToHand(colorsAvail[randint(0, len(colorsAvail) - 1)])  # randomness (stretch goal)
+        else:
+            player.addCardToHand(wanted.color)
+        return ['draw t']
+
 
     def emptyHand(self, state, player):
 
@@ -36,25 +97,6 @@ class Strategy:
 
         wanted = edges[0]
         wantedIndex = [0, 0]
-        ''' This is the old way which ends up being shortest track not empty hand
-        shortestLength = 1000000  # python has not int.max_value so this is a sub
-        #this strategy wants to claim the shortest available track or draw cards to try to claim it next turn. This is greedy
-        for i in range(0, len(edges)):
-            if edges[i].length < shortestLength:
-                shortestLength = edges[i].length
-                wanted = edges[i]
-                wantedIndex = edgeHash[i]
-            elif edges[i].length == shortestLength:
-                # if there are multiple shortest tracks it picks one that it has more cards of its color
-                if player.handCards.count(edges[i].color) > player.handCards.count(wanted.color):
-                    shortestLength = edges[i].length
-                    wanted = edges[i]
-                    wantedIndex = edgeHash[i]
-                elif player.handCards.count(edges[i].color) == player.handCards.count(wanted.color) and randint(0, 1) == 1:  # at random (stretch goal)
-                    shortestLength = edges[i].length
-                    wanted = edges[i]
-                    wantedIndex = edgeHash[i]
-        '''
 
         smallestCardDif = 1000000  # python has not int.max_value so this is a sub
         #this for loop is the ai deciding which track it wants
@@ -84,10 +126,11 @@ class Strategy:
                     player.handCards.remove(toRemove)
                 player.cardIndex = len(player.handCards)
                 #wantedIndex.reverse()
-                return ['claim', wantedIndex]
+                return ['claim', wantedIndex.tolist()]
 
         player.addCardToHand(wanted.color)
-        if len(neededCards)+1 == wanted.length:
+        if len(neededCards)+1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then the 2nd card its draws will be random
             colorsAvail = []
             for i in range(0, len(edges)):
                 if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
@@ -99,131 +142,415 @@ class Strategy:
 
 
     def commitBlock(self, state, player):
-        if self.strategyName == 'commitBlock':
-            UtrackArray = np.array(state.trackArray).copy()
-            UtrackCopy = ''
-            edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
-                (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
-            openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
-            edgeHash = edgeHash[openEdges]
-            edges = np.array(state.trackArray)[tuple(edgeHash.T)]
-            if len(edges) == 0:
-                return ['pass']  # game is actually already over
+        otherPlayer = 'playerOne' if player.name == 'playerTwo' else 'playerTwo'
 
-            tempArray = deepcopy(UtrackArray)
-            for i in range(7):
-                for j in range(7):
-                    if tempArray[i][j] == -1:
-                        tempArray[i][j] = -1
-                    elif tempArray[i][j].getClaimed() == "False":
-                        tempArray[i][j] = tempArray[i][j].length
-                    elif player.getName() != tempArray[i][j].getClaimed():
-                        tempArray[i][j] = 0
-                    else:
-                        tempArray[i][j] = -1
-
-
-            for x in range(len(UtrackArray)):
-                for y in range(len(UtrackArray)):
-                    if tempArray[x][y] == 0:
-                        print(0, end=" ")
-                    else:
-                        #print(tempArray[x][y], end =" ")
-                        continue
-                print('')
-
-            print('')
-
-            destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
-                               ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15],
-                               ['Washington', 'Kansas', 8],
-                               ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
-
-            cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5,
-                           'Oklahoma': 6}
-
-            completionArray = [0]*9
-            for x in range(len(destinationDeck)):
-                temp = self.dijkstra(destinationDeck[x][0], tempArray)[0]
-                completionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
-            print(completionArray)
-
-            previousTurn = [7, 6, 8, 5, 7, 5, 8, 5, 5]
-            minArray = []
-            min = 99
-            for x in range(len(completionArray)):
-                if completionArray[x] == 0:
-                    continue
-                elif completionArray[x] < min:
-                    minArray.clear()
-                    minArray.append(x)
-                    min = completionArray[x]
-                elif completionArray[x] == min:
-                    minArray.append(x)
-
-            print(minArray)
-
-            minDestCost = 0
-            minDestIndex = -1
-            for x in range(len(minArray)):
-                print(minDestCost)
-                if destinationDeck[minArray[x]][2] > minDestCost:
-                    minDestCost = destinationDeck[minArray[x]][2]
-                    minDestIndex = minArray[x]
-
-            print(minDestIndex, " index")
-            toClaim = self.dijkstra(destinationDeck[minDestIndex][0], tempArray)[1]
-            print(toClaim)
-            endCityIndex = cityIndices[destinationDeck[minDestIndex][1]]
-            print(endCityIndex, " end city")
-            wantedIndexies = []
-            finalIndex = endCityIndex
-            while(finalIndex != 0):
-                wantedIndexies.append(toClaim[finalIndex])
-                finalIndex = toClaim[finalIndex][0]
-            print(wantedIndexies)
-
-            smallestEdgeLength = 99
-            smallestEdge = -1
-            wantedIndex = []
-            for x in range(len(wantedIndexies)):
-                if UtrackArray[wantedIndexies[x][0]][wantedIndexies[x][1]].length < smallestEdgeLength:
-                    smallestEdgeLength = UtrackArray[wantedIndexies[x][0]][wantedIndexies[x][1]].length
-                    smallestEdge = UtrackArray[wantedIndexies[x][0]][wantedIndexies[x][1]]
-                    wantedIndex = [wantedIndexies[x][0],wantedIndexies[x][1]]
-            print(smallestEdge, "HERE")
-            wanted = smallestEdge
-            print(wantedIndex, "BREATH")
-            neededCards = []
-            for card in player.handCards:
-                if card.color == wanted.color:
-                    neededCards.append(card)
-                if len(neededCards) == wanted.length:  # if you can claim that track do so
-                    for toRemove in neededCards:
-                        player.handCards.remove(toRemove)
-                    player.cardIndex = len(player.handCards)
-                    # wantedIndex.reverse()
-                    return ['claim', wantedIndex]
-
-            player.addCardToHand(wanted.color)
-            if len(neededCards) + 1 == wanted.length:
-                colorsAvail = []
-                for i in range(0, len(edges)):
-                    if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
-                        colorsAvail.append(edges[i].color)
-                player.addCardToHand(colorsAvail[randint(0, len(colorsAvail) - 1)])  # randomness (stretch goal)
-            else:
-                player.addCardToHand(wanted.color)
+        UtrackArray = np.array(state.trackArray).copy()  # can i deepcopy?
+        UtrackCopy = ''
+        edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
+            (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
+        openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
+        edgeHash = edgeHash[openEdges]
+        edges = np.array(state.trackArray)[tuple(edgeHash.T)]
+        if len(edges) == 0:
+            return ['pass']  # game is actually already over
+        elif len(edges) == 10:  # aka no edges have been claimed
+            #the AI wants to draw cards until the other player claims a track, because its bad to guess what the other
+            #player is trying to complete before they have even claimed a track
+            player.addCardToHand('black')
+            player.addCardToHand('white')
             return ['draw t']
 
-        return 'pass'
+        tempArray = deepcopy(UtrackArray)
+        for i in range(len(tempArray)):
+            for j in range(len(tempArray)):
+                if tempArray[i][j] == -1:
+                    tempArray[i][j] = -1
+                elif tempArray[i][j].getClaimed() == "False":
+                    tempArray[i][j] = tempArray[i][j].length
+                elif otherPlayer == tempArray[i][j].getClaimed():
+                    tempArray[i][j] = 0
+                else:
+                    tempArray[i][j] = -1
+        #tempArray is an adj matrix with -1s where there is no edge and 0 if the other player has claimed that edge
+        #or the length of that edge if that edge is unclaimed
+
+        '''destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
+                           ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
+                           ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
+
+        cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5, 'Oklahoma': 6}
+'''
+        completionArray = [0]*9
+        for x in range(len(destinationDeck)):
+            temp = self.dijkstra(destinationDeck[x][0], tempArray)[0]
+            completionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
+        #the completionArray holds values equal to how close the other player is to completing each of the destination cards
+        #for example if completionArray[1] = 3 then the other player is only 3 track lengths away from completing
+        #the destination card from texas to colorado
+
+        print("completionArray", completionArray)
+        if all(x >= 99 for x in completionArray):  # if the other play is unable to complete ANY dest cards
+            print("No destination cards left so it now follows empty hand strategy to avoid errors")
+            return self.emptyHand(state, player)
+
+        minArray = []
+        min = 99
+        for x in range(len(completionArray)):
+            if completionArray[x] == 0:
+                continue
+            elif completionArray[x] < min:
+                minArray.clear()
+                minArray.append(x)
+                min = completionArray[x]
+            elif completionArray[x] == min:
+                minArray.append(x)
+        # minArray holds the indexes of the destination cards in the completionArray that are closest to being completed
+
+        minDestCost = 0
+        minDestIndex = -1
+        for x in range(len(minArray)):
+            if destinationDeck[minArray[x]][2] > minDestCost:
+                minDestCost = destinationDeck[minArray[x]][2]
+                minDestIndex = minArray[x]
+        #for loop finds the dest card in the minArray worth the most, sets its index to minDestIndex and the length to minDestCost
+
+        print("minDestIndex", minDestIndex)
+        print("minDestCost", minDestCost)
+        toClaim = self.dijkstra(destinationDeck[minDestIndex][0], tempArray)[1]
+        #toClaim is the toClaimTrack array returned by dijkstra when run starting from the first city on the destination
+        # card that is the closet to being completed (tie broke by card point value)
+
+        endCityIndex = cityIndices[destinationDeck[minDestIndex][1]]  # index of 2nd city in min dest card
+        wantedIndexes = []
+        finalIndex = endCityIndex
+
+        for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
+            if toClaim[x] == 0:
+                toClaim[x] = -1
+        print("toClaim", toClaim)
+
+        while finalIndex != -1 and toClaim[finalIndex] != -1:#type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
+            print("Final index", finalIndex)
+            checkIndex = deepcopy(toClaim[finalIndex])
+            if checkIndex[0] > checkIndex[1]:
+                checkIndex[0], checkIndex[1] = checkIndex[1], checkIndex[0]
+            '''print("checkIndex", checkIndex)
+            print("UtrackArray[checkIndex[0]][checkIndex[1]].occupied", UtrackArray[checkIndex[0]][checkIndex[1]].occupied)'''
+
+            if UtrackArray[checkIndex[0]][checkIndex[1]].occupied == 'False':
+                wantedIndexes.append(toClaim[finalIndex])
+                '''if toClaim[finalIndex] == 0:
+                    break'''
+            finalIndex = toClaim[finalIndex][0]
+        #this while loop works backwards, starting from the 2nd city in the min dest card, and adds every edge along the
+        #most direct path between the 2nd city in the min dest card and the 1st city in the min dest card to an array
+        #called wantedIndexes. The strategies wants to claim these tracks because it will allow the ai to block the
+        #other player from completing the dest card it is closest to completing.
+
+        print("wantedIndexes", wantedIndexes)
+        '''smallestEdgeLength = 99
+        smallestEdge = -1
+        wantedIndex = []
+        for x in range(len(wantedIndexes)):
+            if UtrackArray[wantedIndexes[x][0]][wantedIndexes[x][1]].length < smallestEdgeLength:
+                smallestEdgeLength = UtrackArray[wantedIndexes[x][0]][wantedIndexes[x][1]].length
+                smallestEdge = UtrackArray[wantedIndexes[x][0]][wantedIndexes[x][1]]
+                wantedIndex = [wantedIndexes[x][0], wantedIndexes[x][1]]
+            wanted = smallestEdge'''
+
+        wantedIndex = []
+        wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
+        smallestCardDif = 1000000  # python has not int.max_value so this is a sub
+        # this for loop is the ai deciding which track it is closest to claiming out of the wanted tracks (wantedIndexes)
+        for i in range(len(wantedIndexes)):
+            currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
+            # if the edge length is closest to the amount of that color that this player has in their hand
+            if currentEdge.length - player.handCards.count(currentEdge.color) < smallestCardDif:
+                smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                wanted = currentEdge
+                wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+            elif currentEdge.length - player.handCards.count(currentEdge.color) == smallestCardDif:
+                # if there are multiple shortest tracks it picks one that it has more cards of its color
+                if player.handCards.count(currentEdge.color) > player.handCards.count(wanted.color):
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+                elif player.handCards.count(currentEdge.color) == player.handCards.count(wanted.color) and randint(0, 1) == 1:
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+
+        print("wantedIndex", wantedIndex)
+        neededCards = []
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+            if len(neededCards) == wanted.length:  # if you can claim that track do so
+                for toRemove in neededCards:
+                    player.handCards.remove(toRemove)
+                player.cardIndex = len(player.handCards)  # prob useless if I had to guess
+                # wantedIndex.reverse()
+                if wantedIndex[0] > wantedIndex[1]:
+                    wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
+                return ['claim', wantedIndex]
+
+        player.addCardToHand(wanted.color)
+        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then the 2nd card its draws will be random
+            colorsAvail = []
+            for i in range(0, len(edges)):
+                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
+                    colorsAvail.append(edges[i].color)
+            player.addCardToHand(colorsAvail[randint(0, len(colorsAvail) - 1)])  # randomness (stretch goal)
+        else:  # if it needs more then one more then draw a 2nd card of the color of the track it wants
+            player.addCardToHand(wanted.color)
+
+        print("after drawing AI's hand is: ", end='')
+        for card in player.handCards:
+            print(card.color, end=' ')
+        print()
+
+        return ['draw t']
 
 
-    @staticmethod
-    def randomStrategy():
-        x = randint(0, len(stratList)-1)
-        return stratList[x]
+    def blindDestination(self, state, player):
 
+        UtrackArray = np.array(state.trackArray).copy()
+        edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
+            (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
+        openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
+        edgeHash = edgeHash[openEdges]
+        edges = np.array(state.trackArray)[tuple(edgeHash.T)]
+        if len(edges) == 0:
+            return ['pass']  # game is actually already over
+
+        print("the AI's dCards are: ", end='')
+        for card in player.destinationCards:
+            print(card.toString(), end=' ')
+        print()
+
+        tempArray = deepcopy(UtrackArray)
+        for i in range(len(tempArray)):
+            for j in range(len(tempArray)):
+                if tempArray[i][j] == -1:
+                    tempArray[i][j] = -1
+                elif tempArray[i][j].getClaimed() == "False":
+                    tempArray[i][j] = tempArray[i][j].length
+                elif player.getName() == tempArray[i][j].getClaimed():
+                    tempArray[i][j] = 0
+                else:
+                    tempArray[i][j] = -1
+        # tempArray is an adj matrix with -1s where there is no edge and 0 if this player has claimed that edge
+        # or the length of that edge if that edge is unclaimed
+
+        targetDCard = None
+        ## if it has a destCard that is not complete
+        for dCard in player.destinationCards:  # looks at all the dest cards in its hand
+            if not dCard.completed:  # only looks at the ones it has not completed
+                fullInfo = self.dijkstra(dCard.city1, tempArray)
+                distTo = fullInfo[0]
+                ## (and can be completed)
+                if distTo[cityIndices[dCard.city2]] > 99:
+                    #if dist to the 2nd city in the dCard is over 99 then it is impossible to complete that dCard
+                    #so it it stops looking at it
+                    continue
+
+                    '''possibleCompletionArray = [0] * 9
+                    for x in range(len(destinationDeck)):
+                        skip = False
+                        for card in player.destinationCards:
+                            if destinationDeck[x] == card.getValues:
+                                skip = True
+                                break
+                        #if all(destinationDeck[x].getValues == card.getValues for card in player.destinationCards):
+                        if skip:  # dont add any already completed dest card to possible completion array
+                            continue
+                        temp = self.dijkstra(destinationDeck[x][0], tempArray)[0]
+                        possibleCompletionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
+
+                    # the completionArray holds values equal to how close the AI is to completing each of the destination cards
+                    # for example if completionArray[1] = 3 then the other player is only 3 track lengths away from completing
+                    # the destination card from texas to colorado
+
+                    print("completionArray", possibleCompletionArray)
+                    if all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
+                        print("No destination cards left so it now follows empty hand strategy to avoid errors")
+                        return self.emptyHand(state, player)
+                    else:
+                        player.addDestCardToHand()
+                        return ['draw d']'''
+                else:
+                    ## set that destCard to target destCard
+                    targetDCard = dCard
+                    break
+
+        ## if not
+        if targetDCard is None:  # if there are no destcards in its hand that it can complete
+            #checks to make sure it it possible to complete ANY remaining destCards, if not it follows
+            # the emptyhand strat, if there is a destcard it can complete it draws another dest card.
+            possibleCompletionArray = []  # [0] * 9
+            for x in range(len(destinationDeck)):
+                skip = False
+                for card in player.destinationCards:
+                    if destinationDeck[x] == card.getValues:
+                        skip = True
+                        break
+                # if all(destinationDeck[x].getValues == card.getValues for card in player.destinationCards):
+                if skip:  # dont add any already completed dest card to possible completion array
+                    continue
+                temp = self.dijkstra(destinationDeck[x][0], tempArray)[0]
+                #possibleCompletionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
+                possibleCompletionArray.append(temp[cityIndices[destinationDeck[x][1]]])
+
+            # the completionArray holds values equal to how close the AI is to completing each of the destination cards
+            # for example if completionArray[1] = 3 then it is only 3 track lengths away from completing
+            # the destination card from texas to colorado
+
+            print("completionArray", possibleCompletionArray)
+            if all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
+                print("No destination cards left so it now follows empty hand strategy to avoid errors")
+                return self.emptyHand(state, player)
+            else:
+                ## Draw a dCard
+                player.addDestCardToHand()
+                return ['draw d']
+
+        print("targetDCard ", targetDCard.toString())
+        '''dijkstraResult = self.dijkstra(cityIndices[targetDCard.city1], tempArray)
+        distance = dijkstraResult[0][cityIndices[targetDCard.city2]]'''
+        ## Run dijkstra to find the shortest path to complete the target destCard
+        toClaim = self.dijkstra(cityIndices[targetDCard.city1], tempArray)[1]
+        # toClaim is the toClaimTrack array returned by dijkstra when run starting from the first city on the
+        # target destination
+
+        wantedIndexes = []
+        finalIndex = cityIndices[targetDCard.city2]
+
+        for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
+            if toClaim[x] == 0:
+                toClaim[x] = -1
+        print("toClaim", toClaim)
+
+        while finalIndex != -1 and toClaim[finalIndex] != -1:  # type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
+            #print("Final index", finalIndex)
+            checkIndex = deepcopy(toClaim[finalIndex])
+            if checkIndex[0] > checkIndex[1]:
+                checkIndex[0], checkIndex[1] = checkIndex[1], checkIndex[0]
+            '''print("checkIndex", checkIndex)
+            print("UtrackArray[checkIndex[0]][checkIndex[1]].occupied", UtrackArray[checkIndex[0]][checkIndex[1]].occupied)'''
+
+            if UtrackArray[checkIndex[0]][checkIndex[1]].occupied == 'False':
+                wantedIndexes.append(toClaim[finalIndex])
+                '''if toClaim[finalIndex] == 0:
+                    break'''
+            finalIndex = toClaim[finalIndex][0]
+        # this while loop works backwards, starting from the 2nd city in the target dest card, and adds every edge
+        # along the most direct path between the 2nd city of the target dest card and the 1st city in the target dest
+        # card to an array called wantedIndexes. The strategy wants to claim these tracks because they are the
+        # tracks along the shortest path which allows it to complete its target Destination card
+
+        wantedIndex = []
+        wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
+        smallestCardDif = 1000000  # python has not int.max_value so this is a sub
+        # this for loop is the ai deciding which track it is closest to claiming out of the wanted tracks (wantedIndexes)
+        for i in range(len(wantedIndexes)):
+            currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
+            # if the edge length is closest to the amount of that color that this player has in their hand
+            if currentEdge.length - player.handCards.count(currentEdge.color) < smallestCardDif:
+                smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                wanted = currentEdge  ## Set that track to be the wanted edge
+                wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+            elif currentEdge.length - player.handCards.count(currentEdge.color) == smallestCardDif:
+                # if there are multiple shortest tracks it picks one that it has more cards of its color
+                if player.handCards.count(currentEdge.color) > player.handCards.count(wanted.color):
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+                elif player.handCards.count(currentEdge.color) == player.handCards.count(wanted.color) and randint(0, 1) == 1:
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+        ## Find the track (edge) along the shortest path that it is closest to claiming
+
+        print("wantedIndex", wantedIndex)
+        neededCards = []
+        ## If it can claim the wanted edge
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+            if len(neededCards) == wanted.length:  # if you can claim that track do so
+                for toRemove in neededCards:
+                    player.handCards.remove(toRemove)
+                player.cardIndex = len(player.handCards)  # prob useless if I had to guess
+                # wantedIndex.reverse()
+                if wantedIndex[0] > wantedIndex[1]:
+                    wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
+                return ['claim', wantedIndex]  ## claim it
+
+        ## If not
+        player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
+        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then it draws a color of another track it needs along the shortest path
+            colorsAvail = []
+            for i in range(0, len(edges)):
+                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
+                    colorsAvail.append(edges[i].color)
+            wantedColor = colorsAvail[randint(0, len(colorsAvail) - 1)]  # randomness (stretch goal)
+
+            colorsAlongPath = []
+            for i in range(len(wantedIndexes)):
+                if wantedIndexes[i] != wantedIndex:
+                    edge = wantedIndexes[i]
+                    if not colorsAlongPath.__contains__(UtrackArray[edge[0]][edge[1]].color):
+                        colorsAlongPath.append(UtrackArray[edge[0]][edge[1]].color)
+            if len(colorsAlongPath) != 0:
+                wantedColor = colorsAlongPath[randint(0, len(colorsAlongPath) - 1)]
+
+            player.addCardToHand(wantedColor)
+            ''' I tried to make it even smarter... i failed i think but i cant bring myself to delete the code
+            colorCounts = []  # after the for loop colorCounts will be a 2d array of all the colors of the tracks
+            # along the shortest path and their lengths
+            for index in wantedIndexes:
+                if not index == wantedIndex:
+                    edge = UtrackArray[index[0]][index[1]]
+                    newColor = True
+                    for color in colorCounts:
+                        if color[0] == edge.color:
+                            colorCounts[colorCounts.index(color)][1] += edge.length
+                            newColor = False
+                            break
+                    if newColor:
+                        colorCounts.append([edge.color, edge.length])
+            
+            if len(colorCounts) != 0:
+                # removes the amount of that color card you have in your hand (except of the edge you are 
+                # claiming next turn)
+                for color in colorCounts:
+                    if color[0] == UtrackArray[wantedIndex[0]][wantedIndex[1]].color:
+                        continue
+                    else:
+                        color[1] -= player.numCardsOfColor(color[0])
+                
+                #find the color you are
+                minColor = 99
+                for color in colorCounts:
+                    if color[1] < minColor:
+                        wantedColor = color[0]
+                        minColor = color[1]
+                    elif color[1] == minColor and randint(0, 1) == 1:
+                        wantedColor = color[0]
+                        minColor = color[1]
+            
+            player.addCardToHand(wantedColor)
+            '''
+        else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
+            player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
+        print("after drawing AI's hand is: ", end='')
+        for card in player.handCards:
+            print(card.color, end=' ')
+        print()
+
+        return ['draw t']
 
     def printSolution(self, dist, city):
         print("Vertex Distance from Source")
@@ -232,20 +559,22 @@ class Strategy:
 
     def minDistance(self, dist, sptSet):
 
-        min = sys.maxsize
+        minNum = sys.maxsize
+        min_index = 0  # there is prob an error in this method since a min index should always be found
 
         for v in range(7):
-            if dist[v] < min and sptSet[v] == False:
-                min = dist[v]
+            if dist[v] < minNum and sptSet[v] == False:
+                minNum = dist[v]
                 min_index = v
 
         return min_index
 
     def dijkstra(self, start, graph):
 
-        cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5,
-                       'Oklahoma': 6}
-        start = cityIndices[str(start)]
+        '''cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5,
+                       'Oklahoma': 6}'''
+        if type(start) is str:
+            start = cityIndices[start]
 
         dist = [sys.maxsize] * 7
         dist[start] = 0
@@ -269,3 +598,7 @@ class Strategy:
         return [dist, toClaimTrack]
 
 
+    @staticmethod
+    def randomStrategy():
+        x = randint(0, len(stratList)-1)
+        return stratList[x]

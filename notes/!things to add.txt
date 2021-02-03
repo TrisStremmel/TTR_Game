@@ -1,0 +1,19 @@
+broad/general
+implement settings
+when you have 14 cards in hand have error message pop up or be displayed somewhere othere then the console
+add destination cards
+
+^We did all of these things YAY
+
+More things to add:
+*-make .CSVs go into a folder in a folder, for each run of the code there will be a new folder...
+... for each game there will be 2-4 new CSVs within that folder. (2-4 based on limited or extended feature set)
+
+name of new folders will be based on the date and time to avoid name conflicts 
+
+*-add more flags and console opperations
+add flag for limited or extended feature set
+
+*-make a destcard cap for player's hand
+
+*-add win counter for p1 vs p2

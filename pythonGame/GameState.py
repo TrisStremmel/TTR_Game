@@ -5,7 +5,7 @@ import csv
 from csv import writer
 from DestinationCard import DestinationCard
 
-#if true saves only limited feature set csv, if flase saves only extended set
+#if true saves only limited feature set csv, if false saves only extended set
 limitedFlag = True
 
 #ovrights limitedFlag, prints both limited and extended set

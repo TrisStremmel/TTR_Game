@@ -1,0 +1,31 @@
+General structure:
+
+The A.I. will (in this order)
+look at the current state of the game board (what tracks are claimed and by who)
+assesses if this turn it should draw a destination card or decide on a track
+	if it wants a destination card, draw one, 
+	otherwise continue
+based on what strategy it follows, it decides (given the current state of the game) which tracks it wants to claim
+based on what cards it currently (and maybe some other features) decides which of the wanted tracks it will try to claim first
+	if it can claim the one it wants, claim it,
+	otherwise draw cards needed to compete it
+
+
+commitBlock
+Claims tracks that would be needed to complete the opponents destination card
+Guesses opponents destination card by computing which one is closest to being completed
+Ties are broken by which destination card is worth the most to minimize impact of completing it
+
+
+Blind Destination:
+If it has a destCard that is not complete (and can be completed) 
+	set that destCard to target destCard
+If not 
+	Draw a dCard 
+Run dijkstra to find the shortest path to complete the target destCard
+Find the track (edge) along the shortest path that it is closest to claiming
+	Set that track to be the wanted edge
+If it can claim the wanted edge
+	Claim it
+If not
+	Draw cards of the color of that track

@@ -5,9 +5,9 @@ from Card import Card
 from Player import Player
 from Strategy import Strategy
 class AI(Player):
-    def __init__(self, name):
+    def __init__(self, name, sName=None):
         Player.__init__(self, name)
-        self.strategy = Strategy()
+        self.strategy = Strategy(sName)
         print(self.name + " follows the " + self.strategy.strategyName + " strategy.")
 
     def makeMove(self, state):

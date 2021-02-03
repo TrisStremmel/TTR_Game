@@ -24,3 +24,6 @@ class Edge:
 
     def getClaimed(self):
         return self.occupied
+
+    def toString(self):
+        return str(self.length) + " " + str(self.color) + " " + str(self.occupied)
