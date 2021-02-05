@@ -2,6 +2,7 @@ broad/general
 implement settings
 when you have 14 cards in hand have error message pop up or be displayed somewhere othere then the console
 add destination cards
+add win counter for p1 vs p2
 
 ^We did all of these things YAY
 
@@ -15,5 +16,3 @@ name of new folders will be based on the date and time to avoid name conflicts
 add flag for limited or extended feature set
 
 *-make a destcard cap for player's hand
-
-*-add win counter for p1 vs p2

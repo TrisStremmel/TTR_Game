@@ -153,7 +153,9 @@ class Strategy:
         edges = np.array(state.trackArray)[tuple(edgeHash.T)]
         if len(edges) == 0:
             return ['pass']  # game is actually already over
-        elif len(edges) == 10:  # aka no edges have been claimed
+        # ai is responsible for making sure it does not cheat thus you need to make sure you do not go over 14 cards
+        # in the case that the other player also does not claim any tracks
+        elif not len(player.handCards == 14) and len(edges) == 10:  # aka no edges have been claimed
             #the AI wants to draw cards until the other player claims a track, because its bad to guess what the other
             #player is trying to complete before they have even claimed a track
             player.addCardToHand('black')
