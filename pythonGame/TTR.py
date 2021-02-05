@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore")
 # dictionary for translating setting code to True or False
 Translate = {'yes': True, 'no': False, '1': True, '2': False, '0': False}
 SettingTranslate = {'yes': '1', 'no': '0', 'none': 'n'}
-stratList = ['emptyHand', 'commitBlock', 'blindDestination', 'longestFirst']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst']
 for index in range(len(stratList)):
     SettingTranslate[stratList[index].lower()] = str(index)
 
@@ -608,6 +608,9 @@ def gameStart(loopsRemaining=loopFlag):
     running = True
     # game state array for saving every turn
     #GameStateArray = []
+
+    if csvFlag:
+        currentTurn.createCSVs()
 
     while running:
 

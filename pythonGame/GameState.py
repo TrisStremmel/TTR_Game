@@ -9,7 +9,7 @@ from DestinationCard import DestinationCard
 limitedFlag = True
 
 #ovrights limitedFlag, prints both limited and extended set
-bothCSVFlag = True
+bothCSVFlag = False
 
 class GameState:
     player1lim = "player1lim.csv"
@@ -50,6 +50,8 @@ class GameState:
         self.p2Action = None
         self.LastFullAction = None
         self.LastP = 'playerOne'
+
+    def createCSVs(self):
         if limitedFlag or bothCSVFlag:
             self.append_list_as_row(self.player1lim, self.limFields)
             self.append_list_as_row(self.player2lim, self.limFields)

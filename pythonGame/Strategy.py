@@ -5,7 +5,7 @@ from copy import deepcopy
 from DestinationCard import DestinationCard
 
 # when you update stratList here make sure to also update it in TTR.py (its early)
-stratList = ['emptyHand', 'commitBlock', 'blindDestination', 'longestFirst']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst']
 destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
                    ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
                    ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
@@ -141,7 +141,7 @@ class Strategy:
         return ['draw t']
 
 
-    def commitBlock(self, state, player):
+    def readBlock(self, state, player):
         otherPlayer = 'playerOne' if player.name == 'playerTwo' else 'playerTwo'
 
         UtrackArray = np.array(state.trackArray).copy()  # can i deepcopy?
