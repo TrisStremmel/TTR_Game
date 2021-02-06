@@ -28,6 +28,200 @@ class Strategy:
         #exact name of the method for that strat. for ex it would call self.emptyHand(state, player)
         return getattr(self, self.strategyName)(state, player)
 
+    def pickyConductor(self, state, player):
+        ## Look at what tracks are claimed as well as who has claimed them.
+        UtrackArray = np.array(state.trackArray).copy()  # 2d array that represents the adj matrix that is the game board
+        edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
+            (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
+        openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
+        edgeHash = edgeHash[openEdges]
+        edges = np.array(state.trackArray)[tuple(edgeHash.T)]
+        if len(edges) == 0:
+            return ['pass']  # game is actually already over
+
+        wanted = UtrackArray[0][0]
+        wantedIndex = [0, 0]
+        wantedIndexes = []
+
+        ## Check to see if there is a destination card in hand that is not completed
+
+        tempArray = deepcopy(UtrackArray)
+        for i in range(len(tempArray)):
+            for j in range(len(tempArray)):
+                if tempArray[i][j] == -1:
+                    tempArray[i][j] = -1
+                elif tempArray[i][j].getClaimed() == "False":
+                    tempArray[i][j] = tempArray[i][j].length
+                elif player.getName() == tempArray[i][j].getClaimed():
+                    tempArray[i][j] = 0
+                else:
+                    tempArray[i][j] = -1
+        # tempArray is an adj matrix with -1s where there is no edge and 0 if this player has claimed that edge
+        # or the length of that edge if that edge is unclaimed
+
+        targetDCard = None
+        for dCard in player.destinationCards:  # looks at all the dest cards in its hand
+            if not dCard.completed:  # only looks at the ones it has not completed
+                fullInfo = self.dijkstra(dCard.city1, tempArray)
+                distTo = fullInfo[0]
+                ## and can be completed.
+                if distTo[cityIndices[dCard.city2]] > 99:
+                    # if dist to the 2nd city in the dCard is over 99 then it is impossible to complete that dCard
+                    # so it it stops looking at it
+                    continue
+
+                else:
+                    targetDCard = dCard
+                    break
+
+        ## if no
+        ## If it is still possible to complete a remaining dest card
+        if targetDCard is None:  # if there are no destcards in its hand that it can complete
+            # checks to make sure it it possible to complete ANY remaining destCards, if not it follows
+            # the emptyhand strat, if there is a destcard it can complete it draws another dest card.
+            possibleCompletionArray = []  # [0] * 9
+            for x in range(len(destinationDeck)):
+                skip = False
+                for card in player.destinationCards:
+                    if destinationDeck[x] == card.getValues:
+                        skip = True
+                        break
+                # if all(destinationDeck[x].getValues == card.getValues for card in player.destinationCards):
+                if skip:  # dont add any already completed dest card to possible completion array
+                    continue
+                temp = self.dijkstra(destinationDeck[x][0], tempArray)[0]
+                # possibleCompletionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
+                possibleCompletionArray.append(temp[cityIndices[destinationDeck[x][1]]])
+
+            # the completionArray holds values equal to how close the AI is to completing each of the destination cards
+            # for example if completionArray[1] = 3 then it is only 3 track lengths away from completing
+            # the destination card from texas to colorado
+
+            print("completionArray", possibleCompletionArray)
+            if all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
+                print("No destination cards left so it now follows empty hand strategy to avoid errors")
+                ## Else: follow empty hand
+                return self.emptyHand(state, player)
+            else:
+                ## draw a new destination card
+                player.addDestCardToHand()
+                return ['draw d']
+
+
+        ## If yes: Survey the game board and use Dijkstra to find the shortest track corresponding to the destination card.
+
+
+
+
+        neededCards = []
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+
+        ## If hand has the correct cards to claim all tracks along the shortest path for destination card.
+        #if ^:
+            ## claim shortest track along that shortest path
+            for toRemove in neededCards:
+                player.handCards.remove(toRemove)
+            player.cardIndex = len(player.handCards)  # prob useless if I had to guess
+            # wantedIndex.reverse()
+            if wantedIndex[0] > wantedIndex[1]:
+                wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
+            return ['claim', wantedIndex]
+
+        ## Else if AI does not have correct cards to claim track look at what cards are needed
+        ## based on color corresponding track.
+        player.addCardToHand(wanted.color)  ## Draw needed cards.
+        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then it draws a color of another track it needs along the shortest path
+            colorsAvail = []
+            for i in range(0, len(edges)):
+                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
+                    colorsAvail.append(edges[i].color)
+            wantedColor = colorsAvail[randint(0, len(colorsAvail) - 1)]  # randomness (stretch goal)
+
+            colorsAlongPath = []
+            for i in range(len(wantedIndexes)):
+                if wantedIndexes[i] != wantedIndex:
+                    edge = wantedIndexes[i]
+                    if not colorsAlongPath.__contains__(UtrackArray[edge[0]][edge[1]].color):
+                        colorsAlongPath.append(UtrackArray[edge[0]][edge[1]].color)
+            if len(colorsAlongPath) != 0:
+                wantedColor = colorsAlongPath[randint(0, len(colorsAlongPath) - 1)]
+
+            player.addCardToHand(wantedColor)
+
+        else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
+            player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
+
+        return ['draw t']
+
+    def ironEmpire(self, state, player):
+        ## Assess the game board
+        UtrackArray = np.array(state.trackArray).copy()
+        edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
+            (UtrackArray != -1)[np.triu_indices(len(UtrackArray))]]
+        openEdges = [x.occupied == 'False' for x in UtrackArray[tuple(edgeHash.T)]]
+        edgeHash = edgeHash[openEdges]
+        edges = np.array(state.trackArray)[tuple(edgeHash.T)]
+        if len(edges) == 0:
+            return ['pass']  # game is actually already over
+        '''elif not len(player.handCards) == 14 and len(edges) == 10:  # aka no edges have been claimed
+            #the AI wants to draw cards until the other player claims a track, because its bad to guess what the other
+            #player is trying to complete before they have even claimed a track
+            player.addCardToHand('black')
+            player.addCardToHand('white')
+            return ['draw t']'''
+
+        wanted = UtrackArray[0][1]
+        wantedIndex = [0, 1]
+        wantedIndexes = []
+
+
+        ## If you can claim 1 of the tracks
+
+
+
+        ## Claim the track
+        neededCards = []
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+            if len(neededCards) == wanted.length:  # if you can claim that track do so
+                for toRemove in neededCards:
+                    player.handCards.remove(toRemove)
+                player.cardIndex = len(player.handCards)  # prob useless if I had to guess
+                # wantedIndex.reverse()
+                if wantedIndex[0] > wantedIndex[1]:
+                    wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
+                return ['claim', wantedIndex]
+
+        ## If not: Draw cards for 1 of them, beginning with the track with the lowest weight
+        player.addCardToHand(wanted.color)
+        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
+            # then it draws a color of another track it needs of the other incoming tracks to the city it wants to block
+            colorsAvail = []
+            for i in range(0, len(edges)):
+                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
+                    colorsAvail.append(edges[i].color)
+            wantedColor = colorsAvail[randint(0, len(colorsAvail) - 1)]  # randomness (stretch goal)
+
+            colorsAlongPath = []
+            for i in range(len(wantedIndexes)):
+                if wantedIndexes[i] != wantedIndex:
+                    edge = wantedIndexes[i]
+                    if not colorsAlongPath.__contains__(UtrackArray[edge[0]][edge[1]].color):
+                        colorsAlongPath.append(UtrackArray[edge[0]][edge[1]].color)
+            if len(colorsAlongPath) != 0:
+                wantedColor = colorsAlongPath[randint(0, len(colorsAlongPath) - 1)]
+
+            player.addCardToHand(wantedColor)
+
+        else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
+            player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
+
+        return ['draw t']
+
     def longestFirst(self, state, player):
         UtrackArray = np.array(state.trackArray).copy()
         edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
@@ -155,7 +349,7 @@ class Strategy:
             return ['pass']  # game is actually already over
         # ai is responsible for making sure it does not cheat thus you need to make sure you do not go over 14 cards
         # in the case that the other player also does not claim any tracks
-        elif not len(player.handCards == 14) and len(edges) == 10:  # aka no edges have been claimed
+        elif not len(player.handCards) == 14 and len(edges) == 10:  # aka no edges have been claimed
             #the AI wants to draw cards until the other player claims a track, because its bad to guess what the other
             #player is trying to complete before they have even claimed a track
             player.addCardToHand('black')
