@@ -13,6 +13,12 @@ from AI import AI, randomAI
 from Human import Human
 from Track import Track
 from GameState import GameState
+from datetime import date, datetime
+
+now = datetime.now()
+date = now.strftime("%d.%m.%Y_%H.%M.%S")
+os.makedirs("output_CSVs/" + date)
+currentdirs = "output_CSVs/" + date
 
 pygame.init()
 warnings.filterwarnings("ignore")
@@ -610,7 +616,7 @@ def gameStart(loopsRemaining=loopFlag):
     #GameStateArray = []
 
     if csvFlag:
-        currentTurn.createCSVs()
+        currentTurn.createCSVs(currentdirs, loopFlag-loopsRemaining)
 
     while running:
 

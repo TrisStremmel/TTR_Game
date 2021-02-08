@@ -4,6 +4,7 @@ from copy import deepcopy
 import csv
 from csv import writer
 from DestinationCard import DestinationCard
+from datetime import date, datetime
 
 #if true saves only limited feature set csv, if false saves only extended set
 limitedFlag = True
@@ -12,10 +13,6 @@ limitedFlag = True
 bothCSVFlag = False
 
 class GameState:
-    player1lim = "player1lim.csv"
-    player2lim = "player2lim.csv"
-    player1ex = "player1ex.csv"
-    player2ex = "player2ex.csv"
     limFields = ['turn', 'action', 'P1 vs P2 Point Dif', 'Card Color Dif', 'Track 1', 'Track 2', 'Track 3', 'Track 4',
                  'Track 5', 'Track 6', 'Track 7', 'Track 8', 'Track 9', 'Track 10', 'Destination Cards']
     exFields = ['turn', 'action', 'other player action', 'P1 points', 'P2 Points',
@@ -50,12 +47,21 @@ class GameState:
         self.p2Action = None
         self.LastFullAction = None
         self.LastP = 'playerOne'
+        self.player1lim = ""
+        self.player2lim = ""
+        self.player1ex = ""
+        self.player2ex = ""
 
-    def createCSVs(self):
+    def createCSVs(self, currentdirs, runstr):
+        runstr = str(runstr)
         if limitedFlag or bothCSVFlag:
+            self.player1lim = currentdirs + "/player1lim_" + runstr + ".csv"
+            self.player2lim = currentdirs + "/player2lim_" + runstr + ".csv"
             self.append_list_as_row(self.player1lim, self.limFields)
             self.append_list_as_row(self.player2lim, self.limFields)
         if (not limitedFlag) or bothCSVFlag:
+            self.player1ex = currentdirs + "/player1ex_" + runstr + ".csv"
+            self.player2ex = currentdirs + "/player2ex_" + runstr + ".csv"
             self.append_list_as_row(self.player1ex, self.exFields)
             self.append_list_as_row(self.player2ex, self.exFields)
 

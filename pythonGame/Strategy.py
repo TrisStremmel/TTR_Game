@@ -385,7 +385,7 @@ class Strategy:
         #the destination card from texas to colorado
 
         print("completionArray", completionArray)
-        if all(x >= 99 for x in completionArray):  # if the other play is unable to complete ANY dest cards
+        if all((x == 0 or x >= 99) for x in completionArray):  # if the other play is unable to complete ANY dest cards
             print("No destination cards left so it now follows empty hand strategy to avoid errors")
             return self.emptyHand(state, player)
 
