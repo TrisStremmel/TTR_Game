@@ -7,10 +7,10 @@ from DestinationCard import DestinationCard
 from datetime import date, datetime
 
 #if true saves only limited feature set csv, if false saves only extended set
-limitedFlag = True
+limitedFlag = False
 
 #ovrights limitedFlag, prints both limited and extended set
-bothCSVFlag = False
+bothCSVFlag = True
 
 class GameState:
     limFields = ['turn', 'action', 'P1 vs P2 Point Dif', 'Card Color Dif', 'Track 1', 'Track 2', 'Track 3', 'Track 4',
@@ -43,6 +43,7 @@ class GameState:
         self.p2Hand = p2.getHand()
         self.p1Points = p1.points
         self.p2Points = p2.points
+        #self.p1
         self.p1Action = None
         self.p2Action = None
         self.LastFullAction = None
