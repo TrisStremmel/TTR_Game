@@ -56,8 +56,8 @@ class Strategy:
                     tempArray[i][j] = 0
                 else:
                     tempArray[i][j] = -1
-        # tempArray is an adj matrix with -1s where there is no edge and 0 if this player has claimed that edge
-        # or the length of that edge if that edge is unclaimed
+        # tempArray is an adj matrix with -1s where there is no edge (or an edge claimed by other player)
+        # and 0 if this player has claimed that edge or the length of that edge if that edge is unclaimed
 
         targetDCard = None
         for dCard in player.destinationCards:  # looks at all the dest cards in its hand
@@ -110,28 +110,115 @@ class Strategy:
 
         ## If yes: Survey the game board and use Dijkstra to find the shortest track corresponding to the destination card.
 
+        print("targetDCard ", targetDCard.toString())
+        '''dijkstraResult = self.dijkstra(cityIndices[targetDCard.city1], tempArray)
+        distance = dijkstraResult[0][cityIndices[targetDCard.city2]]'''
+        # Run dijkstra to find the shortest path to complete the target destCard
+        toClaim = self.dijkstra(cityIndices[targetDCard.city1], tempArray)[1]
+        # toClaim is the toClaimTrack array returned by dijkstra when run starting from the first city on the
+        # target destination
+
+        wantedIndexes = []
+        finalIndex = cityIndices[targetDCard.city2]
+
+        for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
+            if toClaim[x] == 0:
+                toClaim[x] = -1
+        print("toClaim", toClaim)
+
+        while finalIndex != -1 and toClaim[
+            finalIndex] != -1:  # type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
+            # print("Final index", finalIndex)
+            checkIndex = deepcopy(toClaim[finalIndex])
+            if checkIndex[0] > checkIndex[1]:
+                checkIndex[0], checkIndex[1] = checkIndex[1], checkIndex[0]
+            '''print("checkIndex", checkIndex)
+            print("UtrackArray[checkIndex[0]][checkIndex[1]].occupied", UtrackArray[checkIndex[0]][checkIndex[1]].occupied)'''
+
+            if UtrackArray[checkIndex[0]][checkIndex[1]].occupied == 'False':
+                wantedIndexes.append(toClaim[finalIndex])
+                '''if toClaim[finalIndex] == 0:
+                    break'''
+            finalIndex = toClaim[finalIndex][0]
+        # this while loop works backwards, starting from the 2nd city in the target dest card, and adds every edge
+        # along the most direct path between the 2nd city of the target dest card and the 1st city in the target dest
+        # card to an array called wantedIndexes. The strategy wants to claim these tracks because they are the
+        # tracks along the shortest path which allows it to complete its target Destination card
 
 
-
+        ##once it has the shortest path make a list of all the cards it will need to complete that path
         neededCards = []
-        for card in player.handCards:
-            if card.color == wanted.color:
-                neededCards.append(card)
+        for track in wantedIndexes:
+            currentTrack = UtrackArray[track[0]][track[1]]
+            for i in range(0, currentTrack.lenght):
+                neededCards.append(currentTrack.color)
 
-        ## If hand has the correct cards to claim all tracks along the shortest path for destination card.
-        #if ^:
+        #remove cards in hand from neededCards (you dont need cards that you already have)
+        #########################^
+
+        ##check if it already has all of the cards in that list
+        #can by looking at neededCards after removing the ones you have (if its empty then you have all you need)
+        if len(neededCards) == 0:
             ## claim shortest track along that shortest path
-            for toRemove in neededCards:
+            wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
+            wantedIndex = []
+            shortestLength = 99
+            for i in range(0, len(wantedIndexes)):
+                currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
+                if currentEdge.length < shortestLength:
+                    shortestLength = currentEdge.length
+                    wanted = currentEdge
+                    wantedIndex = wantedIndexes[i]
+
+            toDrawCards = []
+            for card in player.handCards:
+                if card.color == wanted.color:
+                    toDrawCards.append(card)
+
+            for toRemove in toDrawCards:
                 player.handCards.remove(toRemove)
             player.cardIndex = len(player.handCards)  # prob useless if I had to guess
             # wantedIndex.reverse()
             if wantedIndex[0] > wantedIndex[1]:
                 wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
             return ['claim', wantedIndex]
+        else:
+            ## Else if AI does not have correct cards to claim all tracks
+            ## Draw from needed cards
+            player.addCardToHand(neededCards[0].color)
+            if len(neededCards) == 1:
+                player.addCardToHand('neededCards[1].color')
+                #######################^
+            else:
+                player.addCardToHand(neededCards[1].color)
 
-        ## Else if AI does not have correct cards to claim track look at what cards are needed
-        ## based on color corresponding track.
-        player.addCardToHand(wanted.color)  ## Draw needed cards.
+        return ['draw t']
+
+        '''
+        wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
+        wantedIndex = []
+        shortestLength = 99
+        for i in range(0, len(wantedIndexes)):
+            currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
+            if currentEdge.length < shortestLength:
+                shortestLength = currentEdge.length
+                wanted = currentEdge
+                wantedIndex = wantedIndexes[i]
+
+        neededCards = []
+        for card in player.handCards:
+            if card.color == wanted.color:
+                neededCards.append(card)
+                
+        for toRemove in neededCards:
+                player.handCards.remove(toRemove)
+            player.cardIndex = len(player.handCards)  # prob useless if I had to guess
+            # wantedIndex.reverse()
+            if wantedIndex[0] > wantedIndex[1]:
+                wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
+            return ['claim', wantedIndex]
+            
+        player.addCardToHand(wanted.color)  
         if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
             # then it draws a color of another track it needs along the shortest path
             colorsAvail = []
@@ -152,9 +239,7 @@ class Strategy:
             player.addCardToHand(wantedColor)
 
         else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
-            player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
-
-        return ['draw t']
+            player.addCardToHand(wanted.color)  '''
 
     def ironEmpire(self, state, player):
         ## Assess the game board
@@ -790,7 +875,7 @@ class Strategy:
                     toClaimTrack[v] = [u, v]
 
         #self.printSolution(dist, start)
-        #print(toClaimTrack)
+        #print(dist)
         return [dist, toClaimTrack]
 
 
