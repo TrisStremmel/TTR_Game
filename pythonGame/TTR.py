@@ -31,9 +31,11 @@ commandlineFlag = input("Do you want to play the game using the Graphical User I
 AIvAIFlag = False
 stratFlag1 = False
 stratFlag2 = False
-csvFlag = False
+#csvFlag = False
+limitedFlag = False
+extendedFlag = False
 loopFlag = 1
-numFlags = 5  # increase this with every new flag created
+numFlags = 6  # increase this with every new flag created
 
 if commandlineFlag == 'cmd':
     print("You have chosen to control the settings from the command line, please do not change the settings from the "
@@ -53,8 +55,12 @@ if commandlineFlag == 'cmd':
         settingsCode += SettingTranslate[input("Enter the name of the strategy you want playerTwo to follow "
                                                "(type it as it is written in the code. If you don\'t care type "
                                                "\'none\'):  ").lower().strip()]  # stratFlag2
-        settingsCode += SettingTranslate[input("Do you want to generate .csv files for this run? "
-                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # csvFlag
+        '''settingsCode += SettingTranslate[input("Do you want to generate .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # csvFlag'''
+        settingsCode += SettingTranslate[input("Do you want to generate limited .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # limitedFlag
+        settingsCode += SettingTranslate[input("Do you want to generate extended .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # extendedFlag
         settingsCode += input("Enter the amount of times you want the game to loop: ").lower().strip()  # loopFlag
         # loop count will always be the last setting
 
@@ -68,24 +74,29 @@ if commandlineFlag == 'cmd':
         stratFlag2 = False
     else:
         stratFlag2 = stratList[int(settingsCode[2])]
-    csvFlag = Translate[settingsCode[3]]
+    #csvFlag = Translate[settingsCode[3]]
+    limitedFlag = Translate[settingsCode[3]]
+    extendedFlag = Translate[settingsCode[4]]
     loopFlag = int(settingsCode[numFlags - 1:])
 
     print("The setting code for this setting configuration is: " + settingsCode)
 print("AIvAIFlag", AIvAIFlag)
 print("stratFlag1", stratFlag1)
 print("stratFlag2", stratFlag2)
-print("csvFlag", csvFlag)
+#print("csvFlag", csvFlag)
+print("limitedFlag", limitedFlag)
+print("extendedFlag", extendedFlag)
 print("loopFlag", loopFlag)
 
-if commandlineFlag == 'cmd':
-    input("Press enter to begin")
-
-if csvFlag:
+if limitedFlag or extendedFlag:
     now = datetime.now()
     date = now.strftime("%d.%m.%Y_%H.%M.%S")
     os.makedirs("output_CSVs/" + date)
     currentdirs = "output_CSVs/" + date
+    print(".csv files will be created at " + currentdirs)
+
+if commandlineFlag == 'cmd':
+    input("Press enter to begin")
 
 # sets the window size to 800x600px
 display_width = 1920
@@ -665,8 +676,8 @@ def gameStart():
         # game state array for saving every turn
         # GameStateArray = []
 
-        if csvFlag:
-            currentTurn.createCSVs(currentdirs, loops+1)
+        if limitedFlag or extendedFlag:
+            currentTurn.createCSVs(currentdirs, loops+1, limitedFlag, extendedFlag)
 
         while running:
 
@@ -764,8 +775,8 @@ def gameStart():
 
             # save each turn for debugging/prototyping
             # currentTurn.writeToNPY()
-            if csvFlag:
-                currentTurn.writeToCSV()  # btw you def want this before you increment the turn
+            if limitedFlag or extendedFlag:
+                currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
 
             # GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
             currentTurn.incrementTurn()
@@ -786,8 +797,9 @@ def gameStart():
                       " thus lost " + str(card.points) + " points.")
 
         currentTurn.addFinalScores(playerOne, playerTwo)
-        if csvFlag:
-            currentTurn.writeToCSV()
+
+        if limitedFlag or extendedFlag:
+            currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
 
         # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
         if playerOne.points > playerTwo.points:
@@ -835,7 +847,7 @@ def gameStart():
                 print("It was a draw! Both players had " + str(playerTwo.points) + " points and completed " + str(p2DCount)
                       + " destination cards.")
                 ties += 1
-
+        print("PlayerOne uses " + playerOne.strategy + " and playerTwo uses " + playerTwo.strategy)
         if ties == 0:
             if playerMode == 'AI vs AI':
                 print("So far " + stratFlag1 + " has won " + str(s1Wins) + " times, and " + stratFlag2 + " has won " + str(
