@@ -5,7 +5,7 @@ from copy import deepcopy
 from DestinationCard import DestinationCard
 
 # when you update stratList here make sure to also update it in TTR.py (its early)
-stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'pickyConductor']
 destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
                    ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
                    ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
@@ -150,11 +150,25 @@ class Strategy:
         neededCards = []
         for track in wantedIndexes:
             currentTrack = UtrackArray[track[0]][track[1]]
-            for i in range(0, currentTrack.lenght):
+            for i in range(0, currentTrack.length):
                 neededCards.append(currentTrack.color)
 
         #remove cards in hand from neededCards (you dont need cards that you already have)
-        #########################^
+        numblackCards = 0
+        numwhiteCards = 0
+
+        for i in range(len(player.handCards)):
+            if player.handCards[i].color == 'black':
+                numblackCards += 1
+            elif player.handCards[i].color == 'white':
+                numwhiteCards += 1
+
+        while numblackCards > 0 or neededCards.__contains__('black'):
+            neededCards.remove('black')
+            numblackCards -= 1
+        while numwhiteCards > 0 or neededCards.__contains__('white'):
+            neededCards.remove('white')
+            numwhiteCards -= 1
 
         ##check if it already has all of the cards in that list
         #can by looking at neededCards after removing the ones you have (if its empty then you have all you need)
@@ -187,8 +201,13 @@ class Strategy:
             ## Draw from needed cards
             player.addCardToHand(neededCards[0].color)
             if len(neededCards) == 1:
-                player.addCardToHand('neededCards[1].color')
-                #######################^
+                colorsAvail = []
+                for i in range(0, len(edges)):
+                    if edges[i].occupied == 'False':
+                        colorsAvail.append(edges[i].color)
+                randomColor = colorsAvail[randint(0, len(colorsAvail) - 1)]  # randomness (stretch goal)
+                player.addCardToHand(randomColor)
+
             else:
                 player.addCardToHand(neededCards[1].color)
 
