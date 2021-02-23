@@ -7,12 +7,12 @@ from Strategy import Strategy
 class AI(Player):
     def __init__(self, name, sName=None):
         Player.__init__(self, name)
-        self.strategy = Strategy(sName)
-        print(self.name + " follows the " + self.strategy.strategyName + " strategy.")
+        self.strat = Strategy(sName)
+        self.strategy = self.strat.strategyName
+        print(self.name + " follows the " + self.strat.strategyName + " strategy.")
 
     def makeMove(self, state):
-        decision = self.strategy.makeDecision(state, self)
-        return decision
+        return self.strat.makeDecision(state, self)
 
 
 class randomAI(Player):
@@ -29,7 +29,7 @@ class randomAI(Player):
         if numEdges == 0: return ['pass', None]
 
         move = random.choices(['draw t', 'claim', 'draw d', 'pass'], [0.0, 1.0, 0.0, 0.0])[0]
-        arg = None;
+        arg = None
         if move == 'draw t':
             arg = [random.choices([['white', 'white'], ['black', 'black']])]
         elif move == 'claim':

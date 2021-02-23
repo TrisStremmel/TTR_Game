@@ -6,12 +6,6 @@ from csv import writer
 from DestinationCard import DestinationCard
 from datetime import date, datetime
 
-#if true saves only limited feature set csv, if false saves only extended set
-limitedFlag = True
-
-#ovrights limitedFlag, prints both limited and extended set
-bothCSVFlag = False
-
 class GameState:
     limFields = ['turn', 'action', 'P1 vs P2 Point Dif', 'Card Color Dif', 'Track 1', 'Track 2', 'Track 3', 'Track 4',
                  'Track 5', 'Track 6', 'Track 7', 'Track 8', 'Track 9', 'Track 10', 'Destination Cards']
@@ -43,6 +37,8 @@ class GameState:
         self.p2Hand = p2.getHand()
         self.p1Points = p1.points
         self.p2Points = p2.points
+        self.p1Strat = p1.strategy
+        self.p2Strat = p2.strategy
         self.p1Action = None
         self.p2Action = None
         self.LastFullAction = None
@@ -52,16 +48,16 @@ class GameState:
         self.player1ex = ""
         self.player2ex = ""
 
-    def createCSVs(self, currentdirs, runstr):
+    def createCSVs(self, currentdirs, runstr, limitedFlag, extendedFlag):
         runstr = str(runstr)
-        if limitedFlag or bothCSVFlag:
-            self.player1lim = currentdirs + "/player1lim_" + runstr + ".csv"
-            self.player2lim = currentdirs + "/player2lim_" + runstr + ".csv"
+        if limitedFlag:
+            self.player1lim = currentdirs + "/" + self.p1Strat + "_lim_" + runstr + ".csv"
+            self.player2lim = currentdirs + "/" + self.p2Strat + "_lim_" + runstr + ".csv"
             self.append_list_as_row(self.player1lim, self.limFields)
             self.append_list_as_row(self.player2lim, self.limFields)
-        if (not limitedFlag) or bothCSVFlag:
-            self.player1ex = currentdirs + "/player1ex_" + runstr + ".csv"
-            self.player2ex = currentdirs + "/player2ex_" + runstr + ".csv"
+        if extendedFlag:
+            self.player1ex = currentdirs + "/" + self.p1Strat + "_ex_" + runstr + ".csv"
+            self.player2ex = currentdirs + "/" + self.p2Strat + "_ex_" + runstr + ".csv"
             self.append_list_as_row(self.player1ex, self.exFields)
             self.append_list_as_row(self.player2ex, self.exFields)
 
@@ -119,7 +115,7 @@ class GameState:
         else:
             print("Error: player not found. No state info updated")
 
-    def writeToCSV(self):
+    def writeToCSV(self, limitedFlag, extendedFlag):
         # writing to csv file
 
         track1 = self.trackArray[0][1]
@@ -163,7 +159,7 @@ class GameState:
                          track10.getClaimed() + " " + str(track10.getLength()) + " "+track10.getColor(),
                          self.formatDestinationCards(self.p2dCards)
                          ]
-        if limitedFlag or bothCSVFlag:
+        if limitedFlag:
             self.append_list_as_row(self.player1lim, limitedP1Data)
             print("csv based on gameState for player 1 was successfully updated at: " + self.player1lim)
             self.append_list_as_row(self.player2lim, limitedP2Data)
@@ -236,7 +232,7 @@ class GameState:
                         track10.getClaimed(), track10.getLength(), track10.getColor(), 'KS OK',
                         dcardNames2, dcardWorth2, dcardComplete2.upper()
                         ]
-        if (not limitedFlag) or bothCSVFlag:
+        if extendedFlag:
             self.append_list_as_row(self.player1ex, robustP1Data)
             print("csv based on gameState for player 1 was successfully updated at: " + self.player1ex)
             self.append_list_as_row(self.player2ex, robustP2Data)

@@ -17,14 +17,6 @@ from datetime import date, datetime
 from ssh import ssh
 
 
-now = datetime.now()
-date = now.strftime("%d.%m.%Y_%H.%M.%S")
-os.makedirs("output_CSVs/" + date)
-os.makedirs("output_CSVs/" + date + '/target')
-os.makedirs("output_CSVs/" + date + '/other')
-currentdirs = "output_CSVs/" + date
-
-
 
 pygame.init()
 warnings.filterwarnings("ignore")
@@ -32,43 +24,53 @@ warnings.filterwarnings("ignore")
 # dictionary for translating setting code to True or False
 Translate = {'yes': True, 'no': False, '1': True, '2': False, '0': False}
 SettingTranslate = {'yes': '1', 'no': '0', 'none': 'n'}
-stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'ironEmpire', 'pickyConductor']
 for index in range(len(stratList)):
     SettingTranslate[stratList[index].lower()] = str(index)
 
 commandlineFlag = input("Do you want to play the game using the Graphical User Interface or control it from "
-                        "the command line? (type \'cmd\' or \'gui\'): ").lower()
+                        "the command line? (type \'cmd\' or \'gui\'): ").lower().strip()
 
 AIvAIFlag = False
 stratFlag1 = False
 stratFlag2 = False
-csvFlag = False
+#csvFlag = False
+limitedFlag = False
+extendedFlag = False
+DTMFlag = False
 loopFlag = 1
-numFlags = 5  # increase this with every new flag created
+numFlags = 7  # increase this with every new flag created
 
 if commandlineFlag == 'cmd':
     print("You have chosen to control the settings from the command line, please do not change the settings from the "
           "Graphical User Interface, there could be unexpected errors/bugs.")
-    settingsCode = input("Enter the settings code you wish to use or \'none\' if you don\'t know it: ").lower()
+    settingsCode = input("Enter the settings code you wish to use or \'none\' if you don\'t know it: ").lower().strip()
     if settingsCode == 'none':
         settingsCode = ''
-        settingsCode += SettingTranslate[input("Do you want to use AI vs AI mode? (type \'yes\' or \'no\'): ").lower()]  # AIvAIFlag
+        settingsCode += SettingTranslate[
+            input("Do you want to use AI vs AI mode? (type \'yes\' or \'no\'): ").lower().strip()]  # AIvAIFlag
         print("For reference this is the list of strategies: ", stratList)
         if Translate[settingsCode[0]]:  # aka if it is AI v AI ask user what strat player 1 will follow
             settingsCode += SettingTranslate[input("Enter the name of the strategy you want playerOne to follow "
                                                    "(type it as it is written in the code. If you don\'t care type "
-                                                   "\'none\'):  ").lower()]  # stratFlag1
+                                                   "\'none\'):  ").lower().strip()]  # stratFlag1
         else:
             settingsCode += 'n'
         settingsCode += SettingTranslate[input("Enter the name of the strategy you want playerTwo to follow "
                                                "(type it as it is written in the code. If you don\'t care type "
-                                               "\'none\'):  ").lower()]  # stratFlag2
-        settingsCode += SettingTranslate[input("Do you want to generate .csv files for this run? "
-                                               "(type \'yes\' or \'no\'): ").lower()]  # csvFlag
-        settingsCode += input("Enter the amount of times you want the game to loop: ").lower()  # loopFlag
-        #loop count will always be the last setting
+                                               "\'none\'):  ").lower().strip()]  # stratFlag2
+        '''settingsCode += SettingTranslate[input("Do you want to generate .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # csvFlag'''
+        settingsCode += SettingTranslate[input("Do you want to generate limited .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # limitedFlag
+        settingsCode += SettingTranslate[input("Do you want to generate extended .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # extendedFlag
+        settingsCode += SettingTranslate[input("Do you want to generate the RoMDP for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # DTMFlag
+        settingsCode += input("Enter the amount of times you want the game to loop: ").lower().strip()  # loopFlag
+        # loop count will always be the last setting
 
-    #set flags based on settings code
+    # set flags based on settings code
     AIvAIFlag = Translate[settingsCode[0]]
     if settingsCode[1] == 'n':
         stratFlag1 = False
@@ -78,18 +80,40 @@ if commandlineFlag == 'cmd':
         stratFlag2 = False
     else:
         stratFlag2 = stratList[int(settingsCode[2])]
-    csvFlag = Translate[settingsCode[3]]
-    loopFlag = int(settingsCode[numFlags-1:])
+    #csvFlag = Translate[settingsCode[3]]
+    limitedFlag = Translate[settingsCode[3]]
+    extendedFlag = Translate[settingsCode[4]]
+    DTMFlag = Translate[settingsCode[5]]
+    loopFlag = int(settingsCode[numFlags - 1:])
 
     print("The setting code for this setting configuration is: " + settingsCode)
 print("AIvAIFlag", AIvAIFlag)
 print("stratFlag1", stratFlag1)
 print("stratFlag2", stratFlag2)
-print("csvFlag", csvFlag)
+#print("csvFlag", csvFlag)
+print("limitedFlag", limitedFlag)
+print("extendedFlag", extendedFlag)
+print("DTMFlag", DTMFlag)
 print("loopFlag", loopFlag)
+
+if limitedFlag or extendedFlag:
+    now = datetime.now()
+    date = now.strftime("%d.%m.%Y_%H.%M.%S")
+    os.makedirs("output_CSVs/" + date)
+    if limitedFlag:
+        os.makedirs("output_CSVs/" + date + "/limited")
+        os.makedirs("output_CSVs/" + date + '/limited/target')
+        os.makedirs("output_CSVs/" + date + '/limited/other')
+    if extendedFlag:
+        os.makedirs("output_CSVs/" + date + "/extended")
+        os.makedirs("output_CSVs/" + date + '/extended/target')
+        os.makedirs("output_CSVs/" + date + '/extended/other')
+    currentdirs = "output_CSVs/" + date
+    print(".csv files will be created at " + currentdirs)
 
 if commandlineFlag == 'cmd':
     input("Press enter to begin")
+
 # sets the window size to 800x600px
 display_width = 1920
 display_height = 1080
@@ -141,7 +165,7 @@ greenDeckImg = pygame.image.load('Ticket To Ride Assets\Green\GreenDeck.png')
 blueDeckImg = pygame.image.load('Ticket To Ride Assets\Blue\BlueDeck.png')
 blackDeckImg = pygame.image.load('Ticket To Ride Assets\Black\BlackDeck.png')
 
-#loads images of the train tracks
+# loads images of the train tracks
 blankTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Blank.png')
 redTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Red.png')
 orangeTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Orange.png')
@@ -152,7 +176,7 @@ pinkTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Pink.pn
 whiteTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_White.png')
 blackTrack = pygame.image.load('Ticket To Ride Assets\Tracks\Filled\Track_Black.png')
 
-#loads images of the occupied train tracks
+# loads images of the occupied train tracks
 redTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Red.png')
 orangeTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Orange.png')
 yellowTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Yellow.png')
@@ -162,20 +186,19 @@ pinkTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Pi
 whiteTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_White.png')
 blackTrackOcc = pygame.image.load('Ticket To Ride Assets\Tracks\Occupied\Track_Black.png')
 
-
 screen.blit(blackTrainImg, (display_width * 0.05, display_height * 0.9))
 screen.blit(whiteTrainImg, (display_width * 0.15, display_height * 0.9))
 
 BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
-cityConnection = [[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2,  'black'), -1, -1],
-                   [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
-                   [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
-                   [Edge(5, 'white'), -1, Edge(6, 'black'), -1, -1, -1, Edge(3, 'white')],
-                   [Edge(2, 'black'), -1, -1, -1, -1, Edge(3, 'white'), Edge(3, 'white')],
-                   [-1, -1, Edge(4, 'black'), -1, Edge(3, 'white'), -1, Edge(2, 'black')],
-                   [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]]
+cityConnection = [[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2, 'black'), -1, -1],
+                  [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
+                  [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
+                  [Edge(5, 'white'), -1, Edge(6, 'black'), -1, -1, -1, Edge(3, 'white')],
+                  [Edge(2, 'black'), -1, -1, -1, -1, Edge(3, 'white'), Edge(3, 'white')],
+                  [-1, -1, Edge(4, 'black'), -1, Edge(3, 'white'), -1, Edge(2, 'black')],
+                  [-1, -1, -1, Edge(3, 'white'), Edge(3, 'white'), Edge(2, 'black'), -1]]
 
 cityNames = ['Washington', 'Montana', 'New York', 'Texas', 'Colorado', 'Kansas', 'Oklahoma']
 cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colorado': 4, 'Kansas': 5, 'Oklahoma': 6}
@@ -183,19 +206,36 @@ cityIndices = {'Washington': 0, 'Montana': 1, 'New York': 2, 'Texas': 3, 'Colora
 playerMode = 'AI vs AI' if AIvAIFlag else 'Human vs AI'
 playerOne = Player('playerOne')
 playerTwo = Player('playerTwo')
-p1Wins = 0
-p2Wins = 0
-def createPlayers():
+s1Wins = 0
+s2Wins = 0
+ties = 0
+
+
+def createPlayers(flip):
     global playerOne, playerTwo, playerMode
+
     if playerMode == 'Human vs AI':
         playerOne = Human('playerOne')
     elif playerMode == 'AI vs AI':
-        playerOne = AI('playerOne', stratFlag1 if stratFlag1 else None)
+        # flips strat1 and strat2 when you have looped 1/2 of then amount of total runs so each
+        # strat goes first an equal amount of times
+        if flip:
+            playerOne = AI('playerOne', stratFlag2 if stratFlag2 else None)
+        else:
+            playerOne = AI('playerOne', stratFlag1 if stratFlag1 else None)
 
-    #stratFlag will be False or the name of the strat, since strings equate to True this code works
-    playerTwo = AI('playerTwo', stratFlag2 if stratFlag2 else None)
+
+    # flips strat1 and strat2 when you have looped 1/2 of then amount of total runs so each
+    # strat goes first an equal amount of times
+    if flip:
+        # stratFlag will be False or the name of the strat, since strings equate to True this code works
+        playerTwo = AI('playerTwo', stratFlag1 if stratFlag1 else None)
+    else:
+        playerTwo = AI('playerTwo', stratFlag2 if stratFlag2 else None)
+
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
+
 
 def getEdgeValue(length):
     if length == 1:
@@ -213,8 +253,10 @@ def getEdgeValue(length):
     else:
         return -1
 
+
 colors = ["white", "pink", "red", "orange", "yellow", "green", "blue", "black"]
 chosenColors = ["white", "black"]
+
 
 def switchDeck(color):
     return {
@@ -229,6 +271,7 @@ def switchDeck(color):
     }.get(color, lambda: None)()
     # return color + 'Deck1'
 
+
 def checkHitBoxes(color):
     return {
         'white': lambda: drawCard("white"),
@@ -241,6 +284,7 @@ def checkHitBoxes(color):
         'black': lambda: drawCard("black"),
     }.get(color, lambda: None)()
     # return drawCard(color)
+
 
 # Draws the surface where the text will be written
 def text_objects(text, font):
@@ -265,6 +309,7 @@ def button(msg, fs, x, y, w, h, ic, ac, action=None):
     textRect.center = (x + (w / 2), (y + (h / 2)))
     screen.blit(textSurf, textRect)
 
+
 def displayText(text, x, y):
     largeText = pygame.font.Font('freesansbold.ttf', 25)
     TextSurf, TextRect = text_objects(text, largeText)
@@ -282,6 +327,7 @@ NY = City(int(display_width * 0.75), int(display_height * 0.2))
 
 cityArray = [WA, MT, NY, TX, CO, KS, OK]
 
+
 def drawDecks(color):
     return {
         'white': lambda: screen.blit(whiteDeckImg, (display_width * 0.017, display_height * 0.85)),
@@ -295,9 +341,10 @@ def drawDecks(color):
 
     }.get(color, lambda: None)()
 
+
 def createBoard():
     global cityConnection
-    #this is not commented out since it just sets the game over when starting a new round
+    # this is not commented out since it just sets the game over when starting a new round
     cityConnection = ([[-1, Edge(3, 'black'), -1, Edge(5, 'white'), Edge(2, 'black'), -1, -1],
                        [Edge(3, 'black'), -1, Edge(4, 'white'), -1, -1, -1, -1],
                        [-1, Edge(4, 'white'), -1, Edge(6, 'black'), -1, Edge(4, 'black'), -1],
@@ -342,7 +389,6 @@ destDeck = pygame.draw.rect(screen, (255, 255, 255), (display_width * 0.70, disp
 
 
 def drawGameBoard():
-
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (CO.getX(), CO.getY()))
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (TX.getX(), TX.getY()))
     pygame.draw.line(screen, black, (WA.getX(), WA.getY()), (MT.getX(), MT.getY()))
@@ -358,10 +404,12 @@ def drawGameBoard():
     for x in range(0, len(chosenColors), 1):
         drawDecks(chosenColors[x])
 
-    pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
+    pygame.draw.rect(screen, darkGreen,
+                     (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
     displayText("HAND", display_width * 0.95, display_height * 0.14)
 
     drawCities()
+
 
 def drawCities():
     pygame.draw.circle(screen, white, [WA.getX(), WA.getY()], 50, 50)
@@ -382,7 +430,9 @@ def drawCities():
 
 
 trackDataArray = [[-1 for x in range(20)] for y in range(11)]
-#draws the tracks
+
+
+# draws the tracks
 def drawTracks():
     row = 0
     for i in range(0, len(cityConnection), 1):
@@ -400,22 +450,24 @@ def drawTracks():
                 radians = math.atan2(dify, difx)
                 rot = math.degrees(radians)
 
-                perLenX = difx/length
-                perLenY = dify/length
+                perLenX = difx / length
+                perLenY = dify / length
 
                 trackImg = pygame.transform.scale(eval(color + "Track"), (100, 50))
                 trackImgFin = pygame.transform.rotate(trackImg, -rot)
 
-                for pri in range(1, length+1):
+                for pri in range(1, length + 1):
                     if testLength >= 0:
-                        left = x1 + (perLenX*pri*.8) - 50
-                        top = y1 + (perLenY*pri*.8) - 50
+                        left = x1 + (perLenX * pri * .8) - 50
+                        top = y1 + (perLenY * pri * .8) - 50
                         screen.blit(trackImgFin, (left, top))
 
-                        trackDataArray[row][pri-1] = Track(top, left, color, trackImgFin, length, rot, perLenX, perLenY, False, [i, j])
+                        trackDataArray[row][pri - 1] = Track(top, left, color, trackImgFin, length, rot, perLenX,
+                                                             perLenY, False, [i, j])
                         testLength -= 1
                         if testLength == 0:
                             row += 1
+
 
 def claimTrack(track, row, playerName):  # player name variable is just for print statement
     color = track.getColor()
@@ -429,24 +481,29 @@ def claimTrack(track, row, playerName):  # player name variable is just for prin
             top = track.getTop() + (track.getPerY() * pri * .8)
             screen.blit(trackImgFin, (left, top))
 
-    print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
+    print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[
+        track.getEdgeData()[1]])
 
 
 def drawCard(color):
-    screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
+    screen.blit(globals()[color + 'TrainImg'],
+                (display_width * 0.85, display_height * 0.13 + (40 * playerOne.cardIndex)))
     playerOne.addCardToHand(color)
 
+
 def removeCardsFromHand(color, numRemove):
-    for k in range(playerOne.handCards.__len__()-1, -1, -1):
+    for k in range(playerOne.handCards.__len__() - 1, -1, -1):
         if playerOne.handCards[k].getColor() == color and numRemove > 0:
             playerOne.handCards.remove(playerOne.handCards[k])
             playerOne.cardIndex -= 1
             numRemove -= 1
-    pygame.draw.rect(screen, darkGreen, (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
+    pygame.draw.rect(screen, darkGreen,
+                     (display_width * 0.83, display_height * 0.125, display_width * 0.15, display_height * 0.66))
     displayText("HAND", display_width * 0.95, display_height * 0.14)
     for k in range(0, playerOne.handCards.__len__(), 1):
         color = playerOne.handCards[k].getColor()
         screen.blit(globals()[color + 'TrainImg'], (display_width * 0.85, display_height * 0.13 + (40 * k)))
+
 
 def getHumanMove():
     colorsdrawn = []
@@ -477,15 +534,16 @@ def getHumanMove():
 
                             if data != -1:
                                 # pygame.draw.circle(screen, black, (int(data.getLeft()), int(data.getTop())), 10)
-                                if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(pos) and not data.getOccupied():
+                                if data.getImg().get_rect().move(data.getLeft(), data.getTop()).collidepoint(
+                                        pos) and not data.getOccupied():
                                     sameColor = 0
                                     for k in range(0, playerOne.handCards.__len__(), 1):
                                         if playerOne.handCards[k].getColor() == data.getColor():
                                             sameColor += 1
                                         if sameColor == data.getLength():
-                                            #next to lines moved elsewhere so it is update the same it is an AI or human claiming a track
-                                            #firstTrack = trackDataArray[i][0]
-                                            #claimTrack(firstTrack, i)
+                                            # next to lines moved elsewhere so it is update the same it is an AI or human claiming a track
+                                            # firstTrack = trackDataArray[i][0]
+                                            # claimTrack(firstTrack, i)
                                             removeCardsFromHand(data.getColor(), data.getLength())
                                             return ['claim', np.array(data.getEdgeData()).tolist()]
 
@@ -498,7 +556,8 @@ def getHumanMove():
                     return ['draw d']
                 elif drawCount == 0 and len(playerOne.handCards) + 1 >= 14:
                     print('There are 14 cards in your hand, you can not draw any more!')
-                    displayText("There are 14 cards in your hand, you can not draw any more!", display_width * 0.5, display_height * 0.03)
+                    displayText("There are 14 cards in your hand, you can not draw any more!", display_width * 0.5,
+                                display_height * 0.03)
                     # add a way for the player to see this message in game since they cant see the console while playing
                 elif drawCount == 0 or drawCount == 1:  # this is basically an else statement since drawCount will always be 0 or 1 at this point
                     outputBuffer = True
@@ -511,19 +570,25 @@ def getHumanMove():
                             if drawCount == 2:
                                 return ['draw t', colorsdrawn]  # for the record 'colorsdrawn is never used or saved
                     if outputBuffer and drawCount == 1:  # if you exit the above for loop and outputBuffer = true then the player did not click on a card
-                        print('You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.')
-                        displayText("You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.", display_width * 0.5,
-                                    display_height * 0.03)
+                        print(
+                            'You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.')
+                        displayText(
+                            "You drew one card already this turn you cannot claim a track or destination card you must draw one more train card this turn.",
+                            display_width * 0.5,
+                            display_height * 0.03)
                         # add a way for the player to see this message in game since they cant see the console while playing
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
+
         clock.tick(120)
+
 
 
 def quitGame():
     pygame.quit()
     quit()
+
 
 def titleScreen():
     #   print(pygame.font.get_fonts())
@@ -543,7 +608,9 @@ def titleScreen():
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
+
         clock.tick(120)
+
 
 def settings():
     global playerMode
@@ -551,7 +618,8 @@ def settings():
     screen.blit(BackGround.image, BackGround.rect)
     pygame.draw.rect(screen, grey, (display_width * 0.075, display_height * 0.15, 1550, 200), 0)
     for j in range(0, len(chosenColors), 1):
-        pygame.draw.rect(screen, darkBlue, (display_width * (colors.index(chosenColors[j])+1) / 10 - 6, display_height * 0.2 - 6, 110, 110), 11)
+        pygame.draw.rect(screen, darkBlue, (
+        display_width * (colors.index(chosenColors[j]) + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110), 11)
 
     running = True
 
@@ -594,204 +662,247 @@ def settings():
                             if chosenColors.__contains__(colors[i]):
                                 chosenColors.remove(colors[i])
                                 pygame.draw.rect(screen, grey,
-                                                 (display_width * (i + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110), 11)
+                                                 (display_width * (i + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110),
+                                                 11)
                             else:
                                 chosenColors.append(colors[i])
                                 pygame.draw.rect(screen, darkBlue,
-                                                 (display_width * (i + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110), 11)
+                                                 (display_width * (i + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110),
+                                                 11)
 
             pygame.display.update()
+
         clock.tick(120)
 
-def gameStart(loopsRemaining=loopFlag):
-    loopsRemaining -= 1
 
-    global playerMode, p1Wins, p2Wins
-    createPlayers()
-    currentTurn = GameState(1, cityConnection, playerOne, playerTwo)
+def gameStart():
+    '''loopsRemaining=loopFlag'''
+    for loops in range(0, loopFlag):
+        flipper = True if loopFlag > 1 and loops >= loopFlag/2 else False
+        '''loopsRemaining -= 1'''
 
-    screen.fill(white)
-    screen.blit(BackGround.image, BackGround.rect)
+        global playerMode, s1Wins, s2Wins, ties
+        createPlayers(flipper)
+        currentTurn = GameState(1, cityConnection, playerOne, playerTwo)
 
-    createBoard()
-    drawTracks()
-    drawGameBoard()
-    drawCities()
-    running = True
-    # game state array for saving every turn
-    #GameStateArray = []
+        screen.fill(white)
+        screen.blit(BackGround.image, BackGround.rect)
 
-    if csvFlag:
-        currentTurn.createCSVs(currentdirs, loopFlag-loopsRemaining)
+        createBoard()
+        drawTracks()
+        drawGameBoard()
+        drawCities()
+        running = True
+        # game state array for saving every turn
+        # GameStateArray = []
 
-    while running:
+        if limitedFlag or extendedFlag:
+            currentTurn.createCSVs(currentdirs, loops+1, limitedFlag, extendedFlag)
 
-        drawCities()  # they do not change but sometimes the tracks are drawn over them making the names unreadable so we just redraw them again here
+        while running:
 
-        pygame.draw.rect(screen, grey, (display_width * 0.075, display_height * 0.01, 1600, 50), 0)
-        displayText("Error Msg: ", display_width * 0.04, display_height * 0.04)
-        button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
+            drawCities()  # they do not change but sometimes the tracks are drawn over them making the names unreadable so we just redraw them again here
 
-        p1Move = None
-        # AI or Human makes its move and stores it in the game state
-        if playerMode == 'Human vs AI':  # or type(playerOne) == Human
-            # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
-            # I hope the line above works, it may not since it has the human class calling a TTR class function
-            p1Move = getHumanMove()  # since the line above did not work I use this
-        elif playerMode == 'AI vs AI':
-            p1Move = playerOne.makeMove(currentTurn)
+            pygame.draw.rect(screen, grey, (display_width * 0.075, display_height * 0.01, 1600, 50), 0)
+            displayText("Error Msg: ", display_width * 0.04, display_height * 0.04)
+            button("Quit", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
-        currentTurn.setPlayerMove(playerOne, p1Move[0])
-        currentTurn.LastFullAction = p1Move
-        currentTurn.LastP = 'playerOne'
+            p1Move = None
+            # AI or Human makes its move and stores it in the game state
+            if playerMode == 'Human vs AI':  # or type(playerOne) == Human
+                # humanMove = playerOne.makeMove(currentTurn, deckArray)  # it did not work
+                # I hope the line above works, it may not since it has the human class calling a TTR class function
+                p1Move = getHumanMove()  # since the line above did not work I use this
+            elif playerMode == 'AI vs AI':
+                p1Move = playerOne.makeMove(currentTurn)
 
-        if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
-            # needs to be updated but for the other move options the values are just updated in that player's instance
-            x = p1Move[1][0]
-            y = p1Move[1][1]
-            playerOne.points += getEdgeValue(cityConnection[x][y].getLength())
-            cityConnection[x][y].claim(playerOne)
-            cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
-            #also now update if claiming this track happens to complete a destination card
-            for row in range(0, len(trackDataArray)):
-                if type(trackDataArray[row]) != int:
-                    if type(trackDataArray[row][0]) != int:
-                        if (trackDataArray[row][0].getEdgeData() == p1Move[1]):  #.all():
-                            claimTrack(trackDataArray[row][0], row, "Player one")  # updates track data array
-                            break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
-                            # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
+            currentTurn.setPlayerMove(playerOne, p1Move[0])
+            currentTurn.LastFullAction = p1Move
+            currentTurn.LastP = 'playerOne'
 
-        print("Player one chose to " + currentTurn.getP1Move())
-        # updating the game state based on player one's move
-        playerOne.checkDestCardCompletion(cityConnection)  # this will update the players points if a dcard was completed
-        currentTurn.updatePlayerInfo(playerOne)
-        currentTurn.updateTracks(cityConnection)
+            if currentTurn.getP1Move() == 'claim':  # if a player claims a track the cityConnection and trackDataArray
+                # needs to be updated but for the other move options the values are just updated in that player's instance
+                x = p1Move[1][0]
+                y = p1Move[1][1]
+                playerOne.points += getEdgeValue(cityConnection[x][y].getLength())
+                cityConnection[x][y].claim(playerOne)
+                cityConnection[y][x].claim(playerOne)  # this could be wrong so if weird stuff starts happening check this
+                # also now update if claiming this track happens to complete a destination card
+                for row in range(0, len(trackDataArray)):
+                    if type(trackDataArray[row]) != int:
+                        if type(trackDataArray[row][0]) != int:
+                            if (trackDataArray[row][0].getEdgeData() == p1Move[1]):  # .all():
+                                claimTrack(trackDataArray[row][0], row, "Player one")  # updates track data array
+                                break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
+                                # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
-        #GameStateArray.append(currentTurn.returnListedforP())
-        # AI makes its move and stores it in the game state
-        p2Move = playerTwo.makeMove(currentTurn)
-        currentTurn.setPlayerMove(playerTwo, p2Move[0])
+            print("Player one chose to " + currentTurn.getP1Move())
+            # updating the game state based on player one's move
+            playerOne.checkDestCardCompletion(
+                cityConnection)  # this will update the players points if a dcard was completed
+            currentTurn.updatePlayerInfo(playerOne)
+            currentTurn.updateTracks(cityConnection)
 
-        currentTurn.LastFullAction = p2Move
-        currentTurn.LastP = 'playerTwo'
+            # GameStateArray.append(currentTurn.returnListedforP())
+            # AI makes its move and stores it in the game state
+            p2Move = playerTwo.makeMove(currentTurn)
+            currentTurn.setPlayerMove(playerTwo, p2Move[0])
 
-        if currentTurn.getP2Move() == 'claim':
-            x = p2Move[1][0]
-            y = p2Move[1][1]
-            playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
-            cityConnection[x][y].claim(playerTwo)
-            cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
-            for row in range(0, len(trackDataArray)):
-                if type(trackDataArray[row]) != int:
-                    if type(trackDataArray[row][0]) != int:
-                        if (trackDataArray[row][0].getEdgeData() == p2Move[1]):  #.all():
-                            claimTrack(trackDataArray[row][0], row, "Player two")  # updates track data array
+            currentTurn.LastFullAction = p2Move
+            currentTurn.LastP = 'playerTwo'
+
+            if currentTurn.getP2Move() == 'claim':
+                x = p2Move[1][0]
+                y = p2Move[1][1]
+                playerTwo.points += getEdgeValue(cityConnection[x][y].getLength())
+                cityConnection[x][y].claim(playerTwo)
+                cityConnection[y][x].claim(playerTwo)  # this could be wrong so if weird stuff starts happening check this
+                for row in range(0, len(trackDataArray)):
+                    if type(trackDataArray[row]) != int:
+                        if type(trackDataArray[row][0]) != int:
+                            if (trackDataArray[row][0].getEdgeData() == p2Move[1]):  # .all():
+                                claimTrack(trackDataArray[row][0], row, "Player two")  # updates track data array
+                                break
+
+            print("Player two chose to " + currentTurn.getP2Move())
+            # updating the game state based on player two's move
+            # remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
+            playerTwo.checkDestCardCompletion(
+                cityConnection)  # this will update the players points if a dcard was completed
+            currentTurn.updatePlayerInfo(playerTwo)
+            currentTurn.updateTracks(cityConnection)
+
+            # check for deadlock
+            if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
+                print("Since both players passed their turn it is likely the game has reached a deadlock so game ends")
+                running = False  # break should also work
+
+            # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
+            edgeLeft = False
+            for i in range(len(cityConnection)):
+                toLeave = False
+                for edge in cityConnection[i]:
+                    if type(edge) != int:  # aka if there is an edge between those two cities
+                        if edge.occupied == 'False':
+                            toLeave = True
+                            edgeLeft = True
                             break
+                if toLeave:
+                    break
+            if not edgeLeft:
+                print("All tracks have been claimed so the game is over!")
+                running = False  # break should also work
 
-        print("Player two chose to " + currentTurn.getP2Move())
-        # updating the game state based on player two's move
-        #remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
-        playerTwo.checkDestCardCompletion(cityConnection)  # this will update the players points if a dcard was completed
-        currentTurn.updatePlayerInfo(playerTwo)
-        currentTurn.updateTracks(cityConnection)
+            # save each turn for debugging/prototyping
+            # currentTurn.writeToNPY()
+            if limitedFlag or extendedFlag:
+                currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
 
+            # GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
+            currentTurn.incrementTurn()
+            pygame.display.update()
+            clock.tick(240)
 
-        # check for deadlock
-        if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
-            print("Since both players passed their turn it is likely the game has reached a deadlock so game ends")
-            running = False  # break should also work
+        # check which destination cards are not completed and update player score
+        for card in playerOne.getDestCards():
+            if not card.completed:
+                playerOne.points -= card.points
+                print("Player one did not complete the destination card between " + card.city1 + " and " + card.city2 +
+                      " thus lost " + str(card.points) + " points.")
+        for card in playerTwo.getDestCards():
+            if not card.completed:
+                playerTwo.points -= card.points
+                print("Player two did not complete the destination card between " + card.city1 + " and " + card.city2 +
+                      " thus lost " + str(card.points) + " points.")
 
-        # tests if there are any edges left to be claimed, if not: end game, if there are unclaimed edges then continue
-        edgeLeft = False
-        for i in range(len(cityConnection)):
-            toLeave = False
-            for edge in cityConnection[i]:
-                if type(edge) != int:  # aka if there is an edge between those two cities
-                    if edge.occupied == 'False':
-                        toLeave = True
-                        edgeLeft = True
-                        break
-            if toLeave:
-                break
-        if not edgeLeft:
-            print("All tracks have been claimed so the game is over!")
-            running = False  # break should also work
+        currentTurn.addFinalScores(playerOne, playerTwo)
 
-        #save each turn for debugging/prototyping
-        # currentTurn.writeToNPY()
-        if csvFlag:
-            currentTurn.writeToCSV()  # btw you def want this before you increment the turn
+        if limitedFlag or extendedFlag:
+            currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
 
-        #GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
-        currentTurn.incrementTurn()
-
-
-        pygame.display.update()
-        clock.tick(120)
-
-    #check which destination cards are not completed and update player score
-    for card in playerOne.getDestCards():
-        if not card.completed:
-            playerOne.points -= card.points
-            print("Player one did not complete the destination card between " + card.city1 + " and " + card.city2 +
-                  " thus lost " + str(card.points) + " points.")
-    for card in playerTwo.getDestCards():
-        if not card.completed:
-            playerTwo.points -= card.points
-            print("Player two did not complete the destination card between " + card.city1 + " and " + card.city2 +
-                  " thus lost " + str(card.points) + " points.")
-
-    currentTurn.addFinalScores(playerOne, playerTwo)
-    if csvFlag:
-        currentTurn.writeToCSV()
-
-    # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
-    if playerOne.points > playerTwo.points:
-        print("Player one won with " + str(playerOne.points) + " over player two who had " + str(
-            playerTwo.points) + ".")
-        p1Wins += 1
-    elif playerOne.points < playerTwo.points:
-        print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(
-            playerOne.points) + ".")
-        p2Wins += 1
-    else:  # then test number of destination cards as a tie breaker
-        p1DCount = 0
-        for dCard in playerOne.destinationCards:
-            if dCard.completed:
-                p1DCount += 1
-        p2DCount = 0
-        for dCard in playerTwo.destinationCards:
-            if dCard.completed:
-                p2DCount += 1
-        if p1DCount > p2DCount:
-            print("Player one won with " + str(playerOne.points) + " over player two who also had " + str(
-                playerTwo.points) + " because player one completed " + str(p1DCount) + " destination cards"
-                " compared to player two who only completed " + str(p2DCount) + " destination cards.")
-            p1Wins += 1
-        elif p1DCount < p2DCount:
-            print("Player two won with " + str(playerTwo.points) + " over player one who also had " + str(
-                playerOne.points) + " because player two completed " + str(p2DCount) + " destination cards"
-                " compared to player one who only completed " + str(p1DCount) + " destination cards.")
-            p2Wins += 1
+        # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
+        if playerOne.points > playerTwo.points:
+            print("Player one won with " + str(playerOne.points) + " over player two who had " + str(
+                playerTwo.points) + ".")
+            if flipper:  #tracks how many times a strat has won, now how many times the "player" who went 1st won
+                s2Wins += 1
+            else:
+                s1Wins += 1
+        elif playerOne.points < playerTwo.points:
+            print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(
+                playerOne.points) + ".")
+            if flipper:
+                s1Wins += 1
+            else:
+                s2Wins += 1
+        else:  # then test number of destination cards as a tie breaker
+            p1DCount = 0
+            for dCard in playerOne.destinationCards:
+                if dCard.completed:
+                    p1DCount += 1
+            p2DCount = 0
+            for dCard in playerTwo.destinationCards:
+                if dCard.completed:
+                    p2DCount += 1
+            if p1DCount > p2DCount:
+                print("Player one won with " + str(playerOne.points) + " over player two who also had " + str(
+                    playerTwo.points) + " because player one completed " + str(p1DCount) + " destination cards"
+                                                                                           " compared to player two who only completed " + str(
+                    p2DCount) + " destination cards.")
+                if flipper:
+                    s2Wins += 1
+                else:
+                    s1Wins += 1
+            elif p1DCount < p2DCount:
+                print("Player two won with " + str(playerTwo.points) + " over player one who also had " + str(
+                    playerOne.points) + " because player two completed " + str(p2DCount) + " destination cards"
+                                                                                           " compared to player one who only completed " + str(
+                    p1DCount) + " destination cards.")
+                if flipper:
+                    s1Wins += 1
+                else:
+                    s2Wins += 1
+            else:
+                print("It was a draw! Both players had " + str(playerTwo.points) + " points and completed " + str(p2DCount)
+                      + " destination cards.")
+                ties += 1
+        print("PlayerOne uses " + playerOne.strategy + " and playerTwo uses " + playerTwo.strategy)
+        if ties == 0:
+            if playerMode == 'AI vs AI':
+                print("So far " + stratFlag1 + " has won " + str(s1Wins) + " times, and " + stratFlag2 + " has won " + str(
+                    s2Wins) + " times.")
+            else:
+                print("So far player one has won " + str(s1Wins) + " times, and player two has won " +
+                      str(s2Wins) + " times.")
         else:
-            print("It was a draw! Both players had " + str(playerTwo.points) + " points and completed " + str(p2DCount)
-                  + " destination cards.")
+            if playerMode == 'AI vs AI':
+                print("So far " + stratFlag1 + " has won " + str(s1Wins) + " times, and " + stratFlag2 + " has won "
+                      + str(s2Wins) + " time and there have been " + str(ties) + " ties.")
+            else:
+                print("So far player one has won " + str(s1Wins) + " times, and player two has won " +
+                  str(s2Wins) + " times and there have been " + str(ties) + " ties.")
 
-    print("So far player one has won " + str(p1Wins) + " times, and player two has won " + str(p2Wins) + " times.")
+    '''if loopsRemaining > 0:
+        gameStart(loopsRemaining)'''
+    if commandlineFlag == 'gui':
+        titleScreen()
+        quit()
 
-    if loopsRemaining > 0:
-        gameStart(loopsRemaining)
-
-    ssh(date, loopFlag)
-
-    titleScreen()
-    quit()
     # saving full gamestate array to file at end of game
     # np.save(os.getcwd()+'/saves/save.npy', np.array(GameStateArray))
 
 
 if commandlineFlag == 'cmd':
     gameStart()
+    if DTMFlag:
+        pygame.quit()
+        if limitedFlag:
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "limited")
+        if extendedFlag:
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "extended")
+
+    quit()
+
 titleScreen()
 settings()
 gameStart()

@@ -3,6 +3,7 @@ from Player import Player
 class Human(Player):
     def __init__(self, name):
         Player.__init__(self, name)
+        self.strategy = 'human'
 
     def makeMove(self):  # gameState, deckArray, event):  # if it no work it will prob be left in anyway but never used
         #gameState = TTR.getHumanMove(gameState, deckArray, event)  # player decision input made from TTR class
