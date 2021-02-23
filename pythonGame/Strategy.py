@@ -156,19 +156,21 @@ class Strategy:
         #remove cards in hand from neededCards (you dont need cards that you already have)
         numblackCards = 0
         numwhiteCards = 0
-
+        print("neededCards", neededCards) # 14301
         for i in range(len(player.handCards)):
             if player.handCards[i].color == 'black':
                 numblackCards += 1
             elif player.handCards[i].color == 'white':
                 numwhiteCards += 1
 
-        while numblackCards > 0 or neededCards.__contains__('black'):
+        while numblackCards > 0 and neededCards.__contains__('black'):
             neededCards.remove('black')
             numblackCards -= 1
-        while numwhiteCards > 0 or neededCards.__contains__('white'):
+        while numwhiteCards > 0 and neededCards.__contains__('white'):
             neededCards.remove('white')
             numwhiteCards -= 1
+
+        print("neededCards", neededCards)
 
         ##check if it already has all of the cards in that list
         #can by looking at neededCards after removing the ones you have (if its empty then you have all you need)
@@ -199,7 +201,7 @@ class Strategy:
         else:
             ## Else if AI does not have correct cards to claim all tracks
             ## Draw from needed cards
-            player.addCardToHand(neededCards[0].color)
+            player.addCardToHand(neededCards[0])
             if len(neededCards) == 1:
                 colorsAvail = []
                 for i in range(0, len(edges)):
@@ -209,7 +211,7 @@ class Strategy:
                 player.addCardToHand(randomColor)
 
             else:
-                player.addCardToHand(neededCards[1].color)
+                player.addCardToHand(neededCards[1])
 
         return ['draw t']
 
