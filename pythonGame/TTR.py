@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore")
 # dictionary for translating setting code to True or False
 Translate = {'yes': True, 'no': False, '1': True, '2': False, '0': False}
 SettingTranslate = {'yes': '1', 'no': '0', 'none': 'n'}
-stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'ironEmpire']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'ironEmpire', 'pickyConductor']
 for index in range(len(stratList)):
     SettingTranslate[stratList[index].lower()] = str(index)
 
