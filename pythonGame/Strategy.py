@@ -5,7 +5,7 @@ from copy import deepcopy
 from DestinationCard import DestinationCard
 
 # when you update stratList here make sure to also update it in TTR.py (its early)
-stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst']
+stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'ironEmpire']
 destinationDeck = [['Washington', 'New York', 20], ['Texas', 'Colorado', 15], ['Montana', 'Texas', 16],
                    ['Washington', 'Oklahoma', 10], ['New York', 'Colorado', 15], ['Washington', 'Kansas', 8],
                    ['Montana', 'Oklahoma', 18], ['Texas', 'Kansas', 9], ['Montana', 'Colorado', 12]]
@@ -157,6 +157,8 @@ class Strategy:
         return ['draw t']
 
     def ironEmpire(self, state, player):
+        otherPlayer = 'playerOne' if player.name == 'playerTwo' else 'playerTwo'
+
         ## Assess the game board
         UtrackArray = np.array(state.trackArray).copy()
         edgeHash = np.array(np.triu_indices(len(UtrackArray))).T[
@@ -166,21 +168,66 @@ class Strategy:
         edges = np.array(state.trackArray)[tuple(edgeHash.T)]
         if len(edges) == 0:
             return ['pass']  # game is actually already over
-        '''elif not len(player.handCards) == 14 and len(edges) == 10:  # aka no edges have been claimed
+        elif not len(player.handCards) == 14 and len(edges) == 10:  # aka no edges have been claimed
             #the AI wants to draw cards until the other player claims a track, because its bad to guess what the other
             #player is trying to complete before they have even claimed a track
             player.addCardToHand('black')
             player.addCardToHand('white')
-            return ['draw t']'''
+            return ['draw t']
 
-        wanted = UtrackArray[0][1]
         wantedIndex = [0, 1]
         wantedIndexes = []
 
+        ## Pick the location based the lowest total weight of the tracks from a single point and if none of the tracks have been claimed by the opponent
+        smallestInt = 99
+        wantedCity = 0
+
+        for i in range(0, 7):
+            takenCity = 0
+            outgoingWeight = 0
+            city = UtrackArray[i]
+            for j in range(0, 7):
+                if type(city[j]) != int:
+                    if city[j].occupied == "False":
+                        outgoingWeight += city[j].length
+                    elif city[j].occupied == otherPlayer:
+                        takenCity = 1
+                        break
+            if outgoingWeight < smallestInt and outgoingWeight != 0:
+                if takenCity != 1:
+                    smallestInt = outgoingWeight
+                    wantedCity = i
+        print("wantedCity:" + str(wantedCity))
+        print("smallestInt:" + str(smallestInt))
+        if smallestInt == 99:
+            return self.emptyHand(state, player)
 
         ## If you can claim 1 of the tracks
+        x = UtrackArray[wantedCity]
+        for i in range(0,len(x)):
+            if type(x[i]) != int and x[i].occupied != player.name:
+                wantedIndexes.append([i,wantedCity])
 
-
+        wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
+        smallestCardDif = 1000000  # python has not int.max_value so this is a sub
+        # this for loop is the ai deciding which track it is closest to claiming out of the wanted tracks (wantedIndexes)
+        for i in range(len(wantedIndexes)):
+            currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
+            # if the edge length is closest to the amount of that color that this player has in their hand
+            if currentEdge.length - player.handCards.count(currentEdge.color) < smallestCardDif:
+                smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                wanted = currentEdge  ## Set that track to be the wanted edge
+                wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+            elif currentEdge.length - player.handCards.count(currentEdge.color) == smallestCardDif:
+                # if there are multiple shortest tracks it picks one that it has more cards of its color
+                if player.handCards.count(currentEdge.color) > player.handCards.count(wanted.color):
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
+                elif player.handCards.count(currentEdge.color) == player.handCards.count(wanted.color) and randint(0,1) == 1:
+                    smallestCardDif = currentEdge.length - player.handCards.count(currentEdge.color)
+                    wanted = currentEdge
+                    wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
 
         ## Claim the track
         neededCards = []
