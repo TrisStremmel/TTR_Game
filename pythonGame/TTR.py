@@ -14,11 +14,17 @@ from Human import Human
 from Track import Track
 from GameState import GameState
 from datetime import date, datetime
+from ssh import ssh
+
 
 now = datetime.now()
 date = now.strftime("%d.%m.%Y_%H.%M.%S")
 os.makedirs("output_CSVs/" + date)
+os.makedirs("output_CSVs/" + date + '/target')
+os.makedirs("output_CSVs/" + date + '/other')
 currentdirs = "output_CSVs/" + date
+
+
 
 pygame.init()
 warnings.filterwarnings("ignore")
@@ -512,7 +518,7 @@ def getHumanMove():
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(120)
 
 
 def quitGame():
@@ -537,7 +543,7 @@ def titleScreen():
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(120)
 
 def settings():
     global playerMode
@@ -595,7 +601,7 @@ def settings():
                                                  (display_width * (i + 1) / 10 - 6, display_height * 0.2 - 6, 110, 110), 11)
 
             pygame.display.update()
-        clock.tick(60)
+        clock.tick(120)
 
 def gameStart(loopsRemaining=loopFlag):
     loopsRemaining -= 1
@@ -721,7 +727,7 @@ def gameStart(loopsRemaining=loopFlag):
 
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(120)
 
     #check which destination cards are not completed and update player score
     for card in playerOne.getDestCards():
@@ -775,6 +781,9 @@ def gameStart(loopsRemaining=loopFlag):
 
     if loopsRemaining > 0:
         gameStart(loopsRemaining)
+
+    ssh(date, loopFlag)
+
     titleScreen()
     quit()
     # saving full gamestate array to file at end of game
