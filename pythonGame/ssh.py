@@ -1,5 +1,6 @@
 import paramiko
 import time
+import getpass
 
 host = "intuition.thayer.dartmouth.edu"
 port = 22
@@ -12,7 +13,7 @@ port = 22
 class ssh:
     def __init__(self, folder, loops, player1Strat, player2Strat, features):
         username = input("Enter intuition username: ")
-        password = input("Enter intuition password: ")
+        password = getpass.getpass("Enter intuition password: ")
         self.folder = folder
         self.loops = loops
         feat = 'ex' if features == 'extended' else 'lim'
@@ -93,10 +94,11 @@ class ssh:
 
         cdms = ['cd src/C++/DTM/ToyDTMs/', 'python3.8 runRoMDP.py "TTR_auto/{}/{}/target" "TTR_auto/{}/{}/other" "" "" 100 BARON "TTR_auto/{}/{}/output"'.format(folder, features, folder, features, folder, features)]
         print(cdms[1])
-        #cdms = ['cd src/C++/DTM/ToyDTMs/',
-        #        'python3.8 runRoMDP.py "TTR_auto/18.02.2021_14.16.42/target" "TTR_auto/18.02.2021_14.16.42/other" "" "" 100 BARON "TTR_auto/18.02.2021_14.16.42/output"']
-
         ssh.exec_command(';'.join(cdms))
+        time.sleep(5)
+
+        # cdms = ['cd src/C++/DTM/ToyDTMs/',
+        #        'python3.8 runRoMDP.py "TTR_auto/18.02.2021_14.16.42/target" "TTR_auto/18.02.2021_14.16.42/other" "" "" 100 BARON "TTR_auto/18.02.2021_14.16.42/output"']
 
         #cdms = ['ssh {}'.format(node_name)]
         #ssh.exec_command(';'.join(cdms))
