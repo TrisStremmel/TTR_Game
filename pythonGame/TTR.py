@@ -14,6 +14,9 @@ from Human import Human
 from Track import Track
 from GameState import GameState
 from datetime import date, datetime
+from ssh import ssh
+
+
 
 pygame.init()
 warnings.filterwarnings("ignore")
@@ -34,8 +37,9 @@ stratFlag2 = False
 #csvFlag = False
 limitedFlag = False
 extendedFlag = False
+DTMFlag = False
 loopFlag = 1
-numFlags = 6  # increase this with every new flag created
+numFlags = 7  # increase this with every new flag created
 
 if commandlineFlag == 'cmd':
     print("You have chosen to control the settings from the command line, please do not change the settings from the "
@@ -61,6 +65,8 @@ if commandlineFlag == 'cmd':
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # limitedFlag
         settingsCode += SettingTranslate[input("Do you want to generate extended .csv files for this run? "
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # extendedFlag
+        settingsCode += SettingTranslate[input("Do you want to generate the RoMDP for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # DTMFlag
         settingsCode += input("Enter the amount of times you want the game to loop: ").lower().strip()  # loopFlag
         # loop count will always be the last setting
 
@@ -77,6 +83,7 @@ if commandlineFlag == 'cmd':
     #csvFlag = Translate[settingsCode[3]]
     limitedFlag = Translate[settingsCode[3]]
     extendedFlag = Translate[settingsCode[4]]
+    DTMFlag = Translate[settingsCode[5]]
     loopFlag = int(settingsCode[numFlags - 1:])
 
     print("The setting code for this setting configuration is: " + settingsCode)
@@ -86,12 +93,21 @@ print("stratFlag2", stratFlag2)
 #print("csvFlag", csvFlag)
 print("limitedFlag", limitedFlag)
 print("extendedFlag", extendedFlag)
+print("DTMFlag", DTMFlag)
 print("loopFlag", loopFlag)
 
 if limitedFlag or extendedFlag:
     now = datetime.now()
     date = now.strftime("%d.%m.%Y_%H.%M.%S")
     os.makedirs("output_CSVs/" + date)
+    if limitedFlag:
+        os.makedirs("output_CSVs/" + date + "/limited")
+        os.makedirs("output_CSVs/" + date + '/limited/target')
+        os.makedirs("output_CSVs/" + date + '/limited/other')
+    if extendedFlag:
+        os.makedirs("output_CSVs/" + date + "/extended")
+        os.makedirs("output_CSVs/" + date + '/extended/target')
+        os.makedirs("output_CSVs/" + date + '/extended/other')
     currentdirs = "output_CSVs/" + date
     print(".csv files will be created at " + currentdirs)
 
@@ -564,7 +580,9 @@ def getHumanMove():
 
         # keeps updating since its stuck in this loop until user clicks
         pygame.display.update()
-        clock.tick(240)
+
+        clock.tick(120)
+
 
 
 def quitGame():
@@ -590,7 +608,8 @@ def titleScreen():
         button("Quit", 20, display_width * 0.45, display_height * 0.6, 200, 75, red, darkRed, quitGame)
 
         pygame.display.update()
-        clock.tick(240)
+
+        clock.tick(120)
 
 
 def settings():
@@ -652,7 +671,8 @@ def settings():
                                                  11)
 
             pygame.display.update()
-        clock.tick(240)
+
+        clock.tick(120)
 
 
 def gameStart():
@@ -780,7 +800,6 @@ def gameStart():
 
             # GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
             currentTurn.incrementTurn()
-
             pygame.display.update()
             clock.tick(240)
 
@@ -867,13 +886,23 @@ def gameStart():
         gameStart(loopsRemaining)'''
     if commandlineFlag == 'gui':
         titleScreen()
-    quit()
+        quit()
+
     # saving full gamestate array to file at end of game
     # np.save(os.getcwd()+'/saves/save.npy', np.array(GameStateArray))
 
 
 if commandlineFlag == 'cmd':
     gameStart()
+    if DTMFlag:
+        pygame.quit()
+        if limitedFlag:
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "limited")
+        if extendedFlag:
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "extended")
+
+    quit()
+
 titleScreen()
 settings()
 gameStart()
