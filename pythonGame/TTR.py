@@ -14,8 +14,8 @@ from Human import Human
 from Track import Track
 from GameState import GameState
 from datetime import date, datetime
-from ssh import ssh
-
+from ssh import ssh, test
+import getpass
 
 
 pygame.init()
@@ -104,14 +104,23 @@ if limitedFlag or extendedFlag:
         os.makedirs("output_CSVs/" + date + "/limited")
         os.makedirs("output_CSVs/" + date + '/limited/target')
         os.makedirs("output_CSVs/" + date + '/limited/other')
+        os.makedirs("output_CSVs/" + date + '/limited/DTM')
     if extendedFlag:
         os.makedirs("output_CSVs/" + date + "/extended")
         os.makedirs("output_CSVs/" + date + '/extended/target')
         os.makedirs("output_CSVs/" + date + '/extended/other')
+        os.makedirs("output_CSVs/" + date + "/extended/DTM")
     currentdirs = "output_CSVs/" + date
     print(".csv files will be created at " + currentdirs)
 
 if commandlineFlag == 'cmd':
+    if DTMFlag:
+        check = False
+        while not check:
+            username = input("Enter intuition username: ")
+            password = getpass.getpass("Enter intuition password: ")
+            if test(username, password).test():
+                check = True
     input("Press enter to begin")
 
 # sets the window size to 800x600px
@@ -897,9 +906,9 @@ if commandlineFlag == 'cmd':
     if DTMFlag:
         pygame.quit()
         if limitedFlag:
-            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "limited")
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "limited", username, password)
         if extendedFlag:
-            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "extended")
+            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "extended", username, password)
 
     quit()
 

@@ -1,24 +1,22 @@
 import paramiko
 import time
 import getpass
+import gzip
+import shutil
+import os
+
+from paramiko import AuthenticationException
 
 host = "intuition.thayer.dartmouth.edu"
 port = 22
-#username = "****"
-#password = "****"
 
-
-
-# python3.8 runRoMDP.py "TTR_auto/16.02.2021_15.34.17/target" "TTR_auto/16.02.2021_15.34.17/other" "" "" 100 BARON "TTR_auto/16.02.2021_15.34.17/output"
 class ssh:
-    def __init__(self, folder, loops, player1Strat, player2Strat, features):
-        username = input("Enter intuition username: ")
-        password = getpass.getpass("Enter intuition password: ")
+    def __init__(self, folder, loops, player1Strat, player2Strat, features, username, password):
+        self.username = username
+        self.password = password
         self.folder = folder
         self.loops = loops
         feat = 'ex' if features == 'extended' else 'lim'
-
-
         target = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/target/'.format(username, folder, features)
         other = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/other/'.format(username, folder, features)
 
@@ -57,7 +55,6 @@ class ssh:
 
         cdms = ['cd src/C++/DTM/ToyDTMs/TTR_auto', 'mkdir {}'.format(folder), 'cd {}'.format(folder),
                 'mkdir {}'.format(features), 'cd {}'.format(features), 'mkdir {}'.format('target'), 'mkdir {}'.format('other')]
-        print(str(cdms))
         stdin, stdout, stderr = ssh.exec_command(';'.join(cdms))
         print('Made ' + str(folder) + ' folder inside TTR_auto')
 
@@ -90,48 +87,43 @@ class ssh:
                 'output_CSVs/{}/{}_{}_{}.csv'.format(folder, player2Strat, feat, x),
                 other + '/{}_{}_{}.csv'.format(player2Strat, feat, x))
 
-        sftp.close()
-
         cdms = ['cd src/C++/DTM/ToyDTMs/', 'python3.8 runRoMDP.py "TTR_auto/{}/{}/target" "TTR_auto/{}/{}/other" "" "" 100 BARON "TTR_auto/{}/{}/output"'.format(folder, features, folder, features, folder, features)]
-        print(cdms[1])
         ssh.exec_command(';'.join(cdms))
         time.sleep(5)
 
-        # cdms = ['cd src/C++/DTM/ToyDTMs/',
-        #        'python3.8 runRoMDP.py "TTR_auto/18.02.2021_14.16.42/target" "TTR_auto/18.02.2021_14.16.42/other" "" "" 100 BARON "TTR_auto/18.02.2021_14.16.42/output"']
+        fileNames = ["res.lst", "RoMDP-BARON.graphml.gz", "RoMDP-BARON.lp", "RoMDP_analytics-BARON.compressed_pickle",
+                     "RoMDP_mappings-BARON.csv.gz", "RoMDP_probabilities-BARON.csv.gz", "RoMDP_rewards_BARON.csv.gz",
+                     "RoMDP_soln-BARON.csv.gz", "sum.lst", "tim.lst"]
 
-        #cdms = ['ssh {}'.format(node_name)]
-        #ssh.exec_command(';'.join(cdms))
-        #cdms = ['cd src/C++/DTM/ToyDTMs/', 'python3.8 runRoMDP.py \"TTR_auto/{}/target\" \"TTR_auto/{}/other\" \"\" \"\" 100 BARON \"TTR_auto/{}/output\"'.format(folder, folder, folder)]
-        #ssh.exec_command(';'.join(cdms))
-
-        #cdms = ['ssh {}'.format(node_name), 'cd src/C++/DTM/ToyDTMs/', 'python3.8 runRoMDP.py "TTR_auto/16.02.2021_15.51.38/target" "TTR_auto/16.02.2021_15.51.38/other" "" "" 100 BARON "TTR_auto/16.02.2021_15.51.38/output"']
-        #print(str(cdms))
-        #stdin, stdout, stderr = ssh.exec_command(';'.join(cdms))
-
-
-
-        #sftp.get(
-        #    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/16.02.2021_16.57.46/output-BARON/RoMDP-BARON.graphml.gz'.format(username),
-        #    'output_CSVs/16.02.2021_16.57.46/output-BARON/RoMDP-BARON.graphml.gz')
-        #sftp.get(
-        #    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/output-RoMDP-BARON'.format(username, folder),
-        #    'output_CSVs/{}/output-RoMDP-BARON').format(folder)
-
-        #sftp.get(
-        #    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/16.02.2021_16.32.02/output-BARON'.format(username),
-        #    'output_CSVs/16.02.2021_16.32.02/output-BARON')
-        #sftp.get(
-        #    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/16.02.2021_16.32.02/output-RoMDP-BARON'.format(username),
-        #    'output_CSVs/16.02.2021_16.32.02/output-RoMDP-BARON')
+        for file in fileNames:
+            sftp.get(
+                '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/output-RoMDP-BARON/{}'.format(username, folder, features, file),
+                'output_CSVs/{}/{}/DTM/{}'.format(folder, features, file))
+            if file[-2:] == "gz":
+                with gzip.open('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file), 'rb') as f_in:
+                    with open('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file[:-3]), 'wb') as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                os.remove('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file))
 
         sftp.close()
         ssh.close()
         server_ssh.close()
 
         #14511110
-        '''
-        
-        '''
         #/src/C++/DTM/ToyDTMs/TTR_auto
-        #python3.8 runRoMDP.py "TTR_auto/18.02.2021_14.16.42/target" "TTR_auto/18.02.2021_14.16.42/other" "" "" 100 BARON "TTR_auto/18.02.2021_14.16.42/output"
+
+class test:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def test(self):
+        try:
+            server_ssh = paramiko.SSHClient()
+            server_ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy)
+            server_ssh.connect(host, port, self.username, self.password)
+            server_ssh.close()
+            return True
+        except AuthenticationException:
+            print("Wrong username or password")
+            return False
