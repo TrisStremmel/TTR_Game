@@ -27,6 +27,7 @@ SettingTranslate = {'yes': '1', 'no': '0', 'none': 'n'}
 stratList = ['emptyHand', 'readBlock', 'blindDestination', 'longestFirst', 'ironEmpire', 'pickyConductor']
 for index in range(len(stratList)):
     SettingTranslate[stratList[index].lower()] = str(index)
+    SettingTranslate[str(index)] = str(index)
 
 commandlineFlag = input("Do you want to play the game using the Graphical User Interface or control it from "
                         "the command line? (type \'cmd\' or \'gui\'): ").lower().strip()
@@ -65,8 +66,11 @@ if commandlineFlag == 'cmd':
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # limitedFlag
         settingsCode += SettingTranslate[input("Do you want to generate extended .csv files for this run? "
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # extendedFlag
-        settingsCode += SettingTranslate[input("Do you want to generate the RoMDP for this run? "
-                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # DTMFlag
+        if Translate[settingsCode[3]] or Translate[settingsCode[4]]:  # only ask to gen DTM if some csvs were generated
+            settingsCode += SettingTranslate[input("Do you want to generate the RoMDP for this run? "
+                                                   "(type \'yes\' or \'no\'): ").lower().strip()]  # DTMFlag
+        else:
+            settingsCode += '0'
         settingsCode += input("Enter the amount of times you want the game to loop: ").lower().strip()  # loopFlag
         # loop count will always be the last setting
 
@@ -801,7 +805,7 @@ def gameStart():
             # GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
             currentTurn.incrementTurn()
             pygame.display.update()
-            clock.tick(240)
+            clock.tick(120)
 
         # check which destination cards are not completed and update player score
         for card in playerOne.getDestCards():
