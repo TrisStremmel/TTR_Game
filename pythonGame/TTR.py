@@ -890,7 +890,7 @@ def gameStart():
         else:
             if playerMode == 'AI vs AI':
                 print("So far " + stratFlag1 + " has won " + str(s1Wins) + " times, and " + stratFlag2 + " has won "
-                      + str(s2Wins) + " time and there have been " + str(ties) + " ties.")
+                      + str(s2Wins) + " times and there have been " + str(ties) + " ties.")
             else:
                 print("So far player one has won " + str(s1Wins) + " times, and player two has won " +
                   str(s2Wins) + " times and there have been " + str(ties) + " ties.")

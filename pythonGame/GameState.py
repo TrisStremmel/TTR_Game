@@ -161,9 +161,9 @@ class GameState:
                          ]
         if limitedFlag:
             self.append_list_as_row(self.player1lim, limitedP1Data)
-            print("csv based on gameState for player 1 was successfully updated at: " + self.player1lim)
+            #print("csv based on gameState for player 1 was successfully updated at: " + self.player1lim)
             self.append_list_as_row(self.player2lim, limitedP2Data)
-            print("csv based on gameState for player 2 was successfully updated at: " + self.player2lim)
+            #print("csv based on gameState for player 2 was successfully updated at: " + self.player2lim)
             destination = "/some_file_location"
 
         dcardNames1 = ""
@@ -234,9 +234,9 @@ class GameState:
                         ]
         if extendedFlag:
             self.append_list_as_row(self.player1ex, robustP1Data)
-            print("csv based on gameState for player 1 was successfully updated at: " + self.player1ex)
+            #print("csv based on gameState for player 1 was successfully updated at: " + self.player1ex)
             self.append_list_as_row(self.player2ex, robustP2Data)
-            print("csv based on gameState for player 2 was successfully updated at: " + self.player2ex)
+            #print("csv based on gameState for player 2 was successfully updated at: " + self.player2ex)
             destination = "/some_file_location"
 
 

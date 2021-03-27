@@ -75,9 +75,9 @@ class Strategy:
                     break
 
         ## if no
-        ## If it is still possible to complete a remaining dest card
+        ## If it is still possible to complete half of the remaining dest cards
         if targetDCard is None:  # if there are no destcards in its hand that it can complete
-            # checks to make sure it it possible to complete ANY remaining destCards, if not it follows
+            # checks to make sure it it possible to complete more then half of the remaining destCards, if not it follows
             # the emptyhand strat, if there is a destcard it can complete it draws another dest card.
             possibleCompletionArray = []  # [0] * 9
             for x in range(len(destinationDeck)):
@@ -93,14 +93,18 @@ class Strategy:
                 # possibleCompletionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
                 possibleCompletionArray.append(temp[cityIndices[destinationDeck[x][1]]])
 
-            # the completionArray holds values equal to how close the AI is to completing each of the destination cards
-            # for example if completionArray[1] = 3 then it is only 3 track lengths away from completing
+            # the possibleCompletionArray holds values equal to how close the AI is to completing each of the destination cards
+            # for example if possibleCompletionArray[1] = 3 then it is only 3 track lengths away from completing
             # the destination card from texas to colorado
-
-            print("completionArray", possibleCompletionArray)
-            if all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
-                print("No destination cards left so it now follows empty hand strategy to avoid errors")
-                ## Else: follow empty hand
+            possibleCompletions = 0
+            for k in range(len(possibleCompletionArray)):
+                if 1000 > possibleCompletionArray[k] > 0:
+                    possibleCompletions += 1
+            #print("possibleCompletionArray", possibleCompletionArray)
+            #print("possibleCompletions", possibleCompletions)
+            if possibleCompletions < 5:  # if less then half of the d-cards are not able to be completed
+                # all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
+                print("Less then half destination cards left can be completed so it now follows empty hand strategy")
                 return self.emptyHand(state, player)
             else:
                 ## draw a new destination card
@@ -110,7 +114,7 @@ class Strategy:
 
         ## If yes: Survey the game board and use Dijkstra to find the shortest track corresponding to the destination card.
 
-        print("targetDCard ", targetDCard.toString())
+        #print("targetDCard ", targetDCard.toString())
         '''dijkstraResult = self.dijkstra(cityIndices[targetDCard.city1], tempArray)
         distance = dijkstraResult[0][cityIndices[targetDCard.city2]]'''
         # Run dijkstra to find the shortest path to complete the target destCard
@@ -124,7 +128,7 @@ class Strategy:
         for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
             if toClaim[x] == 0:
                 toClaim[x] = -1
-        print("toClaim", toClaim)
+        #print("toClaim", toClaim)
 
         while finalIndex != -1 and toClaim[
             finalIndex] != -1:  # type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
@@ -156,7 +160,7 @@ class Strategy:
         #remove cards in hand from neededCards (you dont need cards that you already have)
         numblackCards = 0
         numwhiteCards = 0
-        print("neededCards", neededCards) # 14301
+        #print("neededCards", neededCards) # 14301
         for i in range(len(player.handCards)):
             if player.handCards[i].color == 'black':
                 numblackCards += 1
@@ -170,7 +174,7 @@ class Strategy:
             neededCards.remove('white')
             numwhiteCards -= 1
 
-        print("neededCards", neededCards)
+        #print("neededCards", neededCards)
 
         ##check if it already has all of the cards in that list
         #can by looking at neededCards after removing the ones you have (if its empty then you have all you need)
@@ -215,52 +219,6 @@ class Strategy:
 
         return ['draw t']
 
-        '''
-        wanted = UtrackArray[wantedIndexes[0][0]][wantedIndexes[0][1]]
-        wantedIndex = []
-        shortestLength = 99
-        for i in range(0, len(wantedIndexes)):
-            currentEdge = UtrackArray[wantedIndexes[i][0]][wantedIndexes[i][1]]
-            if currentEdge.length < shortestLength:
-                shortestLength = currentEdge.length
-                wanted = currentEdge
-                wantedIndex = wantedIndexes[i]
-
-        neededCards = []
-        for card in player.handCards:
-            if card.color == wanted.color:
-                neededCards.append(card)
-                
-        for toRemove in neededCards:
-                player.handCards.remove(toRemove)
-            player.cardIndex = len(player.handCards)  # prob useless if I had to guess
-            # wantedIndex.reverse()
-            if wantedIndex[0] > wantedIndex[1]:
-                wantedIndex[0], wantedIndex[1] = wantedIndex[1], wantedIndex[0]
-            return ['claim', wantedIndex]
-            
-        player.addCardToHand(wanted.color)  
-        if len(neededCards) + 1 == wanted.length:  # if the ai only needed one card to claim the track it wants
-            # then it draws a color of another track it needs along the shortest path
-            colorsAvail = []
-            for i in range(0, len(edges)):
-                if edges[i].occupied == 'False' and not colorsAvail.__contains__(edges[i].color):
-                    colorsAvail.append(edges[i].color)
-            wantedColor = colorsAvail[randint(0, len(colorsAvail) - 1)]  # randomness (stretch goal)
-
-            colorsAlongPath = []
-            for i in range(len(wantedIndexes)):
-                if wantedIndexes[i] != wantedIndex:
-                    edge = wantedIndexes[i]
-                    if not colorsAlongPath.__contains__(UtrackArray[edge[0]][edge[1]].color):
-                        colorsAlongPath.append(UtrackArray[edge[0]][edge[1]].color)
-            if len(colorsAlongPath) != 0:
-                wantedColor = colorsAlongPath[randint(0, len(colorsAlongPath) - 1)]
-
-            player.addCardToHand(wantedColor)
-
-        else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
-            player.addCardToHand(wanted.color)  '''
 
     def ironEmpire(self, state, player):
         otherPlayer = 'playerOne' if player.name == 'playerTwo' else 'playerTwo'
@@ -303,8 +261,8 @@ class Strategy:
                 if takenCity != 1:
                     smallestInt = outgoingWeight
                     wantedCity = i
-        print("wantedCity:" + str(wantedCity))
-        print("smallestInt:" + str(smallestInt))
+        #print("wantedCity:" + str(wantedCity))
+        #print("smallestInt:" + str(smallestInt))
         if smallestInt == 99:
             return self.emptyHand(state, player)
 
@@ -537,7 +495,7 @@ class Strategy:
         #for example if completionArray[1] = 3 then the other player is only 3 track lengths away from completing
         #the destination card from texas to colorado
 
-        print("completionArray", completionArray)
+        #print("completionArray", completionArray)
         if all((x == 0 or x >= 99) for x in completionArray):  # if the other play is unable to complete ANY dest cards
             print("No destination cards left so it now follows empty hand strategy to avoid errors")
             return self.emptyHand(state, player)
@@ -563,8 +521,8 @@ class Strategy:
                 minDestIndex = minArray[x]
         #for loop finds the dest card in the minArray worth the most, sets its index to minDestIndex and the length to minDestCost
 
-        print("minDestIndex", minDestIndex)
-        print("minDestCost", minDestCost)
+        #print("minDestIndex", minDestIndex)
+        #print("minDestCost", minDestCost)
         toClaim = self.dijkstra(destinationDeck[minDestIndex][0], tempArray)[1]
         #toClaim is the toClaimTrack array returned by dijkstra when run starting from the first city on the destination
         # card that is the closet to being completed (tie broke by card point value)
@@ -576,10 +534,10 @@ class Strategy:
         for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
             if toClaim[x] == 0:
                 toClaim[x] = -1
-        print("toClaim", toClaim)
+        #print("toClaim", toClaim)
 
         while finalIndex != -1 and toClaim[finalIndex] != -1:#type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
-            print("Final index", finalIndex)
+            #print("Final index", finalIndex)
             checkIndex = deepcopy(toClaim[finalIndex])
             if checkIndex[0] > checkIndex[1]:
                 checkIndex[0], checkIndex[1] = checkIndex[1], checkIndex[0]
@@ -596,7 +554,7 @@ class Strategy:
         #called wantedIndexes. The strategies wants to claim these tracks because it will allow the ai to block the
         #other player from completing the dest card it is closest to completing.
 
-        print("wantedIndexes", wantedIndexes)
+        #print("wantedIndexes", wantedIndexes)
         '''smallestEdgeLength = 99
         smallestEdge = -1
         wantedIndex = []
@@ -629,7 +587,7 @@ class Strategy:
                     wanted = currentEdge
                     wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
 
-        print("wantedIndex", wantedIndex)
+        #print("wantedIndex", wantedIndex)
         neededCards = []
         for card in player.handCards:
             if card.color == wanted.color:
@@ -654,10 +612,10 @@ class Strategy:
         else:  # if it needs more then one more then draw a 2nd card of the color of the track it wants
             player.addCardToHand(wanted.color)
 
-        print("after drawing AI's hand is: ", end='')
+        '''print("after drawing AI's hand is: ", end='')
         for card in player.handCards:
             print(card.color, end=' ')
-        print()
+        print()'''
 
         return ['draw t']
 
@@ -673,10 +631,10 @@ class Strategy:
         if len(edges) == 0:
             return ['pass']  # game is actually already over
 
-        print("the AI's dCards are: ", end='')
+        '''print("the AI's dCards are: ", end='')
         for card in player.destinationCards:
             print(card.toString(), end=' ')
-        print()
+        print()'''
 
         tempArray = deepcopy(UtrackArray)
         for i in range(len(tempArray)):
@@ -735,7 +693,7 @@ class Strategy:
 
         ## if not
         if targetDCard is None:  # if there are no destcards in its hand that it can complete
-            #checks to make sure it it possible to complete ANY remaining destCards, if not it follows
+            #checks to make sure it it possible to complete half of the remaining destCards, if not it follows
             # the emptyhand strat, if there is a destcard it can complete it draws another dest card.
             possibleCompletionArray = []  # [0] * 9
             for x in range(len(destinationDeck)):
@@ -751,20 +709,25 @@ class Strategy:
                 #possibleCompletionArray[x] = temp[cityIndices[destinationDeck[x][1]]]
                 possibleCompletionArray.append(temp[cityIndices[destinationDeck[x][1]]])
 
-            # the completionArray holds values equal to how close the AI is to completing each of the destination cards
-            # for example if completionArray[1] = 3 then it is only 3 track lengths away from completing
+            # the possibleCompletionArray holds values equal to how close the AI is to completing each of the destination cards
+            # for example if possibleCompletionArray[1] = 3 then it is only 3 track lengths away from completing
             # the destination card from texas to colorado
-
-            print("completionArray", possibleCompletionArray)
-            if all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
-                print("No destination cards left so it now follows empty hand strategy to avoid errors")
+            possibleCompletions = 0
+            for k in range(len(possibleCompletionArray)):
+                if 1000 > possibleCompletionArray[k] > 0:
+                    possibleCompletions += 1
+            #print("possibleCompletionArray", possibleCompletionArray)
+            #print("possibleCompletions", possibleCompletions)
+            if possibleCompletions < 5:  # if less then half of the d-cards are not able to be completed
+                #all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
+                print("Less then half destination cards left can be completed so it now follows empty hand strategy")
                 return self.emptyHand(state, player)
             else:
                 ## Draw a dCard
                 player.addDestCardToHand()
                 return ['draw d']
 
-        print("targetDCard ", targetDCard.toString())
+        #print("targetDCard ", targetDCard.toString())
         '''dijkstraResult = self.dijkstra(cityIndices[targetDCard.city1], tempArray)
         distance = dijkstraResult[0][cityIndices[targetDCard.city2]]'''
         ## Run dijkstra to find the shortest path to complete the target destCard
@@ -778,7 +741,7 @@ class Strategy:
         for x in range(len(toClaim)):  # for loop makes it so the while loop bellow does not break
             if toClaim[x] == 0:
                 toClaim[x] = -1
-        print("toClaim", toClaim)
+        #print("toClaim", toClaim)
 
         while finalIndex != -1 and toClaim[finalIndex] != -1:  # type(finalIndex) != int and type(toClaim[finalIndex]) != int:#
             #print("Final index", finalIndex)
@@ -821,7 +784,7 @@ class Strategy:
                     wantedIndex = [wantedIndexes[i][0], wantedIndexes[i][1]]
         ## Find the track (edge) along the shortest path that it is closest to claiming
 
-        print("wantedIndex", wantedIndex)
+        #print("wantedIndex", wantedIndex)
         neededCards = []
         ## If it can claim the wanted edge
         for card in player.handCards:
@@ -894,10 +857,10 @@ class Strategy:
             '''
         else:  # if it needs more then one more: draw a 2nd card of the color of the track it wants
             player.addCardToHand(wanted.color)  ## Draw cards of the color of that track
-        print("after drawing AI's hand is: ", end='')
+        '''print("after drawing AI's hand is: ", end='')
         for card in player.handCards:
             print(card.color, end=' ')
-        print()
+        print()'''
 
         return ['draw t']
 
