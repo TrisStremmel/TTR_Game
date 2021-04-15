@@ -64,8 +64,8 @@ class Player:
                 if self.DFS(tempArray, cityIndices[dCard.city1], cityIndices[dCard.city2], [False] * len(cityConnection)):
                     self.points += dCard.getPoints()
                     dCard.completed = True
-                    print(self.name + " completed the destination card from " + dCard.city1 + " to " + dCard.city2 +
-                          " for " + str(dCard.getPoints()) + " points.")
+                    #print(self.name + " completed the destination card from " + dCard.city1 + " to " + dCard.city2 +
+                    #      " for " + str(dCard.getPoints()) + " points.")
 
     def getCardIndex(self):
         return self.cardIndex

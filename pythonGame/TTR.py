@@ -14,10 +14,11 @@ from Human import Human
 from Track import Track
 from GameState import GameState
 from datetime import date, datetime
-from ssh import ssh, test
+import time
+from newSSH import newSSH, test
 import getpass
 
-
+startTime = time.time()
 pygame.init()
 warnings.filterwarnings("ignore")
 
@@ -38,9 +39,10 @@ stratFlag2 = False
 #csvFlag = False
 limitedFlag = False
 extendedFlag = False
+hybridFlag = False
 DTMFlag = False
 loopFlag = 1
-numFlags = 7  # increase this with every new flag created
+numFlags = 8  # increase this with every new flag created
 
 if commandlineFlag == 'cmd':
     print("You have chosen to control the settings from the command line, please do not change the settings from the "
@@ -66,7 +68,9 @@ if commandlineFlag == 'cmd':
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # limitedFlag
         settingsCode += SettingTranslate[input("Do you want to generate extended .csv files for this run? "
                                                "(type \'yes\' or \'no\'): ").lower().strip()]  # extendedFlag
-        if Translate[settingsCode[3]] or Translate[settingsCode[4]]:  # only ask to gen DTM if some csvs were generated
+        settingsCode += SettingTranslate[input("Do you want to generate hybrid .csv files for this run? "
+                                               "(type \'yes\' or \'no\'): ").lower().strip()]  # hybridFlag
+        if Translate[settingsCode[3]] or Translate[settingsCode[4]] or Translate[settingsCode[5]]:  # only ask to gen DTM if some csvs were generated
             settingsCode += SettingTranslate[input("Do you want to generate the RoMDP for this run? "
                                                    "(type \'yes\' or \'no\'): ").lower().strip()]  # DTMFlag
         else:
@@ -87,7 +91,8 @@ if commandlineFlag == 'cmd':
     #csvFlag = Translate[settingsCode[3]]
     limitedFlag = Translate[settingsCode[3]]
     extendedFlag = Translate[settingsCode[4]]
-    DTMFlag = Translate[settingsCode[5]]
+    hybridFlag = Translate[settingsCode[5]]
+    DTMFlag = Translate[settingsCode[6]]
     loopFlag = int(settingsCode[numFlags - 1:])
 
     print("The setting code for this setting configuration is: " + settingsCode)
@@ -97,6 +102,7 @@ print("stratFlag2", stratFlag2)
 #print("csvFlag", csvFlag)
 print("limitedFlag", limitedFlag)
 print("extendedFlag", extendedFlag)
+print("hybridFlag", hybridFlag)
 print("DTMFlag", DTMFlag)
 print("loopFlag", loopFlag)
 
@@ -108,12 +114,17 @@ if limitedFlag or extendedFlag:
         os.makedirs("output_CSVs/" + date + "/limited")
         os.makedirs("output_CSVs/" + date + '/limited/target')
         os.makedirs("output_CSVs/" + date + '/limited/other')
-        os.makedirs("output_CSVs/" + date + '/limited/DTM')
+        #os.makedirs("output_CSVs/" + date + '/limited/DTM')
     if extendedFlag:
         os.makedirs("output_CSVs/" + date + "/extended")
         os.makedirs("output_CSVs/" + date + '/extended/target')
         os.makedirs("output_CSVs/" + date + '/extended/other')
-        os.makedirs("output_CSVs/" + date + "/extended/DTM")
+        #os.makedirs("output_CSVs/" + date + "/extended/DTM")
+    if hybridFlag:
+        os.makedirs("output_CSVs/" + date + "/hybrid")
+        os.makedirs("output_CSVs/" + date + '/hybrid/target')
+        os.makedirs("output_CSVs/" + date + '/hybrid/other')
+        #os.makedirs("output_CSVs/" + date + "/hybrid/DTM")
     currentdirs = "output_CSVs/" + date
     print(".csv files will be created at " + currentdirs)
 
@@ -224,7 +235,7 @@ s2Wins = 0
 ties = 0
 
 
-def createPlayers(flip):
+def createPlayers():
     global playerOne, playerTwo, playerMode
 
     if playerMode == 'Human vs AI':
@@ -232,19 +243,19 @@ def createPlayers(flip):
     elif playerMode == 'AI vs AI':
         # flips strat1 and strat2 when you have looped 1/2 of then amount of total runs so each
         # strat goes first an equal amount of times
-        if flip:
+        '''if flip:
             playerOne = AI('playerOne', stratFlag2 if stratFlag2 else None)
-        else:
-            playerOne = AI('playerOne', stratFlag1 if stratFlag1 else None)
+        else:'''
+        playerOne = AI('playerOne', stratFlag1 if stratFlag1 else None)
 
 
     # flips strat1 and strat2 when you have looped 1/2 of then amount of total runs so each
     # strat goes first an equal amount of times
-    if flip:
+    '''if flip:
         # stratFlag will be False or the name of the strat, since strings equate to True this code works
         playerTwo = AI('playerTwo', stratFlag1 if stratFlag1 else None)
-    else:
-        playerTwo = AI('playerTwo', stratFlag2 if stratFlag2 else None)
+    else:'''
+    playerTwo = AI('playerTwo', stratFlag2 if stratFlag2 else None)
 
     playerOne.addDestCardToHand()
     playerTwo.addDestCardToHand()
@@ -494,8 +505,7 @@ def claimTrack(track, row, playerName):  # player name variable is just for prin
             top = track.getTop() + (track.getPerY() * pri * .8)
             screen.blit(trackImgFin, (left, top))
 
-    print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[
-        track.getEdgeData()[1]])
+    #print(playerName + " claimed tracks between " + cityNames[track.getEdgeData()[0]] + " and " + cityNames[track.getEdgeData()[1]])
 
 
 def drawCard(color):
@@ -691,11 +701,11 @@ def settings():
 def gameStart():
     '''loopsRemaining=loopFlag'''
     for loops in range(0, loopFlag):
-        flipper = True if loopFlag > 1 and loops >= loopFlag/2 else False
+        #flipper = True if loopFlag > 1 and loops >= loopFlag/2 else False
         '''loopsRemaining -= 1'''
 
         global playerMode, s1Wins, s2Wins, ties
-        createPlayers(flipper)
+        createPlayers()
         currentTurn = GameState(1, cityConnection, playerOne, playerTwo)
 
         screen.fill(white)
@@ -709,8 +719,8 @@ def gameStart():
         # game state array for saving every turn
         # GameStateArray = []
 
-        if limitedFlag or extendedFlag:
-            currentTurn.createCSVs(currentdirs, loops+1, limitedFlag, extendedFlag)
+        if limitedFlag or extendedFlag or hybridFlag:
+            currentTurn.createCSVs(currentdirs, loops+1, limitedFlag, extendedFlag, hybridFlag)
 
         while running:
 
@@ -749,7 +759,7 @@ def gameStart():
                                 break  # ima do my best to explain this quick: because the track data array is filled "wrong" it has some -1 values in
                                 # it so row is equal to -1 sometimes and you cannot get edge data of a non track obj
 
-            print("Player one chose to " + currentTurn.getP1Move())
+            #print("Player one chose to " + currentTurn.getP1Move())
             # updating the game state based on player one's move
             playerOne.checkDestCardCompletion(
                 cityConnection)  # this will update the players points if a dcard was completed
@@ -777,7 +787,7 @@ def gameStart():
                                 claimTrack(trackDataArray[row][0], row, "Player two")  # updates track data array
                                 break
 
-            print("Player two chose to " + currentTurn.getP2Move())
+            #print("Player two chose to " + currentTurn.getP2Move())
             # updating the game state based on player two's move
             # remember to update trackDataArray when AI makes move since it affects the player (yep i did, that's done above)
             playerTwo.checkDestCardCompletion(
@@ -808,8 +818,8 @@ def gameStart():
 
             # save each turn for debugging/prototyping
             # currentTurn.writeToNPY()
-            if limitedFlag or extendedFlag:
-                currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
+            if limitedFlag or extendedFlag or hybridFlag:
+                currentTurn.writeToCSV(limitedFlag, extendedFlag, hybridFlag)  # btw you def want this before you increment the turn
 
             # GameStateArray.append(currentTurn.returnListedforP())  # used for alex's numpy stuff i think, if not idk what its for
             currentTurn.incrementTurn()
@@ -830,24 +840,18 @@ def gameStart():
 
         currentTurn.addFinalScores(playerOne, playerTwo)
 
-        if limitedFlag or extendedFlag:
-            currentTurn.writeToCSV(limitedFlag, extendedFlag)  # btw you def want this before you increment the turn
+        if limitedFlag or extendedFlag or hybridFlag:
+            currentTurn.writeToCSV(limitedFlag, extendedFlag, hybridFlag)  # btw you def want this before you increment the turn
 
         # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
         if playerOne.points > playerTwo.points:
             print("Player one won with " + str(playerOne.points) + " over player two who had " + str(
                 playerTwo.points) + ".")
-            if flipper:  #tracks how many times a strat has won, now how many times the "player" who went 1st won
-                s2Wins += 1
-            else:
-                s1Wins += 1
+            s1Wins += 1
         elif playerOne.points < playerTwo.points:
             print("Player two won with " + str(playerTwo.points) + " over player one who had " + str(
                 playerOne.points) + ".")
-            if flipper:
-                s1Wins += 1
-            else:
-                s2Wins += 1
+            s2Wins += 1
         else:  # then test number of destination cards as a tie breaker
             p1DCount = 0
             for dCard in playerOne.destinationCards:
@@ -862,24 +866,18 @@ def gameStart():
                     playerTwo.points) + " because player one completed " + str(p1DCount) + " destination cards"
                                                                                            " compared to player two who only completed " + str(
                     p2DCount) + " destination cards.")
-                if flipper:
-                    s2Wins += 1
-                else:
-                    s1Wins += 1
+                s1Wins += 1
             elif p1DCount < p2DCount:
                 print("Player two won with " + str(playerTwo.points) + " over player one who also had " + str(
                     playerOne.points) + " because player two completed " + str(p2DCount) + " destination cards"
                                                                                            " compared to player one who only completed " + str(
                     p1DCount) + " destination cards.")
-                if flipper:
-                    s1Wins += 1
-                else:
-                    s2Wins += 1
+                s2Wins += 1
             else:
                 print("It was a draw! Both players had " + str(playerTwo.points) + " points and completed " + str(p2DCount)
                       + " destination cards.")
                 ties += 1
-        print("PlayerOne uses " + playerOne.strategy + " and playerTwo uses " + playerTwo.strategy)
+        #print("PlayerOne uses " + playerOne.strategy + " and playerTwo uses " + playerTwo.strategy)
         if ties == 0:
             if playerMode == 'AI vs AI':
                 print("So far " + stratFlag1 + " has won " + str(s1Wins) + " times, and " + stratFlag2 + " has won " + str(
@@ -909,11 +907,21 @@ if commandlineFlag == 'cmd':
     gameStart()
     if DTMFlag:
         pygame.quit()
+        featureList = []
         if limitedFlag:
-            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "limited", username, password)
+            featureList.append("limited")
         if extendedFlag:
-            ssh(date, loopFlag, playerOne.strategy, playerTwo.strategy, "extended", username, password)
+            featureList.append("extended")
+        if hybridFlag:
+            featureList.append("hybrid")
+        time.sleep(1)
+        newSSH(date, loopFlag, playerOne.strategy, playerTwo.strategy, featureList, username, password)
 
+    print("As a reminder your settings code was:", settingsCode)
+    print("As a reminder the folder is named:", date)
+    endTime = time.time()
+
+    print("The code took", int((endTime-startTime)/60), "minuets and", int((endTime-startTime) % 60), "seconds to run")
     quit()
 
 titleScreen()

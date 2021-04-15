@@ -9,7 +9,7 @@ class AI(Player):
         Player.__init__(self, name)
         self.strat = Strategy(sName)
         self.strategy = self.strat.strategyName
-        print(self.name + " follows the " + self.strat.strategyName + " strategy.")
+        #print(self.name + " follows the " + self.strat.strategyName + " strategy.")
 
     def makeMove(self, state):
         return self.strat.makeDecision(state, self)

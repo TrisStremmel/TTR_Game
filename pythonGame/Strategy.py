@@ -104,7 +104,7 @@ class Strategy:
             #print("possibleCompletions", possibleCompletions)
             if possibleCompletions < 5:  # if less then half of the d-cards are not able to be completed
                 # all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
-                print("Less then half destination cards left can be completed so it now follows empty hand strategy")
+                #print("Less then half destination cards left can be completed so it now follows empty hand strategy")
                 return self.emptyHand(state, player)
             else:
                 ## draw a new destination card
@@ -497,7 +497,7 @@ class Strategy:
 
         #print("completionArray", completionArray)
         if all((x == 0 or x >= 99) for x in completionArray):  # if the other play is unable to complete ANY dest cards
-            print("No destination cards left so it now follows empty hand strategy to avoid errors")
+            #print("No destination cards left so it now follows empty hand strategy to avoid errors")
             return self.emptyHand(state, player)
 
         minArray = []
@@ -720,7 +720,7 @@ class Strategy:
             #print("possibleCompletions", possibleCompletions)
             if possibleCompletions < 5:  # if less then half of the d-cards are not able to be completed
                 #all(x >= 99 for x in possibleCompletionArray):  # if it is impossible to complete ANY dest cards
-                print("Less then half destination cards left can be completed so it now follows empty hand strategy")
+                #print("Less then half destination cards left can be completed so it now follows empty hand strategy")
                 return self.emptyHand(state, player)
             else:
                 ## Draw a dCard
