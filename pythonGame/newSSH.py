@@ -17,7 +17,6 @@ class newSSH:
         TTR_auto = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/'.format(username)
         for features in featuresList:
             feat = 'ex' if features == 'extended' else 'lim' if features == 'limited' else 'hy'
-            print(feat)
             target = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/target/'.format(username, folder, features)
             other = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/other/'.format(username, folder, features)
 
@@ -59,14 +58,7 @@ class newSSH:
                 print("failed to send zipped folder to server.")
         print("zipped folder was uploaded to intuition")
 
-        # reconnect to intuition then the node if connection is lost
-        if not self.stillConnected(sshConnection):
-            sftp.close()
-            sshConnection.close()
-            server_ssh.close()
-            server_ssh, sshConnection, sftp = self.establishConnection(username, password)
-
-        time.sleep(min(max(loops/50.0, 5), 60))
+        time.sleep(min(max(loops/25.0, 5), 120))
         # decompress the folder on intuition
         commands = ['cd src/C++/DTM/ToyDTMs/TTR_auto', 'unzip {}.zip -d {}'.format(folder, folder)]
         stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
@@ -79,28 +71,21 @@ class newSSH:
             server_ssh.close()
             server_ssh, sshConnection, sftp = self.establishConnection(username, password)
 
-        time.sleep(min(max(loops/25.0, 5), 120))
-        # delete the compressed folder from intuition
-        commands = ['cd src/C++/DTM/ToyDTMs/TTR_auto', 'rm {}.zip'.format(folder)]
-        stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
-        # print('stdin, stdout, stderr:', stderr)
-
-        # delete the compressed folder from local
-        os.remove('output_CSVs/{}.zip'.format(folder))
+        time.sleep(min(max(loops/10.0, 5), 240))
 
         # run romdp
         for features in featuresList:
             # creates folder for RoMDP output results
             os.makedirs("output_CSVs/{}/{}/RoMDP_output".format(folder, features))
             breaker = False
+            hasFailed = 1
             while not breaker:
                 try:
-                    # reconnect to intuition then the node if connection is lost
-                    if not self.stillConnected(sshConnection):
-                        sftp.close()
-                        sshConnection.close()
-                        server_ssh.close()
-                        server_ssh, sshConnection, sftp = self.establishConnection(username, password)
+                    # reconnect to intuition then the node
+                    sftp.close()
+                    sshConnection.close()
+                    server_ssh.close()
+                    server_ssh, sshConnection, sftp = self.establishConnection(username, password)
 
                     commands = ['cd src/C++/DTM/ToyDTMs/',
                                 'python3.8 runRoMDP.py "TTR_auto/{}/{}/target" "TTR_auto/{}/{}/other" "" "" 100 BARON '
@@ -114,10 +99,10 @@ class newSSH:
                           '"TTR_auto/{}/{}/output" >& "TTR_auto/{}/{}/RunNotes.txt" &'.format(folder, features,
                                                                                               folder, features, folder,
                                                                                               features, folder, features))
-                    print("Waiting", min(max(loops/30.0, 5), 3600),
+                    print("Waiting", min(max(int(loops/30.0), 5), 3600)*hasFailed,
                           "seconds to allow for RoMDP to finish running before trying to retrieve results")
                     #change the 3600 to 600 after I know that 10k can run faster then 1hr
-                    time.sleep(min(max(loops/30.0, 5), 3600))
+                    time.sleep(min(max(int(loops/30.0), 5), 3600)*hasFailed)
 
                     # retrieve dtm output files
                     fileNames = ["res.lst", "RoMDP-BARON.graphml.gz", "RoMDP-BARON.lp",
@@ -154,7 +139,25 @@ class newSSH:
                 except Exception as e:
                     print(e)
                     print('failed to generated RoMDP or retrieve its files, trying again...')
+                    hasFailed = 2
 
+        # reconnect to intuition then the node if connection is lost
+        if not self.stillConnected(sshConnection):
+            sftp.close()
+            sshConnection.close()
+            server_ssh.close()
+            server_ssh, sshConnection, sftp = self.establishConnection(username, password)
+
+
+        '''I want to keep a record of all files for testing and checking for now
+        # delete the compressed folder from intuition
+        commands = ['cd src/C++/DTM/ToyDTMs/TTR_auto', 'rm {}.zip'.format(folder)]
+        stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
+        # print('stdin, stdout, stderr:', stderr)
+
+        # delete the compressed folder from local
+        os.remove('output_CSVs/{}.zip'.format(folder))
+        '''
         sftp.close()
         sshConnection.close()
         server_ssh.close()

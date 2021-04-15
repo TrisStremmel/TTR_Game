@@ -907,6 +907,13 @@ if commandlineFlag == 'cmd':
     gameStart()
     if DTMFlag:
         pygame.quit()
+
+        print("As a reminder your settings code was:", settingsCode)
+        print("As a reminder the folder is named:", date)
+        currentTime = time.time()
+        print("The games took", int((currentTime - startTime) / 60), "minuets and", int((currentTime - startTime) % 60),
+              "seconds to run")
+
         featureList = []
         if limitedFlag:
             featureList.append("limited")
@@ -917,10 +924,13 @@ if commandlineFlag == 'cmd':
         time.sleep(1)
         newSSH(date, loopFlag, playerOne.strategy, playerTwo.strategy, featureList, username, password)
 
+        endTime = time.time()
+        print("The ssh script took", int((endTime - currentTime) / 60), "minuets and", int((endTime - currentTime) % 60),
+              "seconds to run")
+
     print("As a reminder your settings code was:", settingsCode)
     print("As a reminder the folder is named:", date)
     endTime = time.time()
-
     print("The code took", int((endTime-startTime)/60), "minuets and", int((endTime-startTime) % 60), "seconds to run")
     quit()
 
