@@ -68,7 +68,11 @@ class Automation:
             except Exception as e:
                 print(e)
                 failCount += .5
-                print("This is failure number:", (failCount-1)*2)
+                failNumber = (failCount - 1) * 2
+                print("This is failure number:", failNumber)
+                if failNumber >= 5:
+                    print("Since it failed", failNumber, "times, the code will now quit.")
+                    breaker = True
 
     @staticmethod
     def generalAutomation():
@@ -114,7 +118,11 @@ class Automation:
             except Exception as e:
                 print(e)
                 failCount += .5
-                print("This is failure number:", (failCount - 1) * 2)
+                failNumber = (failCount - 1) * 2
+                print("This is failure number:", failNumber)
+                if failNumber >= 5:
+                    print("Since it failed", failNumber, "times, the code will now quit.")
+                    breaker = True
 
     @staticmethod
     def compress_send_decompress(failCount, csvCount, username, password, folder, remoteFolder, localPath):
@@ -240,7 +248,7 @@ class Automation:
         Automation.deleteCompressedFolderRemote(csvCount, username, password, folder, remoteFolder)
 
     @staticmethod
-    def deleteCompressedFolderRemote(csvCount, username, password, folder, remoteFolder, localPath):
+    def deleteCompressedFolderRemote(csvCount, username, password, folder, remoteFolder):
 
         server_ssh, sshConnection, sftp = Automation.establishConnection(username, password)
 
