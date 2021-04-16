@@ -15,7 +15,7 @@ from Track import Track
 from GameState import GameState
 from datetime import date, datetime
 import time
-from newSSH import newSSH, test
+from Automation import Automation, Test
 import getpass
 
 startTime = time.time()
@@ -106,7 +106,7 @@ print("hybridFlag", hybridFlag)
 print("DTMFlag", DTMFlag)
 print("loopFlag", loopFlag)
 
-if limitedFlag or extendedFlag:
+if limitedFlag or extendedFlag or hybridFlag:
     now = datetime.now()
     date = now.strftime("%d.%m.%Y_%H.%M.%S")
     os.makedirs("output_CSVs/" + date)
@@ -134,7 +134,7 @@ if commandlineFlag == 'cmd':
         while not check:
             username = input("Enter intuition username: ")
             password = getpass.getpass("Enter intuition password: ")
-            if test(username, password).test():
+            if Test(username, password).test():
                 check = True
     input("Press enter to begin")
 
@@ -922,7 +922,7 @@ if commandlineFlag == 'cmd':
         if hybridFlag:
             featureList.append("hybrid")
         time.sleep(1)
-        newSSH(date, loopFlag, playerOne.strategy, playerTwo.strategy, featureList, username, password)
+        Automation.TTRAutomation(loopFlag, username, password, date, featureList, playerOne.strategy, playerTwo.strategy)
 
         endTime = time.time()
         print("The ssh script took", int((endTime - currentTime) / 60), "minuets and", int((endTime - currentTime) % 60),

@@ -13,6 +13,7 @@ port = 22
 
 
 class newSSH:
+
     def __init__(self, folder, loops, player1Strat, player2Strat, featuresList, username, password):
         TTR_auto = '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/'.format(username)
         for features in featuresList:
@@ -163,157 +164,9 @@ class newSSH:
         server_ssh.close()
         # celebrate
 
-        '''server_ssh = paramiko.SSHClient()
-        server_ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy)
-        server_ssh.connect(host, port, username, password)
-
-        stdin, stdout, stderr = server_ssh.exec_command("/admin/clust report c")
-        
-        #finding a node that is free
-        node_name = None
-        for line in stdout.readlines()[1:]:
-            line = line.split()
-            if len(line) == 8 and line[1] == 'Up':
-                node_name = line[0]
-                break
-        
-        #if there are no free nodes- quit
-        if node_name is None:  #[:6] != 'c-dell':
-            print("all nodes in use, quiting run. I am very sorry.")
-            exit(-1)
-
-        transport = server_ssh.get_transport()
-        node_dest = (node_name, port)
-        server_dest = (host, port)
-        tunnel = transport.open_channel('direct-tcpip', node_dest, server_dest)
 
 
-        sshConnection = paramiko.SSHClient()
-        sshConnection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        print(node_name)
-        sshConnection.connect(node_name, username=username, password=password, sock=tunnel)
 
-        sftp = sshConnection.open_sftp()'''
-        '''
-        #create required folder on intution (should not be nessicary)
-        cdms = ['cd src/C++/DTM/ToyDTMs/TTR_auto', 'mkdir {}'.format(folder), 'cd {}'.format(folder),
-                'mkdir {}'.format(features), 'cd {}'.format(features), 'mkdir {}'.format('target'), 'mkdir {}'.format('other')]
-        stdin, stdout, stderr = sshConnection.exec_command(';'.join(cdms))
-        print('Made ' + str(folder) + ' folder inside TTR_auto')
-
-        #reconnect to intuition then the node if connection is lost
-        if not self.stillConnected(sshConnection):
-            sftp.close()
-            sshConnection.close()
-            server_ssh.close()
-
-            server_ssh, sshConnection, sftp = self.establishConnection(username, password)
-
-
-        sftp.put(
-            'dtmFiles/actions.csv',
-            target + '/actions.csv')
-        sftp.put(
-            'dtmFiles/actions.csv',
-            other + '/actions.csv')
-
-        sftp.put(
-            'dtmFiles/{}/attributes.csv'.format(feat),
-            target + '/attributes.csv')
-        sftp.put(
-            'dtmFiles/{}/attributes.csv'.format(feat),
-            other + '/attributes.csv')
-
-        sftp.put(
-            'output_CSVs/{}/{}/target/list.files'.format(folder, features),
-            target + '/list.files')
-        sftp.put(
-            'output_CSVs/{}/{}/other/list.files'.format(folder, features),
-            other + '/list.files')
-
-        toPrint = 10
-        totalCSVs = 0
-        for x in range(1, loops + 1):
-            totalCSVs += 1
-            if toPrint == x:
-                print(x, "csvs have been uploaded to intuition.")
-                toPrint *= 5
-            sftp.put(
-                'output_CSVs/{}/{}_{}_{}.csv'.format(folder, player1Strat, feat, x),
-                target + '/{}_{}_{}.csv'.format(player1Strat, feat, x))
-            sftp.put(
-                'output_CSVs/{}/{}_{}_{}.csv'.format(folder, player2Strat, feat, x),
-                other + '/{}_{}_{}.csv'.format(player2Strat, feat, x))
-
-        print("All csvs have been uploaded")
-
-        cdms = ['cd src/C++/DTM/ToyDTMs/',
-                'python3.8 runRoMDP.py "TTR_auto/{}/{}/target" "TTR_auto/{}/{}/other" "" "" 100 BARON "TTR_auto/{}/{}/output" >& "TTR_auto/{}/{}/RunNotes.txt" &'.format(folder, features, folder, features, folder, features, folder, features)]
-                #,"disown -r"]
-
-        if sshConnection.get_transport() is not None:
-            if sshConnection.get_transport().is_active():
-                try:
-                    transport = sshConnection.get_transport()
-                    transport.send_ignore()
-                    print("still connected")
-                except EOFError:
-                    print("connection is closed")
-
-        sshConnection.exec_command(';'.join(cdms))
-
-        print('python3.8 runRoMDP.py "TTR_auto/{}/{}/target" "TTR_auto/{}/{}/other" "" "" 100 BARON "TTR_auto/{}/{}/output" >& "TTR_auto/{}/{}/RunNotes.txt" &'.format(folder, features, folder, features, folder, features, folder, features))
-
-        if sshConnection.get_transport() is not None:
-            if sshConnection.get_transport().is_active():
-                try:
-                    transport = sshConnection.get_transport()
-                    transport.send_ignore()
-                    print("still connected")
-                except EOFError:
-                    print("connection is closed")
-
-        print("Waiting", totalCSVs/10.0, "seconds to allow for RoMDP to finish running before trying to retrieve results")
-        time.sleep(totalCSVs/10.0)
-
-        fileNames = ["res.lst", "RoMDP-BARON.graphml.gz", "RoMDP-BARON.lp", "RoMDP_analytics-BARON.compressed_pickle",
-                     "RoMDP_mappings-BARON.csv.gz", "RoMDP_probabilities-BARON.csv.gz", "RoMDP_rewards_BARON.csv.gz",
-                     "RoMDP_soln-BARON.csv.gz", "sum.lst", "tim.lst"]
-
-        if sshConnection.get_transport() is not None:
-            if sshConnection.get_transport().is_active():
-                try:
-                    transport = sshConnection.get_transport()
-                    transport.send_ignore()
-                    print("still connected")
-                except EOFError:
-                    print("connection is closed")
-
-        try:
-            for file in fileNames:
-                print(file)
-                sftp.get(
-                    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/output-RoMDP-BARON/{}'.format(username, folder, features, file),
-                    'output_CSVs/{}/{}/DTM/{}'.format(folder, features, file))
-                if file[-2:] == "gz":
-                    with gzip.open('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file), 'rb') as f_in:
-                        with open('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file[:-3]), 'wb') as f_out:
-                            shutil.copyfileobj(f_in, f_out)
-                    os.remove('output_CSVs/{}/{}/DTM/{}'.format(folder, features, file))
-
-            sftp.get(
-                    '/home/{}/src/C++/DTM/ToyDTMs/TTR_auto/{}/{}/RunNotes.txt'.format(username, folder, features),
-                    'output_CSVs/{}/{}/DTM/RunNotes.txt'.format(folder, features))
-            sftp.close()
-            sshConnection.close()
-            server_ssh.close()
-        except:
-            print("File not found.")
-            sftp.close()
-            sshConnection.close()
-            server_ssh.close()
-
-        '''
         # 14511110
         # /src/C++/DTM/ToyDTMs/TTR_auto
 
