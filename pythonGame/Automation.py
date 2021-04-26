@@ -63,7 +63,7 @@ class Automation:
 
                 breaker = True
                 Automation.deleteCompressedFolderLocal(folder, 'output_CSVs/')
-                Automation.deleteCompressedFolderRemote(csvCount, username, password, folder, 'TTR_auto', 'output_CSVs/')
+                Automation.deleteCompressedFolderRemote(csvCount, username, password, folder, 'TTR_auto')
 
             except Exception as e:
                 print(e)
