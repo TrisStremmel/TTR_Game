@@ -907,6 +907,7 @@ if commandlineFlag == 'cmd':
     gameStart()
     if DTMFlag:
         pygame.quit()
+        print(str(s1Wins) + "/" + str(s2Wins) + "/" + str(ties))
 
         print("As a reminder your settings code was:", settingsCode)
         print("As a reminder the folder is named:", date)

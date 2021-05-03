@@ -44,22 +44,32 @@ class Automation:
 
         print("Finished generating local files.")
 
-        failCount = 1.0  # it is used as a wait multiplier.
+        logging.basicConfig(level=logging.DEBUG, filename='output_CSVs/log.txt')
+
+        waitMultiplier = 1.0  # it is used as a wait multiplier.
         breaker = False
         while not breaker:
             try:
-                if failCount > 1:
+                if waitMultiplier > 1:  # if it has failed at least once before
                     for feature in featuresList:
                         Automation.deletePossibleDuplicateLocal(folder, 'output_CSVs/', feature)
-                    Automation.deletePossibleDuplicateRemote(csvCount, username, password, folder, 'TTR_auto')
+                        #print("will not remove possible duplicate for now")
+                        Automation.deletePossibleDuplicateRemote(csvCount, username, password, folder, 'TTR_auto')
 
-                Automation.compress_send_decompress(failCount, csvCount, username, password, folder,
+                Automation.compress_send_decompress(waitMultiplier, csvCount, username, password, folder,
                                                    'TTR_auto', 'output_CSVs/')
                 for feature in featuresList:
-                    Automation.runRoMDP(failCount, csvCount, username, password, folder + '/' + feature,
+                    Automation.runRoMDP(waitMultiplier, csvCount, username, password, folder + '/' + feature,
                                        'TTR_auto', 'output_CSVs/')
-                    Automation.retrieveRoMDPResults(username, password, folder + '/' + feature,
-                                                   'TTR_auto', 'output_CSVs/')
+                    try:
+                        Automation.retrieveRoMDPResults(username, password, folder + '/' + feature,
+                                                       'TTR_auto', 'output_CSVs/')
+                    except Exception as e:
+                        print("/n", e)
+                        print("Failed to retrieve output files, trying again...")
+                        time.sleep(60)
+                        Automation.retrieveRoMDPResults(username, password, folder + '/' + feature,
+                                                        'TTR_auto', 'output_CSVs/')
 
                 breaker = True
                 Automation.deleteCompressedFolderLocal(folder, 'output_CSVs/')
@@ -67,8 +77,8 @@ class Automation:
 
             except Exception as e:
                 print(e)
-                failCount += .5
-                failNumber = (failCount - 1) * 2
+                waitMultiplier += .5
+                failNumber = (waitMultiplier - 1) * 2
                 print("This is failure number:", failNumber)
                 if failNumber >= 5:
                     print("Since it failed", failNumber, "times, the code will now quit.")
@@ -99,33 +109,33 @@ class Automation:
                           "file is in the same directory as that folder [end it with a /]): ")
 
 
-        failCount = 1.0  # it is used as a wait multiplier.
+        waitMultiplier = 1.0  # it is used as a wait multiplier.
         breaker = False
         while not breaker:
             time.sleep(1)
             try:
-                if failCount > 1:
+                if waitMultiplier > 1:
                     Automation.deletePossibleDuplicateLocal(folder, localPath)
                     Automation.deletePossibleDuplicateRemote(csvCount, username, password, folder, remoteFolder)
 
-                Automation.compress_send_decompress(failCount, csvCount, username, password, folder,
+                Automation.compress_send_decompress(waitMultiplier, csvCount, username, password, folder,
                                                    remoteFolder, localPath)
-                Automation.runRoMDP(failCount, csvCount, username, password, folder, remoteFolder, localPath,
+                Automation.runRoMDP(waitMultiplier, csvCount, username, password, folder, remoteFolder, localPath,
                                    target, other, synTarget, synOther)
 
                 Automation.retrieveRoMDPResults(username, password, folder, remoteFolder, localPath)
                 breaker = True
             except Exception as e:
                 print(e)
-                failCount += .5
-                failNumber = (failCount - 1) * 2
+                waitMultiplier += .5
+                failNumber = (waitMultiplier - 1) * 2
                 print("This is failure number:", failNumber)
                 if failNumber >= 5:
                     print("Since it failed", failNumber, "times, the code will now quit.")
                     breaker = True
 
     @staticmethod
-    def compress_send_decompress(failCount, csvCount, username, password, folder, remoteFolder, localPath):
+    def compress_send_decompress(waitMultiplier, csvCount, username, password, folder, remoteFolder, localPath):
 
         # zip the file locally
         shutil.make_archive('{}{}'.format(localPath, folder), 'zip', '{}{}'.format(localPath, folder))
@@ -138,17 +148,25 @@ class Automation:
         # send the compressed <folder> to src/C++/DTM/ToyDTMs/<remotePath> location on intuition
         sftp.put('{}{}.zip'.format(localPath, folder), '{}{}.zip'.format(remotePath, folder))
 
-        waitAmount = min(max(csvCount / 25.0, 5), 120) * failCount
+        waitAmount = min(max(csvCount / 25.0, 5), 120) * waitMultiplier
         print("Waiting", waitAmount, "seconds while uploading zipped folder to intuition...")
         time.sleep(waitAmount)
 
         # decompress the <folder> on intuition
         commands = ['cd {}'.format(remotePath), 'unzip {}.zip -d {}'.format(folder, folder)]
         stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
+        print('should be waiting here for decompression')
+        exit_status = stdout.channel.recv_exit_status()
+        if exit_status == 0:
+            print("File successfully decompressed on server")
+        else:
+            print('stderr', stderr)
+            raise NameError("Failed to decompress")
+        #print('stdout', stdout)
 
-        waitAmount = min(max(csvCount / 10.0, 5), 240)
-        print("Waiting", waitAmount, "seconds while decompressing the folder on intuition...")
-        time.sleep(waitAmount)
+        waitAmount = min(max(csvCount / 50.0, 5), 120)
+        #print("Waiting", waitAmount, "seconds while decompressing the folder on intuition...")
+        #time.sleep(waitAmount)
 
         sftp.close()
         sshConnection.close()
@@ -156,7 +174,7 @@ class Automation:
 
     #also gets results and sends to local
     @staticmethod
-    def runRoMDP(failCount, csvCount, username, password, folder, remoteFolder, localPath, target=True, other=True,
+    def runRoMDP(waitMultiplier, csvCount, username, password, folder, remoteFolder, localPath, target=True, other=True,
                  synTarget=False, synOther=False):
 
         os.makedirs("{}{}/RoMDP_output".format(localPath, folder))  # creates folder for RoMDP output results
@@ -169,14 +187,23 @@ class Automation:
         commands = ['cd src/C++/DTM/ToyDTMs/', RoMDPCommand]
 
         stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
+        print('should be waiting here for RoMDP to run')
+        exit_status = stdout.channel.recv_exit_status()
+        if exit_status == 0:
+            print("RoMPD successfully run")
+        else:
+            print('stderr', stderr)
+            raise NameError("Failed to run RoMDP")
+        #print('stdout', stdout)
         # print('stdin, stdout, stderr:', stderr)
+
         print("The command used to run the RoMDP:\n" + RoMDPCommand, end="\n\n")
 
-        waitAmount = min(max(int(csvCount / 30.0), 5), 3600) * failCount
-        print("Waiting", waitAmount,
-              "seconds to allow for RoMDP to finish running before trying to retrieve results...")
+        waitAmount = min(max(int(csvCount / 30.0), 5), 600) * waitMultiplier
+        print("Waiting", waitAmount, "seconds to allow for RoMDP to finish running before trying to retrieve results...")
         # change the 3600 to 600 after I know that 10k can run faster then 1hr
-        time.sleep(waitAmount)
+        time.sleep(waitAmount)  # ***********************
+        #time.sleep(10)
 
         sftp.close()
         sshConnection.close()
@@ -197,6 +224,7 @@ class Automation:
         remotePath = '/home/{}/src/C++/DTM/ToyDTMs/{}/'.format(username, remoteFolder)
         print("retrieving file:", end=' ')
         for file in fileNames:
+            #Automation.stillConnected(sshConnection)
             print(file, end=', ')
             sftp.get(
                 '{}/{}/output-RoMDP-BARON/{}'.format(remotePath, folder, file),
@@ -218,7 +246,7 @@ class Automation:
 
     @staticmethod
     def deletePossibleDuplicateLocal(folder, localPath, feature=''):
-        path = "{}{}{}/RoMDP_output".format(localPath, folder, feature)
+        path = "{}{}/{}/RoMDP_output".format(localPath, folder, feature)
         # deletes the RoMDP_output folder and its contents if it already exists.
         if os.path.isdir(path):
             try:
@@ -235,11 +263,19 @@ class Automation:
         # delete the <folder> from intuition so it can work from scratch
         commands = ['cd src/C++/DTM/ToyDTMs/{}'.format(remoteFolder), 'rm -r {}'.format(folder)]
         stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
+        print('should be waiting here for folder to be deleted from server')
+        exit_status = stdout.channel.recv_exit_status()
+        if exit_status == 0:
+            print("Folder successfully deleted from server")
+        else:
+            print('stderr', stderr)
+            raise NameError("Failed to remove the folder")
+        #print('stdout', stdout)
         # print('stdin, stdout, stderr:', stderr)
 
         waitAmount = min(max(int(csvCount / 50.0), 5), 240)
-        print("Waiting", waitAmount, "seconds to allow for possible duplicate files to be removed from intuition...")
-        time.sleep(waitAmount)
+        #print("Waiting", waitAmount, "seconds to allow for possible duplicate files to be removed from intuition...")
+        #time.sleep(waitAmount)
 
         sftp.close()
         sshConnection.close()
@@ -256,11 +292,19 @@ class Automation:
         # delete the compressed folder from intuition
         commands = ['cd src/C++/DTM/ToyDTMs/{}'.format(remoteFolder), 'rm {}.zip'.format(folder)]
         stdin, stdout, stderr = sshConnection.exec_command(';'.join(commands))
+        print('should be waiting here to delete compressed folder')
+        exit_status = stdout.channel.recv_exit_status()
+        if exit_status == 0:
+            print("File successfully removed from server")
+        else:
+            print('stderr', stderr)
+            raise NameError("Failed to remove the compressed file")
+        #print('stdout', stdout)
         # print('stdin, stdout, stderr:', stderr)
 
         waitAmount = min(max(int(csvCount / 100.0), 5), 120)
-        print("Waiting", waitAmount, "more seconds to allow for possible duplicate files to be removed from intuition...")
-        time.sleep(waitAmount)
+        #print("Waiting", waitAmount, "more seconds to allow for possible duplicate files to be removed from intuition...")
+        #time.sleep(waitAmount)
 
         sftp.close()
         sshConnection.close()
